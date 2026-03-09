@@ -1552,7 +1552,7 @@ async def suggest(ctx, *, suggestion: str = None):
     
     # Create and send the suggestion embed
     embed = discord.Embed(
-        title="New Suggestion",
+        title="New Suggestio",
         description=suggestion,
         color=discord.Color.green(),
         timestamp=datetime.datetime.now()
