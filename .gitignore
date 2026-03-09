@@ -1,0 +1,5 @@
+/.env
+/user_inventories.json
+/user_inventories_backup.json
+/user_items.json
+/user_items_backup.json
