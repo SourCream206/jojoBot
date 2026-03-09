@@ -1,3 +1,5 @@
+#old code btw will be fully updated
+
 import os
 import discord
 from dotenv import load_dotenv
