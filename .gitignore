@@ -3,3 +3,8 @@
 /user_inventories_backup.json
 /user_items.json
 /user_items_backup.json
+__pycache__/
+standarena.db
+standarena.db-shm
+standarena.db-wal
+standarena.log

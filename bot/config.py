@@ -338,3 +338,29 @@ WEEKLY_QUEST_POOL = [
     {"id": "wq_duel10", "title": "Street Fighter", "desc": "Win 10 duels", "type": "win_duels", "target": 10, "reward_dust": 80, "reward_hamon": 500},
     {"id": "wq_explore5", "title": "Wanderer", "desc": "Complete 5 exploration runs", "type": "explore", "target": 5, "reward_dust": 60, "reward_hamon": 400},
 ]
+
+# ─────────────────────────────────────────────
+# MERGE
+# ─────────────────────────────────────────────
+MERGE_COPIES_REQUIRED = 5  # copies needed to merge into next star level
+
+# ─────────────────────────────────────────────
+# BIZARRE ITEMS (fun junk drops)
+# ─────────────────────────────────────────────
+ALL_BIZARRE_ITEMS = [
+    "Dio's Left Sock",
+    "Jotaro's Hat (Dented)",
+    "Kakyoin's Cherry",
+    "Joseph's Clacker Volley",
+    "Polnareff's Hair Gel",
+    "Kira's Severed Hand",
+    "Caesar's Bubble Liquid",
+    "Shigechi's Leftover Sandwich",
+    "Narancia's Math Homework",
+    "Green Ball",
+    "Araki's Donut",
+    "Speedwagon's Scarf",
+    "Iggy's Coffee Gum",
+    "Rohan's Sketchbook",
+    "Giorno's Ladybug Brooch",
+]
