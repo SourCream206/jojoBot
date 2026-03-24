@@ -1,0 +1,6 @@
+.env
+schema.sql
+*.log
+db
+requirements.txt
+__pycache__/
