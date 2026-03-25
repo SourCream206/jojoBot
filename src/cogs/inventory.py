@@ -68,15 +68,21 @@ class Inventory(commands.Cog):
             return
 
         stand = max(copies, key=lambda s: s["level"])
+        max_star_level = max(s["stars"] for s in copies) if copies else 1
 
         from src.battle.stand_stats import STAND_CATALOG, make_stand
-        from src.utils.embeds import stand_info_embed
+        from src.utils.embeds import stand_info_embed, StandImageView
 
         catalog   = STAND_CATALOG.get(stand["stand_name"])
         stand_obj = make_stand(stand["stand_name"], stand["level"], stand["stars"], stand["is_shiny"]) if catalog else None
         embed     = stand_info_embed(stand, catalog, stand_obj)
 
-        await ctx.reply(embed=embed, mention_author=False)
+        # Create view for star navigation
+        view = StandImageView(stand["stand_name"], max_stars=max_star_level)
+        view.current_star = stand["stars"]  # Start at this copy's star level
+        view._update_button_labels()
+        message = await ctx.reply(embed=embed, view=view, mention_author=False)
+        view.message = message
 
     # ── Sitems ────────────────────────────────────────────────────────────────
 
@@ -204,11 +210,19 @@ class Inventory(commands.Cog):
         await db.update_stand(keeper["id"], stars=new_stars, merge_count=keeper["merge_count"] + 1)
         await db.add_stand_xp(keeper["id"], bonus_xp)
 
+        from src.utils.stands_data import get_image
+
         embed = discord.Embed(
             title="⭐ Merge Successful!",
             description=f"5× **{stand_name}** ★{star_level} → **{stand_name}** ★{new_stars}\n+{bonus_xp} bonus XP!",
             color=0xF1C40F,
         )
+
+        # Add the new star image
+        new_image = get_image(stand_name, new_stars)
+        if new_image:
+            embed.set_image(url=new_image)
+
         await ctx.reply(embed=embed, mention_author=False)
 
     # ── Suse ──────────────────────────────────────────────────────────────────

@@ -9,6 +9,76 @@ from src.utils.constants import xp_to_next_level
 from src.utils.stands_data import get_image, get_emoji
 
 
+class StandImageView(discord.ui.View):
+    """Navigation view for cycling through stand images at different star levels."""
+
+    def __init__(self, stand_name: str, max_stars: int = 5, timeout: float = 180):
+        super().__init__(timeout=timeout)
+        self.stand_name = stand_name
+        self.max_stars = min(max_stars, 5)  # Cap at 5 stars
+        self.current_star = self.max_stars  # Start at current/max star level
+        self.message = None  # Set by caller
+
+        # Update button labels
+        self._update_button_labels()
+
+    def _update_button_labels(self):
+        """Update button labels and disabled states based on current star."""
+        prev_btn = None
+        next_btn = None
+
+        for item in self.children:
+            if isinstance(item, discord.ui.Button):
+                if item.custom_id == "prev_star":
+                    prev_btn = item
+                elif item.custom_id == "next_star":
+                    next_btn = item
+
+        if prev_btn:
+            prev_btn.label = f"⮜ ★{self.current_star - 1}"
+            prev_btn.disabled = self.current_star <= 1
+
+        if next_btn:
+            next_btn.label = f"★{self.current_star + 1} ⮞"
+            next_btn.disabled = self.current_star >= self.max_stars
+
+    async def _update_message(self, interaction: discord.Interaction):
+        """Update the message with the new star image."""
+        image_url = get_image(self.stand_name, self.current_star)
+
+        # Create a minimal embed just for the image
+        embed = interaction.message.embeds[0]  # Get existing embed
+        if image_url:
+            embed.set_image(url=image_url)
+        else:
+            embed.set_image(url="")  # Clear image if none available
+
+        # Update title to show current star level
+        old_title = embed.title or ""
+        # Remove star indicator if already present
+        if " [★" in old_title:
+            old_title = old_title[:old_title.index(" [★")]
+        new_title = f"{old_title} [★{self.current_star}]"
+        embed.title = new_title
+
+        await interaction.response.defer()
+        await self.message.edit(embed=embed, view=self)
+
+    @discord.ui.button(label="⮜ ★1", style=discord.ButtonStyle.primary, custom_id="prev_star")
+    async def prev_star(self, interaction: discord.Interaction, button: discord.ui.Button):
+        if self.current_star > 1:
+            self.current_star -= 1
+            self._update_button_labels()
+            await self._update_message(interaction)
+
+    @discord.ui.button(label="★5 ⮞", style=discord.ButtonStyle.primary, custom_id="next_star")
+    async def next_star(self, interaction: discord.Interaction, button: discord.ui.Button):
+        if self.current_star < self.max_stars:
+            self.current_star += 1
+            self._update_button_labels()
+            await self._update_message(interaction)
+
+
 def get_active_synergies(primary: str, secondary: str) -> list[str]:
     if not primary or not secondary:
         return []
