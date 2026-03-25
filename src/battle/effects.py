@@ -5,7 +5,12 @@ Each handler applies the effect and returns a message string.
 """
 
 import random
+from typing import TYPE_CHECKING
 from src.battle.stand import Stand, Move
+from src.utils.constants import ITEMS
+
+if TYPE_CHECKING:
+    from src.battle.engine import BattleSession
 
 
 # ════════════════════════════════════════════════════════════
@@ -157,9 +162,31 @@ def handle_counter_next(attacker: Stand, defender: Stand, move: Move, damage: in
 # INFORMATION & UTILITY EFFECTS
 # ════════════════════════════════════════════════════════════
 
-def handle_reveals_info(attacker: Stand, defender: Stand, move: Move, damage: int) -> str:
-    """Reveal opponent's held item/status."""
-    return " 👁️ *Revealed information!*"
+def handle_reveals_info(attacker: Stand, defender: Stand, move: Move, damage: int, session: "BattleSession" = None) -> str:
+    """Reveal opponent's inventory."""
+    if not session or not session.defender_items:
+        return " 👁️ *Tried to reveal information, but opponent has nothing!*"
+
+    # Filter for usable items only (exclude corpse parts)
+    visible_items = {}
+    for item_id, quantity in session.defender_items.items():
+        if item_id in ITEMS:
+            item_info = ITEMS[item_id]
+            if not item_info.get("is_corpse_part"):
+                visible_items[item_id] = quantity
+
+    if not visible_items:
+        return " 👁️ *Revealed opponent has no usable items!*"
+
+    # Build item list
+    item_lines = ["👁️ **Revealed opponent's items:**"]
+    for item_id, quantity in sorted(visible_items.items()):
+        item_info = ITEMS[item_id]
+        emoji = item_info.get("emoji", "📦")
+        name = item_info.get("name", item_id)
+        item_lines.append(f"  {emoji} {name} ×{quantity}")
+
+    return "\n" + "\n".join(item_lines)
 
 def handle_reveal_moves(attacker: Stand, defender: Stand, move: Move, damage: int) -> str:
     """Reveal opponent's moveset."""
@@ -282,7 +309,7 @@ def get_damage_modifier(effect: str, attacker: Stand, defender: Stand, move: Mov
     return 1.0, ""
 
 
-def apply_move_effect(attacker: Stand, defender: Stand, move: Move, damage: int) -> str:
+def apply_move_effect(attacker: Stand, defender: Stand, move: Move, damage: int, session: "BattleSession" = None) -> str:
     """
     Apply all non-damage-modifying effects. Returns effect message.
     This is called AFTER damage is dealt.
@@ -312,7 +339,10 @@ def apply_move_effect(attacker: Stand, defender: Stand, move: Move, damage: int)
 
     # Info effects
     elif effect in INFO_EFFECTS:
-        message = INFO_EFFECTS[effect](attacker, defender, move, damage)
+        if effect == "reveals_info":
+            message = handle_reveals_info(attacker, defender, move, damage, session)
+        else:
+            message = INFO_EFFECTS[effect](attacker, defender, move, damage)
 
     # Special/complex effects
     elif effect in SPECIAL_EFFECTS:

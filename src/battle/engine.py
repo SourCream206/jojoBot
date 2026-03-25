@@ -45,6 +45,7 @@ class BattleSession:
     finished:           bool  = False
     winner_is_attacker: Optional[bool] = None
     db_battle_id:       Optional[int]  = None
+    defender_items:     Optional[dict] = None  # item_id -> quantity for reveals_info effect
 
     def execute_move(self, move: Move, attacker: Stand, defender: Stand) -> str:
         """
@@ -91,7 +92,7 @@ class BattleSession:
         crit_str = " ⭐ *Critical hit!*" if crit else ""
 
         # Apply Move Effects (status, healing, debuffs, etc.)
-        eff_str += apply_move_effect(attacker, defender, move, damage)
+        eff_str += apply_move_effect(attacker, defender, move, damage, session=self)
 
         # [SYNERGY] Time Stop Mastery: Star Platinum + The World
         att_stands = {attacker.name, attacker.secondary_stand_name}
