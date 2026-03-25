@@ -83,7 +83,7 @@ STAND_CATALOG: dict[str, dict] = {
         "stats":  S(hp=95, atk=130, def_=80, spa=70, spd=110, rng=40),
         "gimmick": "precision_strike",
         "moves": [
-            M("ORA ORA Barrage",  "Physical", 80,  0.95, 8,  "hit_3_times"),
+            M("ORA Barrage",  "Physical", 80,  0.95, 8,  "hit_3_times"),
             M("Star Finger",      "Physical", 60,  1.00, 10, ""),
             M("Precision Strike", "Physical", 100, 0.85, 5,  "high_crit"),
             M("The World Stomp",  "Physical", 120, 0.80, 3,  ""),
@@ -97,7 +97,7 @@ STAND_CATALOG: dict[str, dict] = {
         "stats":  S(hp=100, atk=125, def_=85, spa=60, spd=100, rng=40),
         "gimmick": "time_stop",
         "moves": [
-            M("MUDA MUDA Barrage", "Physical", 80,  0.95, 8,  "hit_3_times"),
+            M("MUDA Barrage", "Physical", 80,  0.95, 8,  "hit_3_times"),
             M("Road Roller",       "Physical", 110, 0.80, 5,  ""),
             M("Knife Volley",      "Physical", 70,  0.90, 8,  "multi_hit"),
             M("Time Stop Finish",  "Physical", 130, 0.75, 3,  "ignores_dodge"),

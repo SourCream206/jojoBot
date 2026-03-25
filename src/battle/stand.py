@@ -6,7 +6,7 @@ Stand dataclass, stat calculation, and power score.
 from dataclasses import dataclass, field
 from typing import Optional
 import math
-from src.utils.constants import STAR_MULTIPLIERS, SHINY_MODIFIER, TYPE_CHART
+from src.utils.constants import STAR_MULTIPLIERS, SHINY_MODIFIER
 
 
 @dataclass
@@ -124,7 +124,6 @@ class Stand:
         attacker_stat = self.atk if move.category == "Physical" else self.spa
         defender_stat = target.defense
 
-        type_mult = TYPE_CHART.get(self.stand_type, {}).get(target.stand_type, 1.0)
         crit_mult = 1.5 if crit else 1.0
 
         damage = (
@@ -133,7 +132,7 @@ class Stand:
             * (attacker_stat / defender_stat)
             / 50
             + 2
-        ) * type_mult * crit_mult * random_roll
+        ) * crit_mult * random_roll
 
         return max(1, int(damage))
 

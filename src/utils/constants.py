@@ -340,17 +340,6 @@ RARITY_EMOJIS = {
 }
 
 
-# ────────────────────────────────────────────────────────────
-# STAND TYPE EFFECTIVENESS
-# ────────────────────────────────────────────────────────────
-
-TYPE_CHART = {
-    "Close-Range":   {"Close-Range": 1.0, "Long-Distance": 1.5, "Automatic": 0.75, "Colony": 1.25, "Ability": 0.75},
-    "Long-Distance": {"Close-Range": 0.75,"Long-Distance": 1.0, "Automatic": 1.5,  "Colony": 0.75, "Ability": 1.25},
-    "Automatic":     {"Close-Range": 1.25,"Long-Distance": 0.75,"Automatic": 1.0,  "Colony": 1.5,  "Ability": 0.75},
-    "Colony":        {"Close-Range": 0.75,"Long-Distance": 1.25,"Automatic": 0.75, "Colony": 1.0,  "Ability": 1.5},
-    "Ability":       {"Close-Range": 1.25,"Long-Distance": 0.75,"Automatic": 1.25, "Colony": 0.75, "Ability": 1.0},
-}
 
 
 # ────────────────────────────────────────────────────────────
@@ -379,7 +368,6 @@ def coins_from_pvp(opponent_stand_level: int, opponent_stars: int) -> int:
 
 META_PASSIVES = {
     "Harvest":       {"description": "+25% Coin gain from battles",              "type": "coin_bonus",     "value": 0.25},
-    "Star Platinum": {"description": "-60s off Sroll cooldown",                  "type": "cooldown_reduce","value": 60},
     "Osiris":        {"description": "+10% D'Arby win chance",                   "type": "darby_bonus",    "value": 0.10},
     "Crazy Diamond": {"description": "Healing items restore 25% more HP",        "type": "heal_bonus",     "value": 0.25},
     "Gold Experience":{"description": "5% chance to double XP after a battle",   "type": "xp_double",      "value": 0.05},

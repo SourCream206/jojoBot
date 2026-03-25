@@ -82,15 +82,7 @@ class BattleSession:
             self.bomb_active = False
             bomb_str = " 💥 **BOMB!** 1.5×!"
 
-        # Type effectiveness
-        from src.utils.constants import TYPE_CHART
-        mult = TYPE_CHART.get(attacker.stand_type, {}).get(defender.stand_type, 1.0)
         eff_str = ""
-        if mult >= 1.5:
-            eff_str = " 🔥 *Super effective!*"
-        elif mult <= 0.75:
-            eff_str = " 💧 *Not very effective...*"
-
         crit_str = " ⭐ *Critical hit!*" if crit else ""
 
         # Life reflection (Gold Experience)
