@@ -21,6 +21,7 @@ from src.battle.gimmicks import (
     try_time_stop,
 )
 from src.battle.ai import ai_choose_move, ai_use_time_stop
+from src.battle.effects import get_damage_modifier, apply_move_effect
 from src.utils.constants import coins_from_pve, coins_from_pvp, xp_from_pve, xp_from_pvp
 
 
@@ -52,17 +53,17 @@ class BattleSession:
         """
         parts = []
 
-        # Accuracy — Foresight adds +25%
+        # Accuracy — Foresight adds +25%, unstoppable bypasses this check entirely
         accuracy = move.accuracy
         if attacker.gimmick == "foresight":
             accuracy = min(1.0, accuracy + 0.25)
 
-        if random.random() > accuracy:
+        if move.effect != "unstoppable" and random.random() > accuracy:
             move.pp_remaining -= 1
             return f"💨 **{attacker.name}** used **{move.name}** — but it missed!"
 
-        # Dodge
-        if random.random() < defender.dodge_chance:
+        # Dodge (ignores_dodge effect bypasses this check)
+        if random.random() < defender.dodge_chance and move.effect != "ignores_dodge":
             move.pp_remaining -= 1
             return f"⚡ **{defender.name}** dodged **{move.name}**!"
 
@@ -75,6 +76,10 @@ class BattleSession:
         rand_roll  = random.uniform(0.85, 1.0)
         damage     = attacker.calc_damage(move, defender, crit=crit, random_roll=rand_roll)
 
+        # Apply damage modifier effects (hit_3_times, high_crit, bypass_def, etc.)
+        damage_mult, effect_dmg_str = get_damage_modifier(move.effect, attacker, defender, move, damage)
+        damage = int(damage * damage_mult)
+
         # Bomb modifier (Killer Queen)
         bomb_str = ""
         if self.bomb_active and move.category == "Physical":
@@ -82,13 +87,11 @@ class BattleSession:
             self.bomb_active = False
             bomb_str = " 💥 **BOMB!** 1.5×!"
 
-        eff_str = ""
+        eff_str = effect_dmg_str
         crit_str = " ⭐ *Critical hit!*" if crit else ""
 
-        # Apply Move Effects (like Burn)
-        if move.effect == "burn" and defender.status != "burn" and random.random() < 0.30:
-            defender.status = "burn"
-            eff_str += " 🔥 *Burn applied!*"
+        # Apply Move Effects (status, healing, debuffs, etc.)
+        eff_str += apply_move_effect(attacker, defender, move, damage)
 
         # [SYNERGY] Time Stop Mastery: Star Platinum + The World
         att_stands = {attacker.name, attacker.secondary_stand_name}
