@@ -163,7 +163,7 @@ class Stand:
             (self.level / 5 + 10)
             * power_mod
             * (attacker_stat / defender_stat)
-            / 50
+            / 40
             + 2
         ) * crit_mult * random_roll
         
