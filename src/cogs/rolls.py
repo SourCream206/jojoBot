@@ -60,10 +60,14 @@ class Rolls(commands.Cog):
         weights = dict(RARITY_WEIGHTS_STANDARD)
         primary = await db.get_primary_stand(str(ctx.author.id))
         secondary = await db.get_secondary_stand(str(ctx.author.id))
-        if primary and secondary and primary["stand_name"] == "Osiris" and secondary["stand_name"] == "Atum":
-            weights["Epic"] = weights.get("Epic", 0) * 2
-            weights["Legendary"] = weights.get("Legendary", 0) * 2
-            weights["Mythical"] = weights.get("Mythical", 0) * 2
+        
+        # [SYNERGY] Darby Brothers: Osiris + Atum -> Doubled rates for Epic+
+        if primary and secondary:
+            stands = {primary["stand_name"], secondary["stand_name"]}
+            if {"Osiris", "Atum"}.issubset(stands):
+                weights["Epic"] = weights.get("Epic", 0) * 2
+                weights["Legendary"] = weights.get("Legendary", 0) * 2
+                weights["Mythical"] = weights.get("Mythical", 0) * 2
 
         # Determine rarity (with pity)
         rarity = _roll_rarity(user["pity_counter"], user["mythical_pity_counter"], weights)
@@ -126,9 +130,11 @@ class Rolls(commands.Cog):
         
         primary = await db.get_primary_stand(str(ctx.author.id))
         secondary = await db.get_secondary_stand(str(ctx.author.id))
-        if primary and secondary and primary["stand_name"] == "Osiris" and secondary["stand_name"] == "Atum":
-            weights["Epic"] *= 2
-            weights["Legendary"] *= 2
+        if primary and secondary:
+            stands = {primary["stand_name"], secondary["stand_name"]}
+            if {"Osiris", "Atum"}.issubset(stands):
+                weights["Epic"] *= 2
+                weights["Legendary"] *= 2
             
         rarity = _roll_rarity(user["pity_counter"], user["mythical_pity_counter"], weights)
         
@@ -177,8 +183,10 @@ class Rolls(commands.Cog):
         
         primary = await db.get_primary_stand(str(ctx.author.id))
         secondary = await db.get_secondary_stand(str(ctx.author.id))
-        if primary and secondary and primary["stand_name"] == "Osiris" and secondary["stand_name"] == "Atum":
-            weights["Legendary"] *= 2
+        if primary and secondary:
+            stands = {primary["stand_name"], secondary["stand_name"]}
+            if {"Osiris", "Atum"}.issubset(stands):
+                weights["Legendary"] *= 2
             
         rarity = _roll_rarity(user["pity_counter"], user["mythical_pity_counter"], weights)
         

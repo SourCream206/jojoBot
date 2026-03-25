@@ -14,30 +14,31 @@ def get_active_synergies(primary: str, secondary: str) -> list[str]:
         return []
     
     synergies = []
+    stands = {primary, secondary}
     
-    if primary == "Star Platinum" and secondary == "The World":
+    if {"Star Platinum", "The World"}.issubset(stands):
         synergies.append("Time Stop Mastery (Bonus Damage in Time Stop)")
-    elif primary == "Star Platinum" and secondary in ("Hierophant Green", "Silver Chariot"):
+    elif "Star Platinum" in stands and ("Hierophant Green" in stands or "Silver Chariot" in stands):
         synergies.append("JoBro Buff (+5 HP, +5% Max HP)")
-    elif primary == "Star Platinum" and secondary == "Hermit Purple":
+    elif {"Star Platinum", "Hermit Purple"}.issubset(stands):
         synergies.append("Joestar Bloodline (+10% Max HP)")
     elif primary in ("The Fool", "Horus", "Strength") and secondary in ("The Fool", "Horus", "Strength"):
         synergies.append("Animal Jam (+5 Base Power, +5% Damage)")
-    elif primary == "Dark Blue Moon" and secondary == "Strength":
+    elif {"Dark Blue Moon", "Strength"}.issubset(stands):
         synergies.append("Cruise Ship (+10% Defense)")
-    elif primary == "Osiris" and secondary == "Atum":
+    elif {"Osiris", "Atum"}.issubset(stands):
         synergies.append("Darby Brothers (Highest Luck in Gacha Rolls)")
-    elif primary == "The World" and secondary == "Cream":
+    elif {"The World", "Cream"}.issubset(stands):
         synergies.append("Vampiric Power (+8% Lifesteal)")
-    elif primary == "Magician's Red" and secondary == "The Sun":
+    elif {"Magician's Red", "The Sun"}.issubset(stands):
         synergies.append("Scorching Heat (Burn deals 1.5x Damage)")
-    elif primary == "Tohth" and secondary == "Khnum":
+    elif {"Tohth", "Khnum"}.issubset(stands):
         synergies.append("Fate Manipulation (10% Reflect Chance)")
-    elif primary == "Anubis" and secondary == "Silver Chariot":
+    elif {"Anubis", "Silver Chariot"}.issubset(stands):
         synergies.append("Blade Master (+5% Speed, +6% Damage)")
-    elif primary == "Hanged Man" and secondary == "Emperor":
+    elif {"Hanged Man", "Emperor"}.issubset(stands):
         synergies.append("Perfect Execution (+20% Critical Damage)")
-    elif primary == "Justice" and secondary == "Lovers":
+    elif {"Justice", "Lovers"}.issubset(stands):
         synergies.append("Undead Link (Take 10% less damage when under 50% HP)")
         
     return synergies

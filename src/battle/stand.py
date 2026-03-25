@@ -75,9 +75,10 @@ class Stand:
     def max_hp(self) -> int:
         base = int(self._scale(self.base_stats.hp) * 5)
         # Synergies
-        if self.name == "Star Platinum" and self.secondary_stand_name in ("Hierophant Green", "Silver Chariot"):
+        stands = {self.name, self.secondary_stand_name}
+        if "Star Platinum" in stands and ("Hierophant Green" in stands or "Silver Chariot" in stands):
             base = int((base + 5) * 1.05)
-        elif self.name == "Star Platinum" and self.secondary_stand_name == "Hermit Purple":
+        elif {"Star Platinum", "Hermit Purple"}.issubset(stands):
             base = int(base * 1.10)
         return base
 
@@ -88,7 +89,8 @@ class Stand:
     @property
     def defense(self) -> int:
         base = int(self._scale(self.base_stats.def_))
-        if self.name == "Dark Blue Moon" and self.secondary_stand_name == "Strength":
+        stands = {self.name, self.secondary_stand_name}
+        if {"Dark Blue Moon", "Strength"}.issubset(stands):
             base = int(base * 1.10)
         return base
 
@@ -99,7 +101,8 @@ class Stand:
     @property
     def spd(self) -> int:
         base = int(self._scale(self.base_stats.spd))
-        if self.name == "Anubis" and self.secondary_stand_name == "Silver Chariot":
+        stands = {self.name, self.secondary_stand_name}
+        if {"Anubis", "Silver Chariot"}.issubset(stands):
             base = int(base * 1.05)
         return base
     @property
@@ -147,7 +150,8 @@ class Stand:
         defender_stat = target.defense
 
         crit_mult = 1.5 if crit else 1.0
-        if self.name == "Hanged Man" and self.secondary_stand_name == "Emperor" and crit:
+        stands = {self.name, self.secondary_stand_name}
+        if {"Hanged Man", "Emperor"}.issubset(stands) and crit:
             crit_mult = 1.7
 
         # The Fool + Horus + Strength -> +5 damage, +5% scaling (approx modifying the base power)
@@ -164,11 +168,12 @@ class Stand:
         ) * crit_mult * random_roll
         
         # Anubis + Silver Chariot -> +6% damage
-        if self.name == "Anubis" and self.secondary_stand_name == "Silver Chariot":
+        if {"Anubis", "Silver Chariot"}.issubset(stands):
             damage *= 1.06
 
         # Justice + Lovers -> Enemies deal 10% less damage when target (defender) is < 50% HP
-        if target.name == "Justice" and target.secondary_stand_name == "Lovers":
+        target_stands = {target.name, target.secondary_stand_name}
+        if {"Justice", "Lovers"}.issubset(target_stands):
             if target.current_hp < (target.max_hp * 0.5):
                 damage *= 0.90
 
