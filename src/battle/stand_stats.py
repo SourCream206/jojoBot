@@ -87,7 +87,7 @@ STAND_CATALOG: dict[str, dict] = {
             M("ORA Barrage",  "Physical", 80,  0.95, 8,  "hit_3_times"),
             M("Star Finger",      "Physical", 60,  1.00, 10, ""),
             M("Precision Strike", "Physical", 100, 0.85, 5,  "high_crit"),
-            M("The World Stomp",  "Physical", 120, 0.80, 3,  ""),
+            M("Star Platinum, The World!",  "Physical", 120, 0.80, 3,  ""),
         ],
     },
 
@@ -99,9 +99,9 @@ STAND_CATALOG: dict[str, dict] = {
         "gimmick": "time_stop",
         "moves": [
             M("MUDA Barrage", "Physical", 80,  0.95, 8,  "hit_3_times"),
-            M("Road Roller",       "Physical", 110, 0.80, 5,  ""),
             M("Knife Volley",      "Physical", 70,  0.90, 8,  "multi_hit"),
-            M("Time Stop Finish",  "Physical", 130, 0.75, 3,  "ignores_dodge"),
+            M("Road Roller",       "Physical", 110, 0.80, 5,  ""),
+            M("ZA WARUDO",  "Physical", 130, 0.75, 3,  "ignores_dodge"),
         ],
     },
 
@@ -140,7 +140,7 @@ STAND_CATALOG: dict[str, dict] = {
         "stats":  S(hp=66, atk=95, def_=66, spa=52, spd=114, rng=47),
         "gimmick": None,
         "moves": [
-            M("Rapier Thrust",   "Physical", 65,  1.00, 10, ""),
+            M("Rapier Thrust",   "Physical", 65,  1.00, 10, "multi_hit"),
             M("Armor Off",       "Status",   0,   1.00, 3,  "raise_spd_def"),
             M("Thousand Cuts",   "Physical", 90,  0.85, 6,  ""),
             M("Lightning Lunge", "Physical", 115, 0.80, 3,  ""),

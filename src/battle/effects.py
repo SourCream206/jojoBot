@@ -23,8 +23,8 @@ def handle_hit_3_times(attacker: Stand, defender: Stand, move: Move, damage: int
     return 3.0, " ⚔️ *Hit 3 times!*"
 
 def handle_multi_hit(attacker: Stand, defender: Stand, move: Move, damage: int) -> tuple[float, str]:
-    """Hit 2-3 times randomly."""
-    hits = random.randint(2, 3)
+    """Hit multiple times based on attacker's speed stat."""
+    hits = max(2, attacker.stats.spd // 25)
     return float(hits), f" ⚔️ *Hit {hits} times!*"
 
 def handle_high_crit(attacker: Stand, defender: Stand, move: Move, damage: int) -> tuple[float, str]:
