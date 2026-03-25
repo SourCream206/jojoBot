@@ -499,7 +499,7 @@ class EquipSelectView(discord.ui.View):
             stars = "★" * copy["stars"]
             shiny = " ✨" if copy["is_shiny"] else ""
             label = f"Lv.{copy['level']} {stars}{shiny}"
-            description = f"ID: {copy['id']} • XP: {copy['xp']}"
+            description = f"ID: {copy['id']} • XP: {copy.get('exp', 0)}"
             options.append(
                 discord.SelectOption(
                     label=label,
