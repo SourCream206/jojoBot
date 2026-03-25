@@ -45,6 +45,25 @@ PVE_ENEMIES = {
 }
 
 
+async def _get_defender_items(defender_id: Optional[str]) -> dict:
+    """Fetch defender's items for the reveals_info effect. Generate dummy AI items for PvE."""
+    if defender_id is None:
+        # PvE: Generate random AI items
+        items = {}
+        ai_item_pool = ["healingItem", "xpPotion", "rareRoll", "epicRoll"]
+        for item_id in ai_item_pool:
+            if random.random() < 0.4:  # 40% chance for each item type
+                items[item_id] = random.randint(1, 3)
+        return items
+    else:
+        # PvP: Fetch real items from database
+        all_items = await db.get_items(defender_id)
+        items = {}
+        for item in all_items:
+            items[item["item_id"]] = item["quantity"]
+        return items
+
+
 class Battle(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
@@ -184,6 +203,7 @@ class Battle(commands.Cog):
             is_pvp       = False,
         )
         session.db_battle_id = battle_row["id"]
+        session.defender_items = await _get_defender_items(None)
 
         view  = BattleView(session, ctx)
         embed = _battle_start_embed(
@@ -336,6 +356,7 @@ class ChallengeView(discord.ui.View):
             is_pvp      = True,
         )
         session.db_battle_id = battle_row["id"]
+        session.defender_items = await _get_defender_items(self.target_id)
 
         view  = BattleView(session, self.ctx)
         embed = _battle_start_embed(
