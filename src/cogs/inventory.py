@@ -135,17 +135,28 @@ class Inventory(commands.Cog):
             await ctx.reply(f"You don't own **{stand_name}**.", mention_author=False)
             return
 
-        stand = copies[0]
-        secondary = await db.get_secondary_stand(str(ctx.author.id))
-        if secondary and secondary["id"] == stand["id"]:
-            await ctx.reply(f"**{stand['stand_name']}** is already equipped as your secondary stand! Equip a different primary.", mention_author=False)
+        # If only one copy, equip it directly
+        if len(copies) == 1:
+            stand = copies[0]
+            secondary = await db.get_secondary_stand(str(ctx.author.id))
+            if secondary and secondary["id"] == stand["id"]:
+                await ctx.reply(f"**{stand['stand_name']}** is already equipped as your secondary stand! Equip a different primary.", mention_author=False)
+                return
+            await db.set_primary_stand(str(ctx.author.id), stand["id"])
+            await ctx.reply(
+                f"⭐ **{stand['stand_name']}** is now your primary stand!",
+                mention_author=False,
+            )
             return
 
-        await db.set_primary_stand(str(ctx.author.id), stand["id"])
-        await ctx.reply(
-            f"⭐ **{stand['stand_name']}** is now your primary stand!",
-            mention_author=False,
+        # Multiple copies - show dropdown
+        view = EquipSelectView(ctx.author, copies, "primary")
+        embed = discord.Embed(
+            title=f"⭐ Equip Primary Stand: {stand_name}",
+            description=f"You have **{len(copies)}** copies of this stand.\nSelect which one to equip:",
+            color=0xF1C40F,
         )
+        await ctx.reply(embed=embed, view=view, mention_author=False)
 
     @commands.command(name="equipsecondary", aliases=["eqsec", "setsecondary", "sec"])
     async def sequipsecondary(self, ctx: commands.Context, *, stand_name: str):
@@ -157,17 +168,28 @@ class Inventory(commands.Cog):
             await ctx.reply(f"You don't own **{stand_name}**.", mention_author=False)
             return
 
-        stand = copies[0]
-        primary = await db.get_primary_stand(str(ctx.author.id))
-        if primary and primary["id"] == stand["id"]:
-            await ctx.reply(f"**{stand['stand_name']}** is already equipped as your primary stand! Equip a different secondary.", mention_author=False)
+        # If only one copy, equip it directly
+        if len(copies) == 1:
+            stand = copies[0]
+            primary = await db.get_primary_stand(str(ctx.author.id))
+            if primary and primary["id"] == stand["id"]:
+                await ctx.reply(f"**{stand['stand_name']}** is already equipped as your primary stand! Equip a different secondary.", mention_author=False)
+                return
+            await db.set_secondary_stand(str(ctx.author.id), stand["id"])
+            await ctx.reply(
+                f"🌟 **{stand['stand_name']}** is now your secondary stand!",
+                mention_author=False,
+            )
             return
 
-        await db.set_secondary_stand(str(ctx.author.id), stand["id"])
-        await ctx.reply(
-            f"🌟 **{stand['stand_name']}** is now your secondary stand!",
-            mention_author=False,
+        # Multiple copies - show dropdown
+        view = EquipSelectView(ctx.author, copies, "secondary")
+        embed = discord.Embed(
+            title=f"🌟 Equip Secondary Stand: {stand_name}",
+            description=f"You have **{len(copies)}** copies of this stand.\nSelect which one to equip:",
+            color=0x3498DB,
         )
+        await ctx.reply(embed=embed, view=view, mention_author=False)
 
     # ── Smerge ────────────────────────────────────────────────────────────────
 
@@ -452,6 +474,90 @@ class InventoryView(discord.ui.View):
         self.page = min(self._max_pages() - 1, self.page + 1)
         self._rebuild()
         await interaction.response.edit_message(embed=self.build_embed(), view=self)
+
+    async def on_timeout(self):
+        self.clear_items()
+
+
+# ════════════════════════════════════════════════════════════
+# EQUIP SELECT VIEW — dropdown for choosing which copy to equip
+# ════════════════════════════════════════════════════════════
+
+class EquipSelectView(discord.ui.View):
+    def __init__(self, author: discord.User, copies: list, slot_type: str):
+        super().__init__(timeout=60)
+        self.author = author
+        self.copies = copies
+        self.slot_type = slot_type  # "primary" or "secondary"
+
+        # Sort copies by level (descending), then stars (descending)
+        sorted_copies = sorted(copies, key=lambda c: (c["level"], c["stars"]), reverse=True)
+
+        # Build dropdown options
+        options = []
+        for i, copy in enumerate(sorted_copies):
+            stars = "★" * copy["stars"]
+            shiny = " ✨" if copy["is_shiny"] else ""
+            label = f"Lv.{copy['level']} {stars}{shiny}"
+            description = f"ID: {copy['id']} • XP: {copy['xp']}"
+            options.append(
+                discord.SelectOption(
+                    label=label,
+                    description=description,
+                    value=str(copy["id"]),
+                )
+            )
+
+        # Create the select dropdown
+        select = discord.ui.Select(
+            placeholder="Choose a stand to equip...",
+            options=options,
+            min_values=1,
+            max_values=1,
+        )
+        select.callback = self._select_callback
+        self.add_item(select)
+
+    async def _select_callback(self, interaction: discord.Interaction):
+        if interaction.user.id != self.author.id:
+            await interaction.response.send_message("This isn't your menu!", ephemeral=True)
+            return
+
+        stand_id = int(interaction.data["values"][0])
+        selected_stand = next(c for c in self.copies if c["id"] == stand_id)
+
+        # Check if the stand is already equipped in the other slot
+        if self.slot_type == "primary":
+            secondary = await db.get_secondary_stand(str(self.author.id))
+            if secondary and secondary["id"] == stand_id:
+                await interaction.response.send_message(
+                    f"**{selected_stand['stand_name']}** is already equipped as your secondary stand!",
+                    ephemeral=True
+                )
+                return
+            await db.set_primary_stand(str(self.author.id), stand_id)
+            emoji = "⭐"
+        else:
+            primary = await db.get_primary_stand(str(self.author.id))
+            if primary and primary["id"] == stand_id:
+                await interaction.response.send_message(
+                    f"**{selected_stand['stand_name']}** is already equipped as your primary stand!",
+                    ephemeral=True
+                )
+                return
+            await db.set_secondary_stand(str(self.author.id), stand_id)
+            emoji = "🌟"
+
+        # Update embed to show success
+        stars = "★" * selected_stand["stars"]
+        shiny = " ✨" if selected_stand["is_shiny"] else ""
+        embed = discord.Embed(
+            title=f"{emoji} Stand Equipped!",
+            description=f"**{selected_stand['stand_name']}** Lv.{selected_stand['level']} {stars}{shiny}\nis now your {self.slot_type} stand!",
+            color=0x2ECC71,
+        )
+        self.clear_items()
+        await interaction.response.edit_message(embed=embed, view=self)
 
     async def on_timeout(self):
         self.clear_items()
