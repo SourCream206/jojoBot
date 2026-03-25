@@ -23,6 +23,7 @@ COGS = [
     "src.cogs.profile",
     "src.cogs.economy",
     "src.cogs.admin",
+    "src.cogs.help",
 ]
 
 
