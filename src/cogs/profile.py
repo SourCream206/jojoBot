@@ -20,7 +20,8 @@ class Profile(commands.Cog):
         target = member or ctx.author
         user   = await db.get_or_create_user(str(target.id), target.name)
         primary = await db.get_primary_stand(str(target.id))
-        embed  = profile_embed(user, primary)
+        secondary = await db.get_secondary_stand(str(target.id))
+        embed  = profile_embed(user, primary, secondary)
         if target.avatar:
             embed.set_thumbnail(url=target.avatar.url)
         await ctx.reply(embed=embed, mention_author=False)

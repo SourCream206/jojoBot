@@ -80,7 +80,7 @@ STAND_CATALOG: dict[str, dict] = {
         "type":   "Close-Range",
         "rarity": "Legendary",
         "part":   3,
-        "stats":  S(hp=95, atk=130, def_=80, spa=70, spd=110, rng=40),
+        "stats":  S(hp=87, atk=118, def_=73, spa=64, spd=101, rng=37),
         "gimmick": "precision_strike",
         "moves": [
             M("ORA Barrage",  "Physical", 80,  0.95, 8,  "hit_3_times"),
@@ -94,7 +94,7 @@ STAND_CATALOG: dict[str, dict] = {
         "type":   "Close-Range",
         "rarity": "Legendary",
         "part":   3,
-        "stats":  S(hp=100, atk=125, def_=85, spa=60, spd=100, rng=40),
+        "stats":  S(hp=94, atk=118, def_=80, spa=56, spd=94, rng=38),
         "gimmick": "time_stop",
         "moves": [
             M("MUDA Barrage", "Physical", 80,  0.95, 8,  "hit_3_times"),
@@ -108,7 +108,7 @@ STAND_CATALOG: dict[str, dict] = {
         "type":   "Ability",
         "rarity": "Common",
         "part":   3,
-        "stats":  S(hp=65, atk=40, def_=55, spa=90, spd=70, rng=85),
+        "stats":  S(hp=67, atk=41, def_=57, spa=94, spd=73, rng=88),
         "gimmick": "foresight",
         "moves": [
             M("Thorn Whip",      "Physical", 50, 1.00, 12, ""),
@@ -122,7 +122,7 @@ STAND_CATALOG: dict[str, dict] = {
         "type":   "Long-Distance",
         "rarity": "Rare",
         "part":   3,
-        "stats":  S(hp=75, atk=85, def_=65, spa=100, spd=70, rng=90),
+        "stats":  S(hp=68, atk=77, def_=59, spa=90, spd=64, rng=82),
         "gimmick": None,
         "moves": [
             M("Red Bind",        "Special",  60, 0.95, 10, "burn"),
@@ -136,7 +136,7 @@ STAND_CATALOG: dict[str, dict] = {
         "type":   "Close-Range",
         "rarity": "Rare",
         "part":   3,
-        "stats":  S(hp=70, atk=100, def_=70, spa=55, spd=120, rng=50),
+        "stats":  S(hp=66, atk=95, def_=66, spa=52, spd=114, rng=47),
         "gimmick": None,
         "moves": [
             M("Rapier Thrust",   "Physical", 65,  1.00, 10, ""),
@@ -150,7 +150,7 @@ STAND_CATALOG: dict[str, dict] = {
         "type":   "Ability",
         "rarity": "Legendary",
         "part":   3,
-        "stats":  S(hp=70, atk=55, def_=65, spa=110, spd=85, rng=70),
+        "stats":  S(hp=74, atk=58, def_=69, spa=115, spd=90, rng=74),
         "gimmick": None,
         "moves": [
             M("Soul Steal",      "Special",  70,  0.90, 8,  "drain_hp"),
@@ -164,7 +164,7 @@ STAND_CATALOG: dict[str, dict] = {
         "type":   "Close-Range",
         "rarity": "Legendary",
         "part":   3,
-        "stats":  S(hp=80, atk=115, def_=90, spa=60, spd=90, rng=40),
+        "stats":  S(hp=81, atk=116, def_=91, spa=61, spd=91, rng=40),
         "gimmick": None,
         "moves": [
             M("Void Bite",       "Physical", 85,  0.90, 8,  ""),
@@ -178,7 +178,7 @@ STAND_CATALOG: dict[str, dict] = {
         "type":   "Close-Range",
         "rarity": "Epic",
         "part":   3,
-        "stats":  S(hp=72, atk=110, def_=60, spa=50, spd=105, rng=45),
+        "stats":  S(hp=75, atk=115, def_=62, spa=52, spd=109, rng=47),
         "gimmick": None,
         "moves": [
             M("Sword Slash",     "Physical", 70,  1.00, 10, ""),
@@ -192,7 +192,7 @@ STAND_CATALOG: dict[str, dict] = {
         "type":   "Long-Distance",
         "rarity": "Epic",
         "part":   3,
-        "stats":  S(hp=75, atk=80, def_=70, spa=100, spd=85, rng=95),
+        "stats":  S(hp=68, atk=73, def_=64, spa=91, spd=77, rng=87),
         "gimmick": None,
         "moves": [
             M("Water Hand",      "Special",  65,  0.95, 10, ""),
@@ -208,7 +208,7 @@ STAND_CATALOG: dict[str, dict] = {
         "type":   "Close-Range",
         "rarity": "Legendary",
         "part":   4,
-        "stats":  S(hp=90, atk=120, def_=85, spa=60, spd=95, rng=40),
+        "stats":  S(hp=88, atk=118, def_=83, spa=59, spd=93, rng=39),
         "gimmick": "restoration",
         "moves": [
             M("DORA Barrage",    "Physical", 80,  0.95, 8,  ""),
@@ -222,7 +222,7 @@ STAND_CATALOG: dict[str, dict] = {
         "type":   "Close-Range",
         "rarity": "Legendary",
         "part":   4,
-        "stats":  S(hp=85, atk=110, def_=80, spa=90, spd=90, rng=55),
+        "stats":  S(hp=80, atk=103, def_=75, spa=85, spd=85, rng=52),
         "gimmick": "bomb_set",
         "moves": [
             M("Primary Bomb",    "Physical", 90,  0.90, 6,  "bomb_trigger"),
@@ -236,7 +236,7 @@ STAND_CATALOG: dict[str, dict] = {
         "type":   "Ability",
         "rarity": "Rare",
         "part":   4,
-        "stats":  S(hp=60, atk=50, def_=55, spa=80, spd=85, rng=75),
+        "stats":  S(hp=65, atk=54, def_=60, spa=87, spd=93, rng=81),
         "gimmick": None,
         "moves": [
             M("Sound Effect",    "Special",  55,  0.95, 10, ""),
@@ -250,7 +250,7 @@ STAND_CATALOG: dict[str, dict] = {
         "type":   "Ability",
         "rarity": "Epic",
         "part":   4,
-        "stats":  S(hp=68, atk=60, def_=60, spa=95, spd=90, rng=80),
+        "stats":  S(hp=69, atk=61, def_=61, spa=97, spd=91, rng=81),
         "gimmick": None,
         "moves": [
             M("Sound Pressure",  "Special",  65,  0.95, 10, ""),
@@ -264,7 +264,7 @@ STAND_CATALOG: dict[str, dict] = {
         "type":   "Ability",
         "rarity": "Epic",
         "part":   4,
-        "stats":  S(hp=75, atk=75, def_=65, spa=110, spd=95, rng=80),
+        "stats":  S(hp=69, atk=69, def_=60, spa=101, spd=87, rng=74),
         "gimmick": None,
         "moves": [
             M("3 Freeze",        "Special",  80,  0.90, 8,  "lower_spd"),
@@ -278,7 +278,7 @@ STAND_CATALOG: dict[str, dict] = {
         "type":   "Colony",
         "rarity": "Epic",
         "part":   4,
-        "stats":  S(hp=65, atk=55, def_=60, spa=80, spd=100, rng=90),
+        "stats":  S(hp=66, atk=56, def_=61, spa=82, spd=103, rng=92),
         "gimmick": "scavenge",
         "moves": [
             M("Swarm Strike",    "Physical", 60,  0.95, 10, "multi_hit"),
@@ -292,7 +292,7 @@ STAND_CATALOG: dict[str, dict] = {
         "type":   "Ability",
         "rarity": "Epic",
         "part":   4,
-        "stats":  S(hp=70, atk=55, def_=65, spa=105, spd=80, rng=75),
+        "stats":  S(hp=72, atk=56, def_=66, spa=107, spd=82, rng=77),
         "gimmick": None,
         "moves": [
             M("Paper Slash",     "Physical", 55,  1.00, 10, ""),
@@ -306,7 +306,7 @@ STAND_CATALOG: dict[str, dict] = {
         "type":   "Automatic",
         "rarity": "Legendary",
         "part":   4,
-        "stats":  S(hp=80, atk=100, def_=85, spa=100, spd=85, rng=60),
+        "stats":  S(hp=75, atk=95, def_=80, spa=94, spd=80, rng=56),
         "gimmick": "bomb_set",
         "moves": [
             M("Loop Bomb",       "Special",  90,  0.85, 6,  "bomb_trigger"),
@@ -322,7 +322,7 @@ STAND_CATALOG: dict[str, dict] = {
         "type":   "Close-Range",
         "rarity": "Legendary",
         "part":   5,
-        "stats":  S(hp=85, atk=100, def_=80, spa=110, spd=95, rng=50),
+        "stats":  S(hp=78, atk=92, def_=74, spa=102, spd=88, rng=46),
         "gimmick": "life_reflection",
         "moves": [
             M("Life Shot",       "Special",  75,  0.95, 8,  ""),
@@ -336,7 +336,7 @@ STAND_CATALOG: dict[str, dict] = {
         "type":   "Close-Range",
         "rarity": "Mythical",
         "part":   5,
-        "stats":  S(hp=100, atk=120, def_=95, spa=140, spd=110, rng=60),
+        "stats":  S(hp=80, atk=96, def_=76, spa=112, spd=88, rng=48),
         "gimmick": "life_reflection",
         "moves": [
             M("Return to Zero",  "Special",  130, 0.90, 4,  "nullify_effect"),
@@ -350,7 +350,7 @@ STAND_CATALOG: dict[str, dict] = {
         "type":   "Close-Range",
         "rarity": "Legendary",
         "part":   5,
-        "stats":  S(hp=90, atk=125, def_=75, spa=70, spd=110, rng=45),
+        "stats":  S(hp=84, atk=116, def_=70, spa=65, spd=103, rng=42),
         "gimmick": None,
         "moves": [
             M("Epitaph Foresee", "Status",   0,   1.00, 3,  "dodge_next"),
@@ -364,7 +364,7 @@ STAND_CATALOG: dict[str, dict] = {
         "type":   "Long-Distance",
         "rarity": "Epic",
         "part":   5,
-        "stats":  S(hp=60, atk=70, def_=50, spa=90, spd=110, rng=120),
+        "stats":  S(hp=55, atk=64, def_=46, spa=83, spd=101, rng=111),
         "gimmick": None,
         "moves": [
             M("Bullet Redirect", "Special",  70,  1.00, 8,  ""),
@@ -378,7 +378,7 @@ STAND_CATALOG: dict[str, dict] = {
         "type":   "Close-Range",
         "rarity": "Epic",
         "part":   5,
-        "stats":  S(hp=80, atk=120, def_=55, spa=110, spd=60, rng=40),
+        "stats":  S(hp=79, atk=119, def_=54, spa=109, spd=59, rng=40),
         "gimmick": None,
         "moves": [
             M("Virus Capsule",   "Special",  90,  0.85, 6,  "poison"),
@@ -392,7 +392,7 @@ STAND_CATALOG: dict[str, dict] = {
         "type":   "Close-Range",
         "rarity": "Legendary",
         "part":   5,
-        "stats":  S(hp=88, atk=115, def_=78, spa=65, spd=100, rng=45),
+        "stats":  S(hp=86, atk=112, def_=76, spa=64, spd=98, rng=44),
         "gimmick": None,
         "moves": [
             M("Zipper Punch",    "Physical", 80,  1.00, 8,  ""),
@@ -408,7 +408,7 @@ STAND_CATALOG: dict[str, dict] = {
         "type":   "Close-Range",
         "rarity": "Rare",
         "part":   7,
-        "stats":  S(hp=65, atk=70, def_=60, spa=55, spd=75, rng=60),
+        "stats":  S(hp=74, atk=80, def_=69, spa=63, spd=85, rng=69),
         "gimmick": None,
         "moves": [
             M("Nail Shot",       "Physical", 55,  0.95, 10, ""),
@@ -422,7 +422,7 @@ STAND_CATALOG: dict[str, dict] = {
         "type":   "Close-Range",
         "rarity": "Epic",
         "part":   7,
-        "stats":  S(hp=72, atk=85, def_=65, spa=65, spd=85, rng=65),
+        "stats":  S(hp=76, atk=91, def_=68, spa=68, spd=89, rng=68),
         "gimmick": None,
         "moves": [
             M("Golden Spin",     "Physical", 70,  0.95, 8,  ""),
@@ -436,7 +436,7 @@ STAND_CATALOG: dict[str, dict] = {
         "type":   "Close-Range",
         "rarity": "Epic",
         "part":   7,
-        "stats":  S(hp=80, atk=100, def_=72, spa=75, spd=95, rng=70),
+        "stats":  S(hp=75, atk=94, def_=67, spa=70, spd=89, rng=65),
         "gimmick": None,
         "moves": [
             M("ACT3 Spin",       "Physical", 85,  0.90, 6,  ""),
@@ -450,7 +450,7 @@ STAND_CATALOG: dict[str, dict] = {
         "type":   "Close-Range",
         "rarity": "Mythical",
         "part":   7,
-        "stats":  S(hp=95, atk=130, def_=85, spa=95, spd=105, rng=75),
+        "stats":  S(hp=81, atk=111, def_=73, spa=81, spd=90, rng=64),
         "gimmick": None,
         "moves": [
             M("Love Train Piercer","Physical",120, 0.90, 5,  "ignores_dodge"),
@@ -464,7 +464,7 @@ STAND_CATALOG: dict[str, dict] = {
         "type":   "Close-Range",
         "rarity": "Mythical",
         "part":   7,
-        "stats":  S(hp=95, atk=115, def_=90, spa=90, spd=100, rng=55),
+        "stats":  S(hp=87, atk=105, def_=83, spa=83, spd=92, rng=50),
         "gimmick": None,
         "moves": [
             M("Parallel Swap",   "Status",   0,   1.00, 2,  "dimension_swap"),
@@ -480,7 +480,7 @@ STAND_CATALOG: dict[str, dict] = {
         "type":   "Close-Range",
         "rarity": "Legendary",
         "part":   8,
-        "stats":  S(hp=88, atk=105, def_=80, spa=100, spd=100, rng=60),
+        "stats":  S(hp=79, atk=95, def_=72, spa=90, spd=90, rng=54),
         "gimmick": None,
         "moves": [
             M("Bubble Barrage",  "Physical", 75,  0.95, 8,  ""),

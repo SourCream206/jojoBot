@@ -120,8 +120,10 @@ class Battle(commands.Cog):
                 )
                 return
 
+            secondary = await db.get_secondary_stand(user_id)
+
             # Send challenge embed with Accept/Decline
-            view = ChallengeView(ctx, user_id, target_id, primary)
+            view = ChallengeView(ctx, user_id, target_id, primary, secondary)
             embed = discord.Embed(
                 title="⚔️ Battle Challenge!",
                 description=(
@@ -151,8 +153,11 @@ class Battle(commands.Cog):
             )
             return
 
+        secondary = await db.get_secondary_stand(user_id)
+        sec_name = secondary["stand_name"] if secondary else ""
+
         attacker_stand = make_stand(
-            primary["stand_name"], primary["level"], primary["stars"], primary.get("is_shiny", False)
+            primary["stand_name"], primary["level"], primary["stars"], primary.get("is_shiny", False), sec_name
         )
         # PvE: scale enemy level slightly to player
         base_level = enemy_data["level"]
@@ -267,12 +272,13 @@ class Battle(commands.Cog):
 # ── Challenge accept/decline view ─────────────────────────────────────────────
 
 class ChallengeView(discord.ui.View):
-    def __init__(self, ctx, challenger_id: str, target_id: str, challenger_primary: dict):
+    def __init__(self, ctx, challenger_id: str, target_id: str, challenger_primary: dict, challenger_secondary: dict | None = None):
         super().__init__(timeout=120)
         self.ctx                = ctx
         self.challenger_id      = challenger_id
         self.target_id          = target_id
         self.challenger_primary = challenger_primary
+        self.challenger_secondary = challenger_secondary
         self.message            = None
 
     @discord.ui.button(label="✅ Accept", style=discord.ButtonStyle.success)
@@ -294,17 +300,23 @@ class ChallengeView(discord.ui.View):
             await interaction.response.send_message("One of the stands has no battle data!", ephemeral=True)
             return
 
+        att_sec_name = self.challenger_secondary["stand_name"] if self.challenger_secondary else ""
         att_stand = make_stand(
             self.challenger_primary["stand_name"],
             self.challenger_primary["level"],
             self.challenger_primary["stars"],
             self.challenger_primary.get("is_shiny", False),
+            att_sec_name
         )
+        
+        target_secondary = await db.get_secondary_stand(self.target_id)
+        dfd_sec_name = target_secondary["stand_name"] if target_secondary else ""
         dfd_stand = make_stand(
             target_primary["stand_name"],
             target_primary["level"],
             target_primary["stars"],
             target_primary.get("is_shiny", False),
+            dfd_sec_name
         )
 
         session = BattleSession(

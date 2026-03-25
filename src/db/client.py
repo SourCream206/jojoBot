@@ -105,6 +105,20 @@ async def get_primary_stand(user_id: str) -> Optional[dict]:
     except Exception:
         return None
 
+async def get_secondary_stand(user_id: str) -> Optional[dict]:
+    try:
+        res = (
+            db().table("user_stands")
+            .select("*")
+            .eq("user_id", user_id)
+            .eq("is_secondary", True)
+            .single()
+            .execute()
+        )
+        return res.data
+    except Exception:
+        return None
+
 async def add_stand(user_id: str, stand_name: str, stars: int = 1, is_shiny: bool = False) -> dict:
     res = db().table("user_stands").insert({
         "user_id":    user_id,
@@ -115,9 +129,14 @@ async def add_stand(user_id: str, stand_name: str, stars: int = 1, is_shiny: boo
     return res.data[0]
 
 async def set_primary_stand(user_id: str, stand_id: int):
-    """Clears existing primary then sets new one. Partial unique index is the safety net."""
+    """Clears existing primary then sets new one. Unsets secondary if target is currently secondary."""
     db().table("user_stands").update({"is_primary": False}).eq("user_id", user_id).execute()
-    db().table("user_stands").update({"is_primary": True}).eq("id", stand_id).execute()
+    db().table("user_stands").update({"is_primary": True, "is_secondary": False}).eq("id", stand_id).execute()
+
+async def set_secondary_stand(user_id: str, stand_id: int):
+    """Clears existing secondary then sets new one. Unsets primary if target is currently primary."""
+    db().table("user_stands").update({"is_secondary": False}).eq("user_id", user_id).execute()
+    db().table("user_stands").update({"is_secondary": True, "is_primary": False}).eq("id", stand_id).execute()
 
 async def update_stand(stand_id: int, **kwargs):
     res = db().table("user_stands").update(kwargs).eq("id", stand_id).execute()

@@ -85,12 +85,30 @@ class BattleSession:
         eff_str = ""
         crit_str = " ⭐ *Critical hit!*" if crit else ""
 
+        # Apply Move Effects (like Burn)
+        if move.effect == "burn" and defender.status != "burn" and random.random() < 0.30:
+            defender.status = "burn"
+            eff_str += " 🔥 *Burn applied!*"
+
+        # Star Platinum + The World (Time Stop bonus: +50% damage if defender turn skipped)
+        if attacker.name == "Star Platinum" and attacker.secondary_stand_name == "The World":
+            if self.skip_defender_turn:
+                damage = int(damage * 1.5)
+                eff_str += " 🛑 *Time Stop Bonus!*"
+
         # Life reflection (Gold Experience)
         damage, reflect_log = apply_gimmick_on_damage_received(
             self,
             defender_is_attacker=(defender is self.attacker_stand),
             damage=damage,
         )
+
+        # Tohth + Khnum (Fate manipulation: 10% chance to reflect)
+        if defender.name == "Tohth" and defender.secondary_stand_name == "Khnum" and damage > 0:
+            if random.random() < 0.10:
+                attacker.current_hp = max(0, attacker.current_hp - damage)
+                move.pp_remaining -= 1
+                return f"👁️ **{defender.name}** manipulated fate and reflected **{damage}** damage back to **{attacker.name}**!"
 
         defender.current_hp = max(0, defender.current_hp - damage)
         move.pp_remaining -= 1
@@ -99,6 +117,12 @@ class BattleSession:
             f"**{attacker.name}** used **{move.name}**!{bomb_str}{crit_str}{eff_str}\n"
             f"➤ Dealt **{damage}** damage to **{defender.name}**!"
         )
+
+        # The World + Cream (Vampiric power: +8% lifesteal)
+        if attacker.name == "The World" and attacker.secondary_stand_name == "Cream" and damage > 0:
+            lifesteal = max(1, int(damage * 0.08))
+            attacker.current_hp = min(attacker.max_hp, attacker.current_hp + lifesteal)
+            parts.append(f"🦇 **{attacker.name}** absorbed **{lifesteal}** HP!")
 
         if reflect_log:
             parts.append(reflect_log)
@@ -231,6 +255,24 @@ class BattleView(discord.ui.View):
         if enemy_gimmick:
             full_text += f"\n{enemy_gimmick}"
         full_text += f"\n\n{enemy_log}"
+
+        # ── Apply End of Turn DOT (Burn)
+        for st_obj, opponent in [(s.attacker_stand, s.defender_stand), (s.defender_stand, s.attacker_stand)]:
+            if st_obj.current_hp > 0 and st_obj.status == "burn":
+                burn_dmg = max(1, int(st_obj.max_hp / 16))
+                
+                # Magician's Red + Sun synergy: +50% burn damage
+                if opponent.name == "Magician's Red" and opponent.secondary_stand_name == "The Sun":
+                    burn_dmg = int(burn_dmg * 1.5)
+
+                st_obj.current_hp = max(0, st_obj.current_hp - burn_dmg)
+                full_text += f"\n🔥 **{st_obj.name}** took **{burn_dmg}** burn damage!"
+
+                if st_obj.current_hp <= 0:
+                    s.finished = True
+                    s.winner_is_attacker = (st_obj is s.defender_stand)
+                    full_text += f"\n💀 **{st_obj.name}** fainted from Burn!"
+                    break
 
         s.last_action = full_text
         s.round_number += 1

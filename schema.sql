@@ -41,6 +41,7 @@ CREATE TABLE user_stands (
     is_shiny    BOOLEAN DEFAULT FALSE,
     nickname    TEXT DEFAULT '',
     is_primary  BOOLEAN DEFAULT FALSE,
+    is_secondary BOOLEAN DEFAULT FALSE,
     obtained_at TIMESTAMPTZ DEFAULT NOW()
 );
 
@@ -48,6 +49,11 @@ CREATE TABLE user_stands (
 CREATE UNIQUE INDEX one_primary_per_user
     ON user_stands (user_id)
     WHERE is_primary = TRUE;
+
+-- Enforce only one secondary stand per user at the DB level
+CREATE UNIQUE INDEX one_secondary_per_user
+    ON user_stands (user_id)
+    WHERE is_secondary = TRUE;
 
 
 -- ────────────────────────────────────────────────────────────

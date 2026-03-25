@@ -11,7 +11,7 @@ from datetime import datetime, timezone
 from src.db import client as db
 from src.utils.constants import (
     STAND_POOLS, RARITY_WEIGHTS_STANDARD, RARITY_WEIGHTS_PREMIUM,
-    PITY_LEGENDARY_THRESHOLD, SHINY_RATE, RARITY_EMOJIS, RARITY_COLORS,
+    PITY_LEGENDARY_THRESHOLD, PITY_MYTHICAL_THRESHOLD, SHINY_RATE, RARITY_EMOJIS, RARITY_COLORS,
 )
 from src.utils.passives import get_sroll_cooldown
 from src.utils.embeds import stand_roll_embed
@@ -56,8 +56,17 @@ class Rolls(commands.Cog):
             await ctx.reply("No stands available in this area!", mention_author=False)
             return
 
+        # Osiris + Atum synergy (Better luck in rolling)
+        weights = dict(RARITY_WEIGHTS_STANDARD)
+        primary = await db.get_primary_stand(str(ctx.author.id))
+        secondary = await db.get_secondary_stand(str(ctx.author.id))
+        if primary and secondary and primary["stand_name"] == "Osiris" and secondary["stand_name"] == "Atum":
+            weights["Epic"] = weights.get("Epic", 0) * 2
+            weights["Legendary"] = weights.get("Legendary", 0) * 2
+            weights["Mythical"] = weights.get("Mythical", 0) * 2
+
         # Determine rarity (with pity)
-        rarity = _roll_rarity(user["pity_counter"], RARITY_WEIGHTS_STANDARD)
+        rarity = _roll_rarity(user["pity_counter"], user["mythical_pity_counter"], weights)
 
         # Pity update
         if rarity == "Legendary":
@@ -88,7 +97,110 @@ class Rolls(commands.Cog):
             await ctx.send(embed=quest_complete_embed(quest_title, rewards))
 
         embed = stand_roll_embed(stand_name, rarity, 1, is_shiny)
-        embed.set_footer(text=f"Area: {area} | Pity: {user['pity_counter'] + 1}/50")
+        embed.set_footer(text=f"Area: {area} | Pity: {user['pity_counter'] + 1}/{PITY_LEGENDARY_THRESHOLD}")
+        await ctx.reply(embed=embed, mention_author=False)
+
+    # ── Item Rolls ─────────────────────────────────────────────────────────────
+
+    @commands.command(name="rareroll")
+    async def rareroll(self, ctx: commands.Context):
+        """Consume a Rare Roll to get a guaranteed Rare or better stand."""
+        user = await db.get_or_create_user(str(ctx.author.id), ctx.author.name)
+        
+        has_item = await db.consume_item(str(ctx.author.id), "rareRoll")
+        if not has_item:
+            await ctx.reply("You don't have a **Rare Roll** item in your bag!", mention_author=False)
+            return
+
+        area   = user["current_area"]
+        pool   = STAND_POOLS.get(area, [])
+        unlocked = await db.get_unlocked_stands(str(ctx.author.id))
+        eligible = [s for s in pool if not s.get("special_unlock") or s["name"] in unlocked]
+        
+        if not eligible:
+            await db.add_item(str(ctx.author.id), "rareRoll", 1) # Refund
+            await ctx.reply("No stands available in this area!", mention_author=False)
+            return
+
+        weights = {"Common": 0.0, "Rare": 0.55, "Epic": 0.30, "Legendary": 0.15, "Mythical": 0.0}
+        
+        primary = await db.get_primary_stand(str(ctx.author.id))
+        secondary = await db.get_secondary_stand(str(ctx.author.id))
+        if primary and secondary and primary["stand_name"] == "Osiris" and secondary["stand_name"] == "Atum":
+            weights["Epic"] *= 2
+            weights["Legendary"] *= 2
+            
+        rarity = _roll_rarity(user["pity_counter"], user["mythical_pity_counter"], weights)
+        
+        if rarity == "Legendary":
+            await db.reset_pity(str(ctx.author.id), "legendary")
+        elif rarity == "Mythical":
+            await db.reset_pity(str(ctx.author.id), "mythical")
+        else:
+            await db.increment_pity(str(ctx.author.id), "legendary")
+            await db.increment_pity(str(ctx.author.id), "mythical")
+            
+        rarity_pool = [s for s in eligible if s["rarity"] == rarity]
+        if not rarity_pool: rarity_pool = eligible
+            
+        stand_data = random.choice(rarity_pool)
+        stand_name = stand_data["name"]
+        is_shiny   = random.random() < SHINY_RATE
+        
+        await db.add_stand(str(ctx.author.id), stand_name, stars=1, is_shiny=is_shiny)
+        
+        embed = stand_roll_embed(stand_name, rarity, 1, is_shiny)
+        embed.set_footer(text=f"🎰 Used a Rare Roll! | Area: {area}")
+        await ctx.reply(embed=embed, mention_author=False)
+
+    @commands.command(name="epicroll")
+    async def epicroll(self, ctx: commands.Context):
+        """Consume an Epic Roll to get a guaranteed Epic or better stand."""
+        user = await db.get_or_create_user(str(ctx.author.id), ctx.author.name)
+        
+        has_item = await db.consume_item(str(ctx.author.id), "epicRoll")
+        if not has_item:
+            await ctx.reply("You don't have an **Epic Roll** item in your bag!", mention_author=False)
+            return
+
+        area   = user["current_area"]
+        pool   = STAND_POOLS.get(area, [])
+        unlocked = await db.get_unlocked_stands(str(ctx.author.id))
+        eligible = [s for s in pool if not s.get("special_unlock") or s["name"] in unlocked]
+        
+        if not eligible:
+            await db.add_item(str(ctx.author.id), "epicRoll", 1) # Refund
+            await ctx.reply("No stands available in this area!", mention_author=False)
+            return
+
+        weights = {"Common": 0.0, "Rare": 0.0, "Epic": 0.70, "Legendary": 0.30, "Mythical": 0.0}
+        
+        primary = await db.get_primary_stand(str(ctx.author.id))
+        secondary = await db.get_secondary_stand(str(ctx.author.id))
+        if primary and secondary and primary["stand_name"] == "Osiris" and secondary["stand_name"] == "Atum":
+            weights["Legendary"] *= 2
+            
+        rarity = _roll_rarity(user["pity_counter"], user["mythical_pity_counter"], weights)
+        
+        if rarity == "Legendary":
+            await db.reset_pity(str(ctx.author.id), "legendary")
+        elif rarity == "Mythical":
+            await db.reset_pity(str(ctx.author.id), "mythical")
+        else:
+            await db.increment_pity(str(ctx.author.id), "legendary")
+            await db.increment_pity(str(ctx.author.id), "mythical")
+            
+        rarity_pool = [s for s in eligible if s["rarity"] == rarity]
+        if not rarity_pool: rarity_pool = eligible
+            
+        stand_data = random.choice(rarity_pool)
+        stand_name = stand_data["name"]
+        is_shiny   = random.random() < SHINY_RATE
+        
+        await db.add_stand(str(ctx.author.id), stand_name, stars=1, is_shiny=is_shiny)
+        
+        embed = stand_roll_embed(stand_name, rarity, 1, is_shiny)
+        embed.set_footer(text=f"🎲 Used an Epic Roll! | Area: {area}")
         await ctx.reply(embed=embed, mention_author=False)
 
     # ── Spity ──────────────────────────────────────────────────────────────────
@@ -105,7 +217,7 @@ class Rolls(commands.Cog):
         )
         embed.add_field(
             name="🔴 Mythical Pity",
-            value=f"{user['mythical_pity_counter']}/200 rolls",
+            value=f"{user['mythical_pity_counter']}/{PITY_MYTHICAL_THRESHOLD} rolls",
             inline=True,
         )
         await ctx.reply(embed=embed, mention_author=False)
@@ -113,8 +225,10 @@ class Rolls(commands.Cog):
 
 # ── Helpers ───────────────────────────────────────────────────────────────────
 
-def _roll_rarity(pity: int, weights: dict) -> str:
+def _roll_rarity(pity: int, mythical_pity: int, weights: dict) -> str:
     # Pity override
+    if mythical_pity >= PITY_MYTHICAL_THRESHOLD:
+        return "Mythical"
     if pity >= PITY_LEGENDARY_THRESHOLD:
         return "Legendary"
 

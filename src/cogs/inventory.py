@@ -78,6 +78,45 @@ class Inventory(commands.Cog):
 
         await ctx.reply(embed=embed, mention_author=False)
 
+    # ── Sitems ────────────────────────────────────────────────────────────────
+
+    @commands.command(name="items", aliases=["bag", "backpack"])
+    async def sitems(self, ctx: commands.Context):
+        """View your items (xpPotions, rolls, etc.)."""
+        await db.get_or_create_user(str(ctx.author.id), ctx.author.name)
+        items = await db.get_items(str(ctx.author.id))
+        
+        if not items:
+            await ctx.reply("Your bag is empty!", mention_author=False)
+            return
+            
+        embed = discord.Embed(
+            title=f"🎒 {ctx.author.name}'s Bag",
+            color=0x3498DB
+        )
+        
+        lines = []
+        for row in items:
+            item_id = row["item_id"]
+            qty = row["quantity"]
+            if qty <= 0:
+                continue
+            item_def = ITEMS.get(item_id)
+            if item_def:
+                name = item_def.get("name", item_id)
+                desc = item_def.get("description", "")
+                emoji = item_def.get("emoji", "📦")
+                lines.append(f"{emoji} **{name}** ×{qty}\n└ *{desc}*")
+            else:
+                lines.append(f"📦 **{item_id}** ×{qty}")
+                
+        if not lines:
+            await ctx.reply("Your bag is empty!", mention_author=False)
+            return
+            
+        embed.description = "\n\n".join(lines)
+        await ctx.reply(embed=embed, mention_author=False)
+
     # ── Sequip ────────────────────────────────────────────────────────────────
 
     @commands.command(name="equip", aliases=["eq", "set", "primary"])
@@ -91,9 +130,36 @@ class Inventory(commands.Cog):
             return
 
         stand = copies[0]
+        secondary = await db.get_secondary_stand(str(ctx.author.id))
+        if secondary and secondary["id"] == stand["id"]:
+            await ctx.reply(f"**{stand['stand_name']}** is already equipped as your secondary stand! Equip a different primary.", mention_author=False)
+            return
+
         await db.set_primary_stand(str(ctx.author.id), stand["id"])
         await ctx.reply(
             f"⭐ **{stand['stand_name']}** is now your primary stand!",
+            mention_author=False,
+        )
+
+    @commands.command(name="equipsecondary", aliases=["eqsec", "setsecondary", "sec"])
+    async def sequipsecondary(self, ctx: commands.Context, *, stand_name: str):
+        """Set a stand as your secondary (equipped) stand. Usage: Seqsec <stand name>"""
+        await db.get_or_create_user(str(ctx.author.id), ctx.author.name)
+        copies = await db.get_stands_by_name(str(ctx.author.id), stand_name)
+
+        if not copies:
+            await ctx.reply(f"You don't own **{stand_name}**.", mention_author=False)
+            return
+
+        stand = copies[0]
+        primary = await db.get_primary_stand(str(ctx.author.id))
+        if primary and primary["id"] == stand["id"]:
+            await ctx.reply(f"**{stand['stand_name']}** is already equipped as your primary stand! Equip a different secondary.", mention_author=False)
+            return
+
+        await db.set_secondary_stand(str(ctx.author.id), stand["id"])
+        await ctx.reply(
+            f"🌟 **{stand['stand_name']}** is now your secondary stand!",
             mention_author=False,
         )
 

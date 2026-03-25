@@ -80,7 +80,7 @@ def stand_info_embed(stand_row: dict, catalog_entry: dict | None = None, stand_o
     return embed
 
 
-def profile_embed(user: dict, primary_stand: dict | None) -> discord.Embed:
+def profile_embed(user: dict, primary_stand: dict | None, secondary_stand: dict | None = None) -> discord.Embed:
     embed = discord.Embed(
         title=f"🧿 {user['username']}'s Profile",
         color=0x9B59B6,
@@ -115,6 +115,20 @@ def profile_embed(user: dict, primary_stand: dict | None) -> discord.Embed:
         image_url = get_image(name, stars)
         if image_url:
             embed.set_thumbnail(url=image_url)
+
+    if secondary_stand:
+        name2   = secondary_stand["stand_name"]
+        lvl2    = secondary_stand["level"]
+        stars2  = secondary_stand["stars"]
+        shiny2  = " ✨" if secondary_stand.get("is_shiny") else ""
+        emoji2  = get_emoji(name2)
+        name2_display = f"{emoji2} {name2}".strip() if emoji2 else name2
+
+        embed.add_field(
+            name="🌙 Secondary Stand",
+            value=f"**{name2_display}**{shiny2}\nLv.{lvl2} {'★' * stars2}",
+            inline=False,
+        )
 
     if user.get("bio"):
         embed.add_field(name="📝 Bio", value=user["bio"], inline=False)

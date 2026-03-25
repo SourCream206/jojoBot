@@ -54,6 +54,7 @@ class Stand:
     level:   int  = 1
     stars:   int  = 1
     is_shiny: bool = False
+    secondary_stand_name: str = ""
 
     # Battle state (mutable during a fight)
     current_hp:      int   = field(init=False)
@@ -68,18 +69,39 @@ class Stand:
     def _scale(self, base: int) -> int:
         star_mult  = STAR_MULTIPLIERS[self.stars]
         shiny_mult = SHINY_MODIFIER if self.is_shiny else 1.0
-        return int(base * (1 + self.level / 50) * star_mult * shiny_mult)
+        return int(base * (1 + self.level / 100) * star_mult * shiny_mult)
 
     @property
-    def max_hp(self)  -> int: return self._scale(self.base_stats.hp)
+    def max_hp(self) -> int:
+        base = int(self._scale(self.base_stats.hp) * 5)
+        # Synergies
+        if self.name == "Star Platinum" and self.secondary_stand_name in ("Hierophant Green", "Silver Chariot"):
+            base = int((base + 5) * 1.05)
+        elif self.name == "Star Platinum" and self.secondary_stand_name == "Hermit Purple":
+            base = int(base * 1.10)
+        return base
+
     @property
-    def atk(self)     -> int: return self._scale(self.base_stats.atk)
+    def atk(self) -> int:
+        return int(self._scale(self.base_stats.atk))
+
     @property
-    def defense(self) -> int: return self._scale(self.base_stats.def_)
+    def defense(self) -> int:
+        base = int(self._scale(self.base_stats.def_))
+        if self.name == "Dark Blue Moon" and self.secondary_stand_name == "Strength":
+            base = int(base * 1.10)
+        return base
+
     @property
-    def spa(self)     -> int: return self._scale(self.base_stats.spa)
+    def spa(self) -> int:
+        return int(self._scale(self.base_stats.spa))
+
     @property
-    def spd(self)     -> int: return self._scale(self.base_stats.spd)
+    def spd(self) -> int:
+        base = int(self._scale(self.base_stats.spd))
+        if self.name == "Anubis" and self.secondary_stand_name == "Silver Chariot":
+            base = int(base * 1.05)
+        return base
     @property
     def rng(self)     -> int: return self._scale(self.base_stats.rng)
 
@@ -125,14 +147,30 @@ class Stand:
         defender_stat = target.defense
 
         crit_mult = 1.5 if crit else 1.0
+        if self.name == "Hanged Man" and self.secondary_stand_name == "Emperor" and crit:
+            crit_mult = 1.7
+
+        # The Fool + Horus + Strength -> +5 damage, +5% scaling (approx modifying the base power)
+        power_mod = move.power
+        if self.name in ("The Fool", "Horus", "Strength") and self.secondary_stand_name in ("The Fool", "Horus", "Strength"):
+            power_mod = (power_mod + 5) * 1.05
 
         damage = (
-            (2 * self.level / 5 + 2)
-            * move.power
+            (self.level / 5 + 10)
+            * power_mod
             * (attacker_stat / defender_stat)
             / 50
             + 2
         ) * crit_mult * random_roll
+        
+        # Anubis + Silver Chariot -> +6% damage
+        if self.name == "Anubis" and self.secondary_stand_name == "Silver Chariot":
+            damage *= 1.06
+
+        # Justice + Lovers -> Enemies deal 10% less damage when target (defender) is < 50% HP
+        if target.name == "Justice" and target.secondary_stand_name == "Lovers":
+            if target.current_hp < (target.max_hp * 0.5):
+                damage *= 0.90
 
         return max(1, int(damage))
 
@@ -155,6 +193,44 @@ def compute_power_score(stand_row: dict) -> int:
         return 0
 
     mult  = STAR_MULTIPLIERS[stars] * (SHINY_MODIFIER if shiny else 1.0)
-    scale = 1 + level / 50
+    scale = 1 + level / 100
     total = sum([base.hp, base.atk, base.def_, base.spa, base.spd, base.rng])
     return int(total * scale * mult)
+
+
+def make_stand(stand_name: str, level: int = 1, stars: int = 1, is_shiny: bool = False, secondary_stand_name: str = "") -> Stand:
+    """Builds a Stand object from the catalog definition + player dynamic stats."""
+    from src.battle.stand_stats import STAND_CATALOG, STAND_BASE_STATS
+    
+    cat = STAND_CATALOG.get(stand_name)
+    if not cat:
+        raise ValueError(f"Stand {stand_name} not found in catalog.")
+
+    base = STAND_BASE_STATS.get(stand_name)
+    if not base:
+        raise ValueError(f"Base stats for {stand_name} not found.")
+
+    moves = []
+    for m in cat["moves"]:
+        moves.append(Move(
+            name=str(m["name"]),
+            category=str(m["category"]),
+            power=int(m["power"]),
+            accuracy=float(m["accuracy"]),
+            pp=int(m["pp"]),
+            effect=str(m.get("effect", ""))
+        ))
+    
+    return Stand(
+        name=stand_name,
+        stand_type=cat["type"],
+        rarity=cat.get("rarity", "Common"),
+        part=cat.get("part", 3),
+        base_stats=base,
+        moves=moves,
+        gimmick=cat.get("gimmick"),
+        level=level,
+        stars=stars,
+        is_shiny=is_shiny,
+        secondary_stand_name=secondary_stand_name,
+    )
