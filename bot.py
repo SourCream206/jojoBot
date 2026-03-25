@@ -60,7 +60,7 @@ class JojoBot(commands.Bot):
     async def on_ready(self):
         log.info(f"Logged in as {self.user} (ID: {self.user.id})")
         await self.change_presence(
-            activity=discord.Game(name="JoJo's Bizarre Adventure | Sroll")
+            activity=discord.Game(name="JJBA RPG | Shelp to start")
         )
 
     async def on_command_error(self, ctx: commands.Context, error):
