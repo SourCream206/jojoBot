@@ -40,7 +40,9 @@
                     "rarity": "Rare",
                     "rollable": true,
                     "stars": {
-                        "1": "https://media.discordapp.net/attachments/1348433490269700198/1348435730816438282/image.png?ex=67cf7422&is=67ce22a2&hm=44090d96eb96b76cece4ec8cc2249e4462fafcf5bc4f0634c5af90d0d5a4a9c6&format=webp&quality=lossless&width=296&height=394&"
+                        "1": "https://media.discordapp.net/attachments/1348433490269700198/1348435730816438282/image.png?ex=67cf7422&is=67ce22a2&hm=44090d96eb96b76cece4ec8cc2249e4462fafcf5bc4f0634c5af90d0d5a4a9c6&format=webp&quality=lossless&width=296&height=394&",
+                        "2": "https://cdn.discordapp.com/attachments/1221354016433377300/1486243114535616592/image.png?ex=69c4cb43&is=69c379c3&hm=676c3f06fe9d16f7328e5c43c3592831dafc14892569ecba8ca3f9749196e6a3&"
+
                     }
             },
             "Silver Chariot": {
