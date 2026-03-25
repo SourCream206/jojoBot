@@ -7,6 +7,7 @@ Sleaderboard — show win count and power score leaderboards.
 import discord
 from discord.ext import commands
 import random
+from typing import Optional
 
 from src.db import client as db
 from src.battle.engine import BattleSession, BattleView
