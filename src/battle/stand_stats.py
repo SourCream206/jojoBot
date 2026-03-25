@@ -27,7 +27,7 @@ STAND_BASE_STATS: dict[str, StandStats] = {}
 import copy as _copy
 from dataclasses import asdict as _asdict
 
-def make_stand(name: str, level: int = 1, stars: int = 1, is_shiny: bool = False) -> Stand:
+def make_stand(name: str, level: int = 1, stars: int = 1, is_shiny: bool = False, secondary_stand_name: str = "") -> Stand:
     """Instantiate a Stand by name with given level/stars/shiny."""
     data = STAND_CATALOG.get(name)
     if not data:
@@ -62,6 +62,7 @@ def make_stand(name: str, level: int = 1, stars: int = 1, is_shiny: bool = False
         level      = level,
         stars      = stars,
         is_shiny   = is_shiny,
+        secondary_stand_name = secondary_stand_name,
     )
     return stand
 
