@@ -9,6 +9,40 @@ from src.utils.constants import xp_to_next_level
 from src.utils.stands_data import get_image, get_emoji
 
 
+def get_active_synergies(primary: str, secondary: str) -> list[str]:
+    if not primary or not secondary:
+        return []
+    
+    synergies = []
+    
+    if primary == "Star Platinum" and secondary == "The World":
+        synergies.append("Time Stop Mastery (Bonus Damage in Time Stop)")
+    elif primary == "Star Platinum" and secondary in ("Hierophant Green", "Silver Chariot"):
+        synergies.append("JoBro Buff (+5 HP, +5% Max HP)")
+    elif primary == "Star Platinum" and secondary == "Hermit Purple":
+        synergies.append("Joestar Bloodline (+10% Max HP)")
+    elif primary in ("The Fool", "Horus", "Strength") and secondary in ("The Fool", "Horus", "Strength"):
+        synergies.append("Animal Jam (+5 Base Power, +5% Damage)")
+    elif primary == "Dark Blue Moon" and secondary == "Strength":
+        synergies.append("Cruise Ship (+10% Defense)")
+    elif primary == "Osiris" and secondary == "Atum":
+        synergies.append("Darby Brothers (Highest Luck in Gacha Rolls)")
+    elif primary == "The World" and secondary == "Cream":
+        synergies.append("Vampiric Power (+8% Lifesteal)")
+    elif primary == "Magician's Red" and secondary == "The Sun":
+        synergies.append("Scorching Heat (Burn deals 1.5x Damage)")
+    elif primary == "Tohth" and secondary == "Khnum":
+        synergies.append("Fate Manipulation (10% Reflect Chance)")
+    elif primary == "Anubis" and secondary == "Silver Chariot":
+        synergies.append("Blade Master (+5% Speed, +6% Damage)")
+    elif primary == "Hanged Man" and secondary == "Emperor":
+        synergies.append("Perfect Execution (+20% Critical Damage)")
+    elif primary == "Justice" and secondary == "Lovers":
+        synergies.append("Undead Link (Take 10% less damage when under 50% HP)")
+        
+    return synergies
+
+
 def stand_roll_embed(stand_name: str, rarity: str, stars: int, is_shiny: bool) -> discord.Embed:
     color        = RARITY_COLORS.get(rarity, 0xAAAAAA)
     rarity_emoji = RARITY_EMOJIS.get(rarity, "⚪")
@@ -109,7 +143,14 @@ def profile_embed(user: dict, primary_stand: dict | None, secondary_stand: dict 
             value=f"**{name_display}**{shiny}\nLv.{lvl} {'★' * stars}\n{xp_bar} {exp}/{needed} XP",
             inline=False,
         )
-        embed.add_field(name="💫 Active Passive", value=passive_str, inline=False)
+        embed.add_field(name="💫 Active Passive", value=passive_str, inline=True)
+
+        # Synergy string
+        if secondary_stand:
+            syn_list = get_active_synergies(name, secondary_stand["stand_name"])
+            if syn_list:
+                synergy_str = "\n".join(f"• {s}" for s in syn_list)
+                embed.add_field(name="🧬 Active Synergy", value=synergy_str, inline=True)
 
         # Thumbnail = current star image of primary stand
         image_url = get_image(name, stars)
