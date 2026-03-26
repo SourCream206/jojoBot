@@ -4,8 +4,11 @@ Image processing utilities for adding visual effects to stand cards.
 """
 
 import io
+import logging
 import aiohttp
-from PIL import Image, ImageFilter, ImageEnhance
+from PIL import Image, ImageFilter, ImageDraw
+
+log = logging.getLogger("jojo-rpg")
 
 # Cache to avoid re-processing the same images
 _GLOW_CACHE: dict[str, bytes] = {}
@@ -18,141 +21,213 @@ async def fetch_image(url: str) -> Image.Image | None:
         async with aiohttp.ClientSession() as session:
             async with session.get(url, timeout=aiohttp.ClientTimeout(total=10)) as resp:
                 if resp.status != 200:
+                    log.warning(f"Failed to fetch image: HTTP {resp.status}")
                     return None
                 data = await resp.read()
                 return Image.open(io.BytesIO(data)).convert("RGBA")
-    except Exception:
+    except Exception as e:
+        log.warning(f"Failed to fetch image: {e}")
         return None
 
 
-def add_shiny_glow(img: Image.Image, glow_color: tuple = (255, 215, 0), glow_size: int = 15) -> Image.Image:
+def add_solar_flare_glow(img: Image.Image) -> Image.Image:
     """
-    Add a radiant glowing border effect around the image.
-
-    Args:
-        img: PIL Image to add glow to
-        glow_color: RGB tuple for glow color (default: gold)
-        glow_size: Thickness of the glow effect
-
-    Returns:
-        New image with glowing border
+    Add an intense solar flare glow effect around the image border.
+    Creates multiple layers of bright, expanding glow for a dramatic effect.
     """
-    # Create a larger canvas for the glow
-    padding = glow_size * 2
-    new_size = (img.width + padding, img.height + padding)
+    # Glow parameters - make it VERY visible
+    glow_thickness = 40  # How far the glow extends
+    padding = glow_thickness + 10
 
-    # Create the glow layer
-    glow_layer = Image.new("RGBA", new_size, (0, 0, 0, 0))
+    new_width = img.width + padding * 2
+    new_height = img.height + padding * 2
 
-    # Create a solid color version of the image for the glow
-    # We'll use the alpha channel to create the glow shape
-    alpha = img.getchannel("A") if img.mode == "RGBA" else Image.new("L", img.size, 255)
+    # Create the result canvas with transparent background
+    result = Image.new("RGBA", (new_width, new_height), (0, 0, 0, 0))
 
-    # Create colored glow base
-    glow_base = Image.new("RGBA", img.size, (*glow_color, 255))
-    glow_base.putalpha(alpha)
+    # Position for the original image (centered)
+    img_x = padding
+    img_y = padding
 
-    # Paste glow base centered on the larger canvas
-    offset = (padding // 2, padding // 2)
-    glow_layer.paste(glow_base, offset, glow_base)
-
-    # Apply multiple blur passes for a soft, radiant glow
-    for i in range(3):
-        blur_radius = glow_size * (3 - i) // 2
-        glow_layer = glow_layer.filter(ImageFilter.GaussianBlur(radius=blur_radius))
-
-    # Brighten the glow
-    enhancer = ImageEnhance.Brightness(glow_layer)
-    glow_layer = enhancer.enhance(1.5)
-
-    # Create final composite
-    result = Image.new("RGBA", new_size, (0, 0, 0, 0))
-    result.paste(glow_layer, (0, 0))
-
-    # Paste original image on top, centered
-    result.paste(img, offset, img)
-
-    return result
-
-
-def add_rainbow_glow(img: Image.Image, glow_size: int = 12) -> Image.Image:
-    """
-    Add a multi-colored rainbow glow effect for extra shine.
-    """
-    padding = glow_size * 3
-    new_size = (img.width + padding, img.height + padding)
-    offset = (padding // 2, padding // 2)
-
-    # Get alpha channel
-    alpha = img.getchannel("A") if img.mode == "RGBA" else Image.new("L", img.size, 255)
-
-    result = Image.new("RGBA", new_size, (0, 0, 0, 0))
-
-    # Layer multiple colored glows
-    colors = [
-        (255, 100, 100, 180),  # Red
-        (255, 200, 100, 180),  # Orange
-        (255, 255, 100, 180),  # Yellow
-        (100, 255, 150, 180),  # Green
-        (100, 200, 255, 180),  # Cyan
-        (150, 100, 255, 180),  # Purple
+    # Create multiple glow layers from outer (dimmer) to inner (brighter)
+    # This creates the "solar flare" expanding effect
+    glow_layers = [
+        # (distance from edge, color with alpha, blur amount)
+        (40, (255, 100, 0, 60), 25),    # Outer red/orange haze
+        (35, (255, 150, 0, 80), 20),    # Orange mid-outer
+        (30, (255, 180, 0, 100), 18),   # Orange-yellow
+        (25, (255, 200, 0, 130), 15),   # Yellow outer
+        (20, (255, 220, 50, 160), 12),  # Bright yellow
+        (15, (255, 235, 100, 190), 10), # Intense yellow
+        (10, (255, 245, 150, 220), 8),  # Near-white yellow
+        (5, (255, 255, 200, 250), 5),   # White-hot inner
+        (2, (255, 255, 255, 255), 3),   # Pure white edge
     ]
 
-    for i, color in enumerate(colors):
-        layer = Image.new("RGBA", img.size, color)
-        layer.putalpha(alpha)
+    for distance, color, blur in glow_layers:
+        # Create a layer for this glow ring
+        layer = Image.new("RGBA", (new_width, new_height), (0, 0, 0, 0))
+        draw = ImageDraw.Draw(layer)
 
-        glow = Image.new("RGBA", new_size, (0, 0, 0, 0))
-        # Offset each color slightly for rainbow effect
-        layer_offset = (offset[0] + (i - 2) * 2, offset[1] + (i - 2) * 2)
-        glow.paste(layer, layer_offset, layer)
-        glow = glow.filter(ImageFilter.GaussianBlur(radius=glow_size))
+        # Draw a rectangle slightly larger than the image
+        x1 = img_x - distance
+        y1 = img_y - distance
+        x2 = img_x + img.width + distance
+        y2 = img_y + img.height + distance
 
-        result = Image.alpha_composite(result, glow)
+        # Draw the glow border (filled rectangle, then we'll cut out the middle)
+        draw.rectangle([x1, y1, x2, y2], fill=color)
 
-    # Paste original on top
-    result.paste(img, offset, img)
+        # Cut out the center to leave just the border
+        inner_margin = max(0, distance - 8)
+        draw.rectangle(
+            [img_x - inner_margin, img_y - inner_margin,
+             img_x + img.width + inner_margin, img_y + img.height + inner_margin],
+            fill=(0, 0, 0, 0)
+        )
+
+        # Apply blur for the glow effect
+        layer = layer.filter(ImageFilter.GaussianBlur(radius=blur))
+
+        # Composite onto result
+        result = Image.alpha_composite(result, layer)
+
+    # Add some "flare spikes" at corners for extra effect
+    result = _add_corner_flares(result, img_x, img_y, img.width, img.height)
+
+    # Paste the original image on top
+    result.paste(img, (img_x, img_y), img if img.mode == "RGBA" else None)
 
     return result
 
 
-async def get_shiny_image(url: str, use_rainbow: bool = False) -> bytes | None:
+def _add_corner_flares(img: Image.Image, x: int, y: int, w: int, h: int) -> Image.Image:
+    """Add diagonal flare spikes at corners for extra dramatic effect."""
+    layer = Image.new("RGBA", img.size, (0, 0, 0, 0))
+    draw = ImageDraw.Draw(layer)
+
+    # Corner positions
+    corners = [
+        (x, y),                    # Top-left
+        (x + w, y),                # Top-right
+        (x, y + h),                # Bottom-left
+        (x + w, y + h),            # Bottom-right
+    ]
+
+    flare_length = 30
+    flare_color = (255, 220, 100, 150)
+
+    for cx, cy in corners:
+        # Draw small diagonal lines emanating from corners
+        for angle_offset in [(-1, -1), (1, -1), (-1, 1), (1, 1)]:
+            ex = cx + angle_offset[0] * flare_length
+            ey = cy + angle_offset[1] * flare_length
+            draw.line([(cx, cy), (ex, ey)], fill=flare_color, width=3)
+
+    layer = layer.filter(ImageFilter.GaussianBlur(radius=4))
+    return Image.alpha_composite(img, layer)
+
+
+def add_shiny_border_frame(img: Image.Image) -> Image.Image:
+    """
+    Add a thick glowing golden border frame around the image.
+    Simpler but still visually striking.
+    """
+    border_size = 8
+    glow_size = 25
+    total_padding = border_size + glow_size
+
+    new_width = img.width + total_padding * 2
+    new_height = img.height + total_padding * 2
+
+    result = Image.new("RGBA", (new_width, new_height), (0, 0, 0, 0))
+
+    # Create outer glow
+    glow_layer = Image.new("RGBA", (new_width, new_height), (0, 0, 0, 0))
+    draw = ImageDraw.Draw(glow_layer)
+
+    # Draw golden rectangle for glow base
+    draw.rectangle(
+        [glow_size - 5, glow_size - 5,
+         new_width - glow_size + 5, new_height - glow_size + 5],
+        fill=(255, 215, 0, 255)
+    )
+    # Cut out center
+    draw.rectangle(
+        [total_padding - 2, total_padding - 2,
+         total_padding + img.width + 2, total_padding + img.height + 2],
+        fill=(0, 0, 0, 0)
+    )
+
+    # Blur for glow effect
+    glow_layer = glow_layer.filter(ImageFilter.GaussianBlur(radius=15))
+    result = Image.alpha_composite(result, glow_layer)
+
+    # Add solid golden border
+    border_layer = Image.new("RGBA", (new_width, new_height), (0, 0, 0, 0))
+    draw = ImageDraw.Draw(border_layer)
+    draw.rectangle(
+        [total_padding - border_size, total_padding - border_size,
+         total_padding + img.width + border_size, total_padding + img.height + border_size],
+        fill=(255, 200, 50, 255)
+    )
+    draw.rectangle(
+        [total_padding, total_padding,
+         total_padding + img.width, total_padding + img.height],
+        fill=(0, 0, 0, 0)
+    )
+    result = Image.alpha_composite(result, border_layer)
+
+    # Paste original image
+    result.paste(img, (total_padding, total_padding), img if img.mode == "RGBA" else None)
+
+    return result
+
+
+async def get_shiny_image(url: str, effect: str = "solar_flare") -> bytes | None:
     """
     Get a shiny version of an image with glowing border.
     Results are cached to avoid re-processing.
 
     Args:
         url: URL of the original image
-        use_rainbow: If True, use rainbow glow instead of gold
+        effect: "solar_flare" for intense effect, "border" for simpler frame
 
     Returns:
         PNG image bytes with glow effect, or None on failure
     """
-    cache_key = f"{url}_{use_rainbow}"
+    cache_key = f"{url}_{effect}"
 
     if cache_key in _GLOW_CACHE:
         return _GLOW_CACHE[cache_key]
 
     img = await fetch_image(url)
     if not img:
+        log.warning(f"Could not fetch image for shiny effect: {url}")
         return None
 
-    # Apply glow effect
-    if use_rainbow:
-        result = add_rainbow_glow(img)
-    else:
-        result = add_shiny_glow(img, glow_color=(255, 223, 0), glow_size=12)
+    try:
+        # Apply glow effect
+        if effect == "border":
+            result = add_shiny_border_frame(img)
+        else:
+            result = add_solar_flare_glow(img)
 
-    # Convert to bytes
-    buffer = io.BytesIO()
-    result.save(buffer, format="PNG", optimize=True)
-    image_bytes = buffer.getvalue()
+        # Convert to bytes
+        buffer = io.BytesIO()
+        result.save(buffer, format="PNG", optimize=True)
+        image_bytes = buffer.getvalue()
 
-    # Cache the result (with size limit)
-    if len(_GLOW_CACHE) >= MAX_CACHE_SIZE:
-        # Remove oldest entry
-        oldest = next(iter(_GLOW_CACHE))
-        del _GLOW_CACHE[oldest]
+        # Cache the result (with size limit)
+        if len(_GLOW_CACHE) >= MAX_CACHE_SIZE:
+            # Remove oldest entry
+            oldest = next(iter(_GLOW_CACHE))
+            del _GLOW_CACHE[oldest]
 
-    _GLOW_CACHE[cache_key] = image_bytes
-    return image_bytes
+        _GLOW_CACHE[cache_key] = image_bytes
+        log.info(f"Created shiny glow effect for image ({len(image_bytes)} bytes)")
+        return image_bytes
+
+    except Exception as e:
+        log.error(f"Failed to apply shiny effect: {e}")
+        return None
