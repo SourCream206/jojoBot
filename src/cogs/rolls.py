@@ -24,7 +24,7 @@ class Rolls(commands.Cog):
 
     # ── Sroll ──────────────────────────────────────────────────────────────────
 
-    @commands.command(name="roll", aliases=["r", "gacha", "summon"])
+    @commands.command(name="roll", aliases=["r", "gacha", "summon", "rol", "rool", "pull", "wish", "draw", "rl"])
     async def sroll(self, ctx: commands.Context):
         """Roll a random stand from your current area."""
         user = await db.get_or_create_user(str(ctx.author.id), ctx.author.name)

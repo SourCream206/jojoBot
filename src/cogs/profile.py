@@ -15,7 +15,7 @@ class Profile(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
 
-    @commands.command(name="profile", aliases=["prof", "me", "stats"])
+    @commands.command(name="profile", aliases=["prof", "me", "stats", "p", "status", "profil", "profl"])
     async def sprofile(self, ctx: commands.Context, member: discord.Member = None):
         """View your (or another player's) profile. Usage: Sprofile [@user]"""
         target = member or ctx.author

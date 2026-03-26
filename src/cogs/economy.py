@@ -48,7 +48,7 @@ class Economy(commands.Cog):
 
     # ── Sbalance ──────────────────────────────────────────────────────────────
 
-    @commands.command(name="balance", aliases=["bal", "coins", "wallet"])
+    @commands.command(name="balance", aliases=["bal", "coins", "wallet", "money", "coin", "cash", "gold", "balanc", "ballance", "bl"])
     async def sbalance(self, ctx: commands.Context):
         """Check your coin and diamond balance."""
         user = await db.get_or_create_user(str(ctx.author.id), ctx.author.name)
@@ -59,7 +59,7 @@ class Economy(commands.Cog):
 
     # ── Sdaily ────────────────────────────────────────────────────────────────
 
-    @commands.command(name="daily", aliases=["claim"])
+    @commands.command(name="daily", aliases=["claim", "daly", "dailly", "dayly", "clam", "claym", "d"])
     async def sdaily(self, ctx: commands.Context):
         """Claim your daily reward."""
         user_id = str(ctx.author.id)
@@ -123,7 +123,7 @@ class Economy(commands.Cog):
 
     # ── Sshop ─────────────────────────────────────────────────────────────────
 
-    @commands.command(name="cd", aliases=["cooldown", "cooldowns", "cds"])
+    @commands.command(name="cd", aliases=["cooldown", "cooldowns", "cds", "cooldown", "cld", "cooldwn", "timer", "timers"])
     async def scd(self, ctx: commands.Context):
         """Check all your active cooldowns."""
         user_id = str(ctx.author.id)
@@ -185,13 +185,21 @@ class Economy(commands.Cog):
             embed.add_field(name=label, value=fmt(remaining), inline=True)
         await ctx.reply(embed=embed, mention_author=False)
 
-    @commands.command(name="shop", aliases=["store"])
+    @commands.command(name="shop", aliases=["store", "shopdaily", "dailyshop", "shopweekly", "weeklyshop", "shopweek", "weekshop"])
     async def sshop(self, ctx: commands.Context, tab: str = "daily"):
         """
         View the rotating shop.
         - Sshop daily   → today's daily shop
         - Sshop weekly  → this week's weekly shop
+        - Or use: Sshopdaily, Sshopweekly, etc.
         """
+        # Handle compound command names
+        cmd_name = ctx.invoked_with.lower()
+        if "weekly" in cmd_name or "week" in cmd_name:
+            tab = "weekly"
+        elif "daily" in cmd_name:
+            tab = "daily"
+
         tab  = tab.lower()
         pool = _get_weekly_shop() if tab == "weekly" else _get_daily_shop()
         label = "Weekly Shop 🗓️" if tab == "weekly" else "Daily Shop 🏪"
@@ -215,7 +223,7 @@ class Economy(commands.Cog):
         embed.set_footer(text=refresh_str)
         await ctx.reply(embed=embed, mention_author=False)
 
-    @commands.command(name="buy")
+    @commands.command(name="buy", aliases=["purchase", "get", "buyitem", "purchaseitem", "by"])
     async def sbuy(self, ctx: commands.Context, item_id: str):
         """Buy an item from the current shop. Usage: Sbuy <item_id>"""
         user_id = str(ctx.author.id)
@@ -248,7 +256,7 @@ class Economy(commands.Cog):
 
     # ── Sdarby (Blackjack) ────────────────────────────────────────────────────
 
-    @commands.command(name="darby", aliases=["gamble", "blackjack", "casino"])
+    @commands.command(name="darby", aliases=["gamble", "blackjack", "casino", "bet", "bj", "darbey", "darb", "gambling", "gambl", "game"])
     async def sdarby(self, ctx: commands.Context, bet: int = 0):
         """
         Challenge D'Arby to a game of Blackjack.

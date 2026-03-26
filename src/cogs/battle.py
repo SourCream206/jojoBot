@@ -71,7 +71,7 @@ class Battle(commands.Cog):
 
     # ── Sbattle ───────────────────────────────────────────────────────────────
 
-    @commands.command(name="battle", aliases=["fight", "duel", "b"])
+    @commands.command(name="battle", aliases=["fight", "duel", "b", "batl", "battl", "fite", "atack", "attack", "challange", "challenge", "pvp", "pve"])
     async def sbattle(self, ctx: commands.Context, target: discord.Member = None):
         """
         Start a battle.

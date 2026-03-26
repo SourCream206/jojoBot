@@ -23,7 +23,7 @@ class Inventory(commands.Cog):
 
     # ── Sinv ──────────────────────────────────────────────────────────────────
 
-    @commands.command(name="inv", aliases=["inventory", "stands", "collection"])
+    @commands.command(name="inv", aliases=["inventory", "stands", "collection", "i", "inventorry", "inventry", "mystand", "mystands", "box"])
     async def sinv(self, ctx: commands.Context):
         """View your stand inventory, paginated by area."""
         await db.get_or_create_user(str(ctx.author.id), ctx.author.name)
@@ -57,7 +57,7 @@ class Inventory(commands.Cog):
 
     # ── Sinfo ─────────────────────────────────────────────────────────────────
 
-    @commands.command(name="info", aliases=["lookup", "stand", "details"])
+    @commands.command(name="info", aliases=["lookup", "stand", "details", "inf", "check", "view", "show", "standinfo", "infor", "infp"])
     async def sinfo(self, ctx: commands.Context, *, stand_name: str):
         """View detailed info on one of your stands. Usage: Sinfo <stand name>"""
         await db.get_or_create_user(str(ctx.author.id), ctx.author.name)
@@ -67,8 +67,23 @@ class Inventory(commands.Cog):
             await ctx.reply(f"You don't own **{stand_name}**.", mention_author=False)
             return
 
-        stand = max(copies, key=lambda s: s["level"])
-        max_star_level = max(s["stars"] for s in copies) if copies else 1
+        # If only one copy, show info directly
+        if len(copies) == 1:
+            await self._show_stand_info(ctx, copies[0], copies)
+            return
+
+        # Multiple copies - show dropdown
+        view = InfoSelectView(ctx.author, copies, self)
+        embed = discord.Embed(
+            title=f"📋 Stand Info: {stand_name}",
+            description=f"You have **{len(copies)}** copies of this stand.\nSelect which one to view:",
+            color=0x3498DB,
+        )
+        await ctx.reply(embed=embed, view=view, mention_author=False)
+
+    async def _show_stand_info(self, ctx: commands.Context, stand: dict, all_copies: list):
+        """Helper to display stand info embed."""
+        max_star_level = max(s["stars"] for s in all_copies) if all_copies else 1
 
         from src.battle.stand_stats import STAND_CATALOG, make_stand
         from src.utils.embeds import stand_info_embed, StandImageView
@@ -86,7 +101,7 @@ class Inventory(commands.Cog):
 
     # ── Sitems ────────────────────────────────────────────────────────────────
 
-    @commands.command(name="items", aliases=["bag", "backpack"])
+    @commands.command(name="items", aliases=["bag", "backpack", "item", "itm", "itms", "backpak", "bak"])
     async def sitems(self, ctx: commands.Context):
         """View your items (xpPotions, rolls, etc.)."""
         await db.get_or_create_user(str(ctx.author.id), ctx.author.name)
@@ -125,7 +140,7 @@ class Inventory(commands.Cog):
 
     # ── Sequip ────────────────────────────────────────────────────────────────
 
-    @commands.command(name="equip", aliases=["eq", "set", "primary"])
+    @commands.command(name="equip", aliases=["eq", "set", "primary", "setprimary", "equipstand", "eqp", "equp", "equipt", "setstand", "use"])
     async def sequip(self, ctx: commands.Context, *, stand_name: str):
         """Set a stand as your primary (equipped) stand. Usage: Sequip <stand name>"""
         await db.get_or_create_user(str(ctx.author.id), ctx.author.name)
@@ -158,7 +173,7 @@ class Inventory(commands.Cog):
         )
         await ctx.reply(embed=embed, view=view, mention_author=False)
 
-    @commands.command(name="equipsecondary", aliases=["eqsec", "setsecondary", "sec"])
+    @commands.command(name="equipsecondary", aliases=["eqsec", "setsecondary", "sec", "secondary", "equipsec", "equipseondary", "equipseconday", "equip2", "eq2", "setsec"])
     async def sequipsecondary(self, ctx: commands.Context, *, stand_name: str):
         """Set a stand as your secondary (equipped) stand. Usage: Seqsec <stand name>"""
         await db.get_or_create_user(str(ctx.author.id), ctx.author.name)
@@ -193,7 +208,7 @@ class Inventory(commands.Cog):
 
     # ── Smerge ────────────────────────────────────────────────────────────────
 
-    @commands.command(name="merge", aliases=["fuse", "combine", "upgrade"])
+    @commands.command(name="merge", aliases=["fuse", "combine", "upgrade", "mrg", "merge5", "fuze", "kombine", "upgrd"])
     async def smerge(self, ctx: commands.Context, *, stand_name: str):
         """Merge 5 copies of the same stand (same star level) into one copy at the next star."""
         await db.get_or_create_user(str(ctx.author.id), ctx.author.name)
@@ -249,7 +264,7 @@ class Inventory(commands.Cog):
 
     # ── Suse ──────────────────────────────────────────────────────────────────
 
-    @commands.command(name="use", aliases=["consume", "activate"])
+    @commands.command(name="use", aliases=["consume", "activate", "useitem", "u", "apply", "eat", "drink", "usepotion"])
     async def suse(self, ctx: commands.Context, item_id: str, *, stand_name: str = ""):
         """Use an item. Usage: Suse <item_id> [stand name]"""
         user_id = str(ctx.author.id)
@@ -558,6 +573,73 @@ class EquipSelectView(discord.ui.View):
         )
         self.clear_items()
         await interaction.response.edit_message(embed=embed, view=self)
+
+    async def on_timeout(self):
+        self.clear_items()
+
+
+# ════════════════════════════════════════════════════════════
+# INFO SELECT VIEW — dropdown for choosing which copy to view info
+# ════════════════════════════════════════════════════════════
+
+class InfoSelectView(discord.ui.View):
+    def __init__(self, author: discord.User, copies: list, cog):
+        super().__init__(timeout=60)
+        self.author = author
+        self.copies = copies
+        self.cog = cog
+
+        # Sort copies by level (descending), then stars (descending)
+        sorted_copies = sorted(copies, key=lambda c: (c["level"], c["stars"]), reverse=True)
+
+        # Build dropdown options
+        options = []
+        for i, copy in enumerate(sorted_copies):
+            stars = "★" * copy["stars"]
+            shiny = " ✨" if copy["is_shiny"] else ""
+            label = f"Lv.{copy['level']} {stars}{shiny}"
+            description = f"ID: {copy['id']} • XP: {copy.get('exp', 0)}"
+            options.append(
+                discord.SelectOption(
+                    label=label,
+                    description=description,
+                    value=str(copy["id"]),
+                )
+            )
+
+        # Create the select dropdown
+        select = discord.ui.Select(
+            placeholder="Choose a stand to view...",
+            options=options,
+            min_values=1,
+            max_values=1,
+        )
+        select.callback = self._select_callback
+        self.add_item(select)
+
+    async def _select_callback(self, interaction: discord.Interaction):
+        if interaction.user.id != self.author.id:
+            await interaction.response.send_message("This isn't your menu!", ephemeral=True)
+            return
+
+        stand_id = int(interaction.data["values"][0])
+        selected_stand = next(c for c in self.copies if c["id"] == stand_id)
+
+        max_star_level = max(s["stars"] for s in self.copies)
+
+        from src.battle.stand_stats import STAND_CATALOG, make_stand
+        from src.utils.embeds import stand_info_embed, StandImageView
+
+        catalog   = STAND_CATALOG.get(selected_stand["stand_name"])
+        stand_obj = make_stand(selected_stand["stand_name"], selected_stand["level"], selected_stand["stars"], selected_stand["is_shiny"]) if catalog else None
+        embed     = stand_info_embed(selected_stand, catalog, stand_obj)
+
+        # Create view for star navigation
+        view = StandImageView(selected_stand["stand_name"], max_stars=max_star_level)
+        view.current_star = selected_stand["stars"]
+        view._update_button_labels()
+
+        await interaction.response.edit_message(embed=embed, view=view)
 
     async def on_timeout(self):
         self.clear_items()
