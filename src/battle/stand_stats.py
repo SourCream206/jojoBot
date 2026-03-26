@@ -24,9 +24,6 @@ STAND_BASE_STATS: dict[str, StandStats] = {}
 
 # ── Factory ────────────────────────────────────────────────────────────────────
 
-import copy as _copy
-from dataclasses import asdict as _asdict
-
 def make_stand(name: str, level: int = 1, stars: int = 1, is_shiny: bool = False, secondary_stand_name: str = "") -> Stand:
     """Instantiate a Stand by name with given level/stars/shiny."""
     data = STAND_CATALOG.get(name)
@@ -53,9 +50,6 @@ def make_stand(name: str, level: int = 1, stars: int = 1, is_shiny: bool = False
 
     stand = Stand(
         name       = name,
-        stand_type = data["type"],
-        rarity     = data["rarity"],
-        part       = data["part"],
         base_stats = data["stats"],
         moves      = fresh_moves,
         gimmick    = data.get("gimmick"),

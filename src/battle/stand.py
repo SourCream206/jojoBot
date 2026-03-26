@@ -37,9 +37,6 @@ class StandStats:
 class Stand:
     # Identity
     name:       str
-    stand_type: str          # Close-Range | Long-Distance | Automatic | Colony | Ability
-    rarity:     str
-    part:       int
 
     # Base stats (before level/star scaling)
     base_stats: StandStats
@@ -206,7 +203,7 @@ def compute_power_score(stand_row: dict) -> int:
 def make_stand(stand_name: str, level: int = 1, stars: int = 1, is_shiny: bool = False, secondary_stand_name: str = "") -> Stand:
     """Builds a Stand object from the catalog definition + player dynamic stats."""
     from src.battle.stand_stats import STAND_CATALOG, STAND_BASE_STATS
-    
+
     cat = STAND_CATALOG.get(stand_name)
     if not cat:
         raise ValueError(f"Stand {stand_name} not found in catalog.")
@@ -225,12 +222,9 @@ def make_stand(stand_name: str, level: int = 1, stars: int = 1, is_shiny: bool =
             pp=int(m["pp"]),
             effect=str(m.get("effect", ""))
         ))
-    
+
     return Stand(
         name=stand_name,
-        stand_type=cat["type"],
-        rarity=cat.get("rarity", "Common"),
-        part=cat.get("part", 3),
         base_stats=base,
         moves=moves,
         gimmick=cat.get("gimmick"),

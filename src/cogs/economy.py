@@ -133,8 +133,8 @@ class Economy(commands.Cog):
         active = []
 
         # ── Cooldowns table (sroll, sbattle, sdarby etc.) ──
-        from src.db.client import db as get_db
-        res  = get_db().table("cooldowns").select("command, expires_at").eq("user_id", user_id).execute()
+        from src.db.client import db as get_db, _run_sync
+        res = await _run_sync(lambda: get_db().table("cooldowns").select("command, expires_at").eq("user_id", user_id).execute())
         for row in (res.data or []):
             expires = datetime.fromisoformat(row["expires_at"])
             if expires.tzinfo is None:
