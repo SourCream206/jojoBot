@@ -1,0 +1,1107 @@
+{
+        "Part 3": {
+            "Star Platinum": {
+                    "emoji": "<:StarPlatinumMangaAv:1346249373394276573>",
+                    "image": "https://cdn.discordapp.com/attachments/1355434876291125258/1355967084793823363/image.png?ex=69c6c7c1&is=69c57641&hm=db63b3410183899609a5816df91e535173b82388de28c407cd9dab47da281ba7&",
+                    "rarity": "Legendary",
+                    "rollable": true,
+                    "stars": {
+                        "1": "https://cdn.discordapp.com/attachments/1355434876291125258/1355967084793823363/image.png?ex=69c6c7c1&is=69c57641&hm=db63b3410183899609a5816df91e535173b82388de28c407cd9dab47da281ba7&",
+                        "2": "https://cdn.discordapp.com/attachments/1221354016433377300/1486870819488403598/image.png?ex=69c713dc&is=69c5c25c&hm=b65461c3bd34070e8fd753e8b6b005ecec32cfccb020c54d0f27a899e0f40d77&",
+                        "3": "https://cdn.discordapp.com/attachments/1355434919781994598/1355962306907078841/image.png?ex=69c6c34e&is=69c571ce&hm=343c7c19068de5f447f262ec800fa05d2af8d946ac3f3d1ede0562afc0901632&",
+                        "4": "https://media.discordapp.net/attachments/1355434919781994598/1355965147331694712/image.png?ex=69c6c5f3&is=69c57473&hm=d17241e4cc056225e8cb679733c1e225dc572b3d9c4ef21c4e31660302f9d636&format=webp&quality=lossless&width=704&height=939&",
+                        "5": "https://media.discordapp.net/attachments/1355434934491414539/1355440132068474950/image.png?ex=69c6d73e&is=69c585be&hm=5e80d61d3625d96ca7e541eb8089dec5a21076329097e8409f03420b9a6ac938&format=webp&quality=lossless&width=704&height=938&"
+                    }
+            },  
+            "Magician's Red": {
+                "emoji": "<:MagicianRedMangaAv:1346249361490837514>", 
+                "image": "https://cdn.discordapp.com/attachments/1353096163410055170/1353868941000179712/image.png?ex=69c70eb5&is=69c5bd35&hm=83623c4bb1caa886c5c9725bb8fd47541710f9740beca3f9c56e4b0c4b86feb0&",
+                "rarity": "Epic",
+                "rollable": true,
+                "stars": {
+                    "1": "https://cdn.discordapp.com/attachments/1353096163410055170/1353868941000179712/image.png?ex=69c70eb5&is=69c5bd35&hm=83623c4bb1caa886c5c9725bb8fd47541710f9740beca3f9c56e4b0c4b86feb0&",
+                    "2": "https://cdn.discordapp.com/attachments/1355434892355436625/1357051445870067845/image.png?ex=69c6c525&is=69c573a5&hm=8d943fd94f5397fa5adaa6f18f7654761223ac4bbc16fb18a5d492fc3c72d51d&",
+                    "3": "https://cdn.discordapp.com/attachments/1221354016433377300/1486250394135957554/image.png?ex=69c6cc4b&is=69c57acb&hm=5509a5b01b454bca9e900f64fa6fe8c9745eeb3757749d15aba8fe45d5a79638&"}
+            },
+            "Hermit Purple": {
+                    "emoji": "<:HermitPurpleMangaAv:1346249350136991755>",             
+                    "image": "https://media.discordapp.net/attachments/1355434876291125258/1357055132889649192/image.png?ex=69c6c894&is=69c57714&hm=1661f726e337a0b1993f843b8ed9f3194d45d9840dbe615e1b4c16195b3b4fc6&format=webp&quality=lossless&width=357&height=475&",
+                    "rarity": "Rare",
+                    "rollable": true,
+                    "stars": {
+                            "1": "https://media.discordapp.net/attachments/1355434876291125258/1357055132889649192/image.png?ex=69c6c894&is=69c57714&hm=1661f726e337a0b1993f843b8ed9f3194d45d9840dbe615e1b4c16195b3b4fc6&format=webp&quality=lossless&width=357&height=475&",
+                            "2": "https://cdn.discordapp.com/attachments/1355434892355436625/1357054537596141598/image.png?ex=69c6c806&is=69c57686&hm=2e84049e4d8acc717dacaa98298e8ff0eb54a5e178d666fe26b1c449d0ad1b90&",
+                            "3": "https://media.discordapp.net/attachments/1355434919781994598/1357054099870187530/image.png?ex=69c6c79e&is=69c5761e&hm=366a2c5ef23eb89fc49e0de48e42fe4f97e3e5ca8a876f1027183f0709d234ad&format=webp&quality=lossless&width=296&height=394&"
+                        }
+            },
+            "Hierophant Green": {
+                    "emoji": "<:HierophantGreenMangaAv:1346249334932504617>",             
+                    "image": "https://media.discordapp.net/attachments/1348433490269700198/1348435730816438282/image.png?ex=69c71122&is=69c5bfa2&hm=3e43e1abaf7b14846f38385ffed13689e1cbc3382f58d4ce5531f1d9c71de118&format=webp&quality=lossless&width=296&height=394&",
+                    "rarity": "Rare",
+                    "rollable": true,
+                    "stars": {
+                        "1": "https://media.discordapp.net/attachments/1348433490269700198/1348435730816438282/image.png?ex=69c71122&is=69c5bfa2&hm=3e43e1abaf7b14846f38385ffed13689e1cbc3382f58d4ce5531f1d9c71de118&format=webp&quality=lossless&width=296&height=394&",
+                        "2": "https://cdn.discordapp.com/attachments/1221354016433377300/1486243114535616592/image.png?ex=69c6c583&is=69c57403&hm=43025fa62a998797d14d245eca498c2b8e1b77d604ba801a15e876e252cad6a5&"
+
+                    }
+            },
+            "Silver Chariot": {
+                    "emoji": "<:SilverChariotMangaAv:1346249321917448253>",             
+                    "image": "https://cdn.discordapp.com/attachments/1353096163410055170/1353866160986390568/20210312220626Silver_Chariot_SC_Infobox_Manga.png?ex=69c70c1e&is=69c5ba9e&hm=a5485a3777a91cefe98904652d5f00d0c8e1410ff8232dca7445aafab88bd19d&",
+                    "rarity": "Epic",
+                    "rollable": true,
+                    "stars": {
+                        "1": "https://cdn.discordapp.com/attachments/1353096163410055170/1353866160986390568/20210312220626Silver_Chariot_SC_Infobox_Manga.png?ex=69c70c1e&is=69c5ba9e&hm=a5485a3777a91cefe98904652d5f00d0c8e1410ff8232dca7445aafab88bd19d&"
+                    }
+            },
+            "The Fool": {
+                    "emoji": "<:250pxThe_Fool_Infobox_Manga:1346254364804780102>",             
+                    "image": "https://cdn.discordapp.com/attachments/1348433490269700198/1348436748098601030/image.png?ex=69c71215&is=69c5c095&hm=1b604a679b9327e7c71406fdbb774d9158822793993b4fcf974d72ecafaf47a7&",
+                    "rarity": "Epic",
+                    "rollable": true,
+                    "stars": {
+                        "1": "https://cdn.discordapp.com/attachments/1348433490269700198/1348436748098601030/image.png?ex=69c71215&is=69c5c095&hm=1b604a679b9327e7c71406fdbb774d9158822793993b4fcf974d72ecafaf47a7&"
+                    }
+            },
+            "The World": {
+                    "emoji": "<:TheWorldMangaAv:1346254262237401201>",            
+                    "image": "https://cdn.discordapp.com/attachments/1348433490269700198/1348434570793586760/image.png?ex=69c7100e&is=69c5be8e&hm=9f12078995166fd788aa5fb3adeab90a7969e375b28efa6eee289fe8c74e385a&",
+                    "rarity": "Legendary",
+                    "rollable": true,
+                    "stars": {
+                            "1": "https://cdn.discordapp.com/attachments/1348433490269700198/1348434570793586760/image.png?ex=69c7100e&is=69c5be8e&hm=9f12078995166fd788aa5fb3adeab90a7969e375b28efa6eee289fe8c74e385a&",
+                            "2": "https://cdn.discordapp.com/attachments/1355434876291125258/1356016117868396656/image.png?ex=69c6f56c&is=69c5a3ec&hm=2fc73ec220a7b736ddc6e58bdd683f8016037c0231971fe27b26e1092c33866a&",
+                            "3": "",
+                            "4": "",
+                            "5": "https://cdn.discordapp.com/attachments/1355434934491414539/1355440239375552633/image.png?ex=69c6d757&is=69c585d7&hm=0d32ce7264b47e5add2799503ecc1cdc860941e640520b13825fa5ea23582818&"
+                        }
+            },
+            "Tower of Gray": {
+                    "emoji": "<:TowerOfGrayMangaAv:1346254507624890408>",            
+                    "image": "https://cdn.discordapp.com/attachments/1348433490269700198/1348437350593593426/image.png?ex=69c712a5&is=69c5c125&hm=73e28296b57676cc64b375df4fa2168571121d82e76bc8b0496ed361924040a2&",
+                    "rarity": "Common",
+                    "rollable": true,
+                    "stars": {
+                        "1": "https://cdn.discordapp.com/attachments/1348433490269700198/1348437350593593426/image.png?ex=69c712a5&is=69c5c125&hm=73e28296b57676cc64b375df4fa2168571121d82e76bc8b0496ed361924040a2&"
+                    }
+            },
+            "Dark Blue Moon": {
+                    "emoji": "<:DarkBlueMoonMangaAv:1346254557226995862>",            
+                    "image": "https://media.discordapp.net/attachments/1348433490269700198/1348437749979549706/image.png?ex=69c71304&is=69c5c184&hm=e9110a512ecc3f1ee2b20fcd55d481ffe5af2198fe35933d47f833bb51bfe93e&format=webp&quality=lossless&width=704&height=939&",
+                    "rarity": "Common",
+                    "rollable": true,
+                    "stars": {
+                        "1": "https://media.discordapp.net/attachments/1348433490269700198/1348437749979549706/image.png?ex=69c71304&is=69c5c184&hm=e9110a512ecc3f1ee2b20fcd55d481ffe5af2198fe35933d47f833bb51bfe93e&format=webp&quality=lossless&width=704&height=939&"
+                    }
+            },
+            "Strength": {
+                    "emoji": "<:StrengthMangaAv:1346254578210963478>",             
+                    "image": "https://cdn.discordapp.com/attachments/1348433490269700198/1348438154159587420/image.png?ex=69c71364&is=69c5c1e4&hm=3d21d71344b3e26eca598c513f4fe8738eb136ea06b23b11f8c80090ed1b483b&",
+                    "rarity": "Common",
+                    "rollable": true,
+                    "stars": {
+                        "1": "https://cdn.discordapp.com/attachments/1348433490269700198/1348438154159587420/image.png?ex=69c71364&is=69c5c1e4&hm=3d21d71344b3e26eca598c513f4fe8738eb136ea06b23b11f8c80090ed1b483b&"
+                    }
+            },
+            "Ebony Devil": {
+                    "emoji": "<:EbonyDevilMangaAv:1346254601317257248> ",            
+                    "image": "https://cdn.discordapp.com/attachments/1348433490269700198/1348438620469465090/image.png?ex=69c713d3&is=69c5c253&hm=516d978844e9acdc558df813947fb95c61c8d128d500f30e1394c4e8e1dae196&",
+                    "rarity": "Common",
+                    "rollable": true,
+                    "stars": {
+                        "1": "https://cdn.discordapp.com/attachments/1348433490269700198/1348438620469465090/image.png?ex=69c713d3&is=69c5c253&hm=516d978844e9acdc558df813947fb95c61c8d128d500f30e1394c4e8e1dae196&"
+                    }
+            },
+            "Yellow Temperance": {
+                    "emoji": "<:YellowTemperanceMangaAv:1346254618572755065>",            
+                    "image": "https://cdn.discordapp.com/attachments/1353096163410055170/1353869688202854521/image.png?ex=69c70f67&is=69c5bde7&hm=d1219ce45e6b132fcd111357efeb5b075dfe15d46d8e0d6ec187e3514fb0b9f4&",
+                    "rarity": "Common",
+                    "rollable": true,
+                    "stars": {
+                        "1": "https://cdn.discordapp.com/attachments/1353096163410055170/1353869688202854521/image.png?ex=69c70f67&is=69c5bde7&hm=d1219ce45e6b132fcd111357efeb5b075dfe15d46d8e0d6ec187e3514fb0b9f4&"
+                    }
+            },
+            "Hanged Man": {
+                    "emoji": "<:HangedManMangaAv:1346254636025122998>",             
+                    "image": "https://cdn.discordapp.com/attachments/1348433490269700198/1348439455866032128/image.png?ex=69c7149b&is=69c5c31b&hm=ab330a4fef618ccd07ef622d601d5b80e09a721afa0d064e6bb65a57ffce72a3&",
+                    "rarity": "Common",
+                    "rollable": true,
+                    "stars": {
+                        "1": "https://cdn.discordapp.com/attachments/1348433490269700198/1348439455866032128/image.png?ex=69c7149b&is=69c5c31b&hm=ab330a4fef618ccd07ef622d601d5b80e09a721afa0d064e6bb65a57ffce72a3&"
+                    }
+            },
+            "Emperor": {
+                    "emoji": "<:EmperorMangaAv:1346254657764196445>",             
+                    "image": "https://cdn.discordapp.com/attachments/1353096163410055170/1353866552612487209/image.png?ex=69c70c7b&is=69c5bafb&hm=d8b76df2af78fd3c043eac8ce64fbf6c65a6dbc6c983095f5738a1d60fdc5dfb&",
+                    "rarity": "Rare",
+                    "rollable": true,
+                    "stars": {
+                        "1": "https://cdn.discordapp.com/attachments/1353096163410055170/1353866552612487209/image.png?ex=69c70c7b&is=69c5bafb&hm=d8b76df2af78fd3c043eac8ce64fbf6c65a6dbc6c983095f5738a1d60fdc5dfb&"
+                    }
+            },
+            "Empress": {
+                    "emoji": "<:EmpressMangaAv:1346254682716110848>",            
+                    "image": "https://cdn.discordapp.com/attachments/1348433490269700198/1348440297272639569/EmpressPoseManga.png?ex=69c71563&is=69c5c3e3&hm=adbaa079367c804edeccd9248e5e9f04b782bc4bf8c42e1601b0c0fac4b6b12e&",
+                    "rarity": "Common",
+                    "rollable": true,
+                    "stars": {
+                        "1": "https://cdn.discordapp.com/attachments/1348433490269700198/1348440297272639569/EmpressPoseManga.png?ex=69c71563&is=69c5c3e3&hm=adbaa079367c804edeccd9248e5e9f04b782bc4bf8c42e1601b0c0fac4b6b12e&"
+                    }
+            },
+            "Wheel of Fortune": {
+                    "emoji": "<:WheelOfFortuneMangaAv:1346254703608201246>",             
+                    "image": "https://cdn.discordapp.com/attachments/1348433490269700198/1348442139859750992/image.png?ex=69c7171a&is=69c5c59a&hm=c71f60617387c7fee7b1b06b41d68c1822844a63fea6fcf62966482ab3b532eb&",
+                    "rarity": "Common",
+                    "rollable": true,
+                    "stars": {
+                        "1": "https://cdn.discordapp.com/attachments/1348433490269700198/1348442139859750992/image.png?ex=69c7171a&is=69c5c59a&hm=c71f60617387c7fee7b1b06b41d68c1822844a63fea6fcf62966482ab3b532eb&"
+                    }
+            },
+            "Justice": {
+                    "emoji": "<:JusticeMangaAv:1346254724894163066>",             
+                    "image": "https://media.discordapp.net/attachments/1348433490269700198/1348442545696280586/image.png?ex=69c66ebb&is=69c51d3b&hm=4f4a045a2edd58a400bc120b994ca2fa0c63b8941ea298c63fdfb0e27046b6b1&format=webp&quality=lossless&width=704&height=939&",
+                    "rarity": "Common",
+                    "rollable": true,
+                    "stars": {
+                        "1": "https://media.discordapp.net/attachments/1348433490269700198/1348442545696280586/image.png?ex=69c66ebb&is=69c51d3b&hm=4f4a045a2edd58a400bc120b994ca2fa0c63b8941ea298c63fdfb0e27046b6b1&format=webp&quality=lossless&width=704&height=939&"
+                    }
+            },
+            "Lovers": {
+                    "emoji": "<:LoversMangaAv:1346254745936990269>",            
+                    "image": "https://cdn.discordapp.com/attachments/1348433490269700198/1348442859807838218/image.png?ex=69c66f06&is=69c51d86&hm=c623ca523eda09b7778d9cf0de2a38a953ff0e7696e285dc0a982944bda73475&",
+                    "rarity": "Common",
+                    "rollable": true,
+                    "stars": {
+                        "1": "https://cdn.discordapp.com/attachments/1348433490269700198/1348442859807838218/image.png?ex=69c66f06&is=69c51d86&hm=c623ca523eda09b7778d9cf0de2a38a953ff0e7696e285dc0a982944bda73475&"
+                    }
+            },
+            "Sun": {
+                    "emoji": "<:SunMangaAv:1346254760977633330>",             
+                    "image": "https://cdn.discordapp.com/attachments/1348433490269700198/1348443185000611921/image.png?ex=69c66f54&is=69c51dd4&hm=7b7112e570277ff1ac96ac1ddd9fbd8c3561c5229e0912d92d8fa6f852694aeb&",
+                    "rarity": "Common",
+                    "rollable": true,
+                    "stars": {
+                        "1": "https://cdn.discordapp.com/attachments/1348433490269700198/1348443185000611921/image.png?ex=69c66f54&is=69c51dd4&hm=7b7112e570277ff1ac96ac1ddd9fbd8c3561c5229e0912d92d8fa6f852694aeb&"
+                    }
+            },
+            "Death Thirteen": {
+                    "emoji": "<:DeathThirteenMangaAv:1346256596371509268>",            
+                    "image": "https://media.discordapp.net/attachments/1348433490269700198/1348443411346358313/image.png?ex=69c66f8a&is=69c51e0a&hm=a2627d77960904d6599a2ce45d6f626c1fa3f90c78674453a6fa6c61323c827a&format=webp&quality=lossless&width=531&height=709&",
+                    "rarity": "Rare",
+                    "rollable": true,
+                    "stars": {
+                        "1": "https://media.discordapp.net/attachments/1348433490269700198/1348443411346358313/image.png?ex=69c66f8a&is=69c51e0a&hm=a2627d77960904d6599a2ce45d6f626c1fa3f90c78674453a6fa6c61323c827a&format=webp&quality=lossless&width=531&height=709&"
+                    }
+            },
+            "Judgement": {
+                    "emoji": "<:JudgementMangaAv:1346256618458710056>",            
+                    "image": "https://media.discordapp.net/attachments/1348433490269700198/1348443619409006725/image.png?ex=69c66fbb&is=69c51e3b&hm=b1f5b3a0c94699112c1c0cbef9f42f778cf5f6115cc91ee44d3cebac1a1752c1&format=webp&quality=lossless&width=458&height=611&",
+                    "rarity": "Common",
+                    "rollable": true,
+                    "stars": {
+                        "1": "https://media.discordapp.net/attachments/1348433490269700198/1348443619409006725/image.png?ex=69c66fbb&is=69c51e3b&hm=b1f5b3a0c94699112c1c0cbef9f42f778cf5f6115cc91ee44d3cebac1a1752c1&format=webp&quality=lossless&width=458&height=611&"
+                    }
+            },
+            "High Priestess": {
+                    "emoji": "<:HighPriestessMangaAv:1346256998684954667>",            
+                    "image": "https://cdn.discordapp.com/attachments/1348433490269700198/1348444001564491817/image.png?ex=69c67016&is=69c51e96&hm=6fd422118ddfc431fa9f3de24256a88bd0feffc5250362639445990854f24c13&",
+                    "rarity": "Common",
+                    "rollable": true,
+                    "stars": {
+                        "1": "https://cdn.discordapp.com/attachments/1348433490269700198/1348444001564491817/image.png?ex=69c67016&is=69c51e96&hm=6fd422118ddfc431fa9f3de24256a88bd0feffc5250362639445990854f24c13&"
+                    }
+            },
+            "Geb": {
+                    "emoji": "<:GebMangaAv:1346257022072520786>",            
+                    "image": "https://cdn.discordapp.com/attachments/1348433490269700198/1348444332054806599/image.png?ex=69c67065&is=69c51ee5&hm=7b194a900527d2dd622ed309c78a682314baccf13bdb7d8ea280fccd3ae5a3f1&",
+                    "rarity": "Rare",
+                    "rollable": true,
+                    "stars": {
+                        "1": "https://cdn.discordapp.com/attachments/1348433490269700198/1348444332054806599/image.png?ex=69c67065&is=69c51ee5&hm=7b194a900527d2dd622ed309c78a682314baccf13bdb7d8ea280fccd3ae5a3f1&"
+                    }
+            },
+            "Khnum": {
+                    "emoji": "<:KhnumMangaAv:1346257057124450476>",             
+                    "image": "https://cdn.discordapp.com/attachments/1348433490269700198/1348444476221165670/image.png?ex=69c67088&is=69c51f08&hm=ef38703e5b7abce71230ac29c2d21922146b1c52645d4c2407e2b93d27ca399d&",
+                    "rarity": "Common",
+                    "rollable": true,
+                    "stars": {
+                        "1": "https://cdn.discordapp.com/attachments/1348433490269700198/1348444476221165670/image.png?ex=69c67088&is=69c51f08&hm=ef38703e5b7abce71230ac29c2d21922146b1c52645d4c2407e2b93d27ca399d&"
+                    }
+            },
+            "Tohth": {
+                    "emoji": "<:TohthMangaAv:1346257080138596362>",            
+                    "image": "https://cdn.discordapp.com/attachments/1348433490269700198/1348444700318633985/image.png?ex=69c670bd&is=69c51f3d&hm=80dc1d1e86965cc67de647525d558ac58265e78bc3679f60a45fdd703e6d8972&",
+                    "rarity": "Common",
+                    "rollable": true,
+                    "stars": {
+                        "1": "https://cdn.discordapp.com/attachments/1348433490269700198/1348444700318633985/image.png?ex=69c670bd&is=69c51f3d&hm=80dc1d1e86965cc67de647525d558ac58265e78bc3679f60a45fdd703e6d8972&"
+                    }
+            },
+            "Anubis": {
+                    "emoji": "<:AnubisMangaAv:1346257097658073169>",            
+                    "image": "https://cdn.discordapp.com/attachments/1353096163410055170/1353869344832229506/image.png?ex=69c70f15&is=69c5bd95&hm=2c3dd0052cfa372d738ca920a0e7fff7525d6b171c622b505a3b88931b38abce&",
+                    "rarity": "Epic",
+                    "rollable": true,
+                    "stars": {
+                        "1": "https://cdn.discordapp.com/attachments/1353096163410055170/1353869344832229506/image.png?ex=69c70f15&is=69c5bd95&hm=2c3dd0052cfa372d738ca920a0e7fff7525d6b171c622b505a3b88931b38abce&"
+                    }
+            },
+            "Bastet": {
+                    "emoji": "<:BastetMangaAv:1346257119225315361>",            
+                    "image": "https://cdn.discordapp.com/attachments/1348433490269700198/1348445595139964971/image.png?ex=69c67192&is=69c52012&hm=396e1a2a1fc7d811cd9b507690f1b749ae0c1a7f73ea9cb0496021bc73236ead&",
+                    "rarity": "Common",
+                    "rollable": true,
+                    "stars": {
+                        "1": "https://cdn.discordapp.com/attachments/1348433490269700198/1348445595139964971/image.png?ex=69c67192&is=69c52012&hm=396e1a2a1fc7d811cd9b507690f1b749ae0c1a7f73ea9cb0496021bc73236ead&"
+                    }
+            },
+            "Sethan": {
+                    "emoji": "<:SethanAvAnim:1346257234706960465>",            
+                    "image": "https://cdn.discordapp.com/attachments/1348433490269700198/1348445233666592829/image.png?ex=69c6713c&is=69c51fbc&hm=7fec5d7cac4ced062baa8587aaf53a595e3e5da082c1ce50dc5e31c439b91485&",
+                    "rarity": "Common",
+                    "rollable": true,
+                    "stars": {
+                        "1": "https://cdn.discordapp.com/attachments/1348433490269700198/1348445233666592829/image.png?ex=69c6713c&is=69c51fbc&hm=7fec5d7cac4ced062baa8587aaf53a595e3e5da082c1ce50dc5e31c439b91485&"
+                    }
+            },
+            "Osiris": {
+                    "emoji": "<:OsirisMangaAv:1346257258329407619>",             
+                    "image": "https://cdn.discordapp.com/attachments/1353096163410055170/1353866962932989972/image.png?ex=69c70cdd&is=69c5bb5d&hm=17f376f58101a092f4b87ed36a67c824408738ba4eaaa6d11a51f6994e8d4c5c&",
+                    "rarity": "Common",
+                    "rollable": true,
+                    "stars": {
+                        "1": "https://cdn.discordapp.com/attachments/1353096163410055170/1353866962932989972/image.png?ex=69c70cdd&is=69c5bb5d&hm=17f376f58101a092f4b87ed36a67c824408738ba4eaaa6d11a51f6994e8d4c5c&",
+                        "2": "https://cdn.discordapp.com/attachments/1355434892355436625/1357908399102103735/image.png?ex=69c6977f&is=69c545ff&hm=5585de6c6583b539e6ec3710f4e7b675c83b89ef54d169db1ebbd0c7a0d4dca4&"
+                    }
+            },
+            "Horus": {
+                    "emoji": "<:HorusMangaAv:1346257277958488074>",             
+                    "image": "https://cdn.discordapp.com/attachments/1348433490269700198/1348446007591047290/image.png?ex=69c671f5&is=69c52075&hm=f9ef5c635120baff604ec94a133acbc625f25153a43c89057fce0d4e267fe360&",
+                    "rarity": "Common",
+                    "rollable": true,
+                    "stars": {
+                        "1": "https://cdn.discordapp.com/attachments/1348433490269700198/1348446007591047290/image.png?ex=69c671f5&is=69c52075&hm=f9ef5c635120baff604ec94a133acbc625f25153a43c89057fce0d4e267fe360&"
+                    }
+            },
+            "Atum": {
+                    "emoji": "<:AtumMangaAv:1346257298829480047>",             
+                    "image": "https://cdn.discordapp.com/attachments/1348433490269700198/1348446445979701311/image.png?ex=69c6725d&is=69c520dd&hm=12f80d7ba87408b84a48d865aa6ff448489398b2c15c94e674b4c434f5625012&",
+                    "rarity": "Common",
+                    "rollable": true,
+                    "stars": {
+                        "1": "https://cdn.discordapp.com/attachments/1348433490269700198/1348446445979701311/image.png?ex=69c6725d&is=69c520dd&hm=12f80d7ba87408b84a48d865aa6ff448489398b2c15c94e674b4c434f5625012&"
+                    }
+            },
+            "Tenore Sax": {
+                    "emoji": "<:TenoreSaxMangaAv:1346257319113265263>",            
+                    "image": "https://cdn.discordapp.com/attachments/1348433490269700198/1348446593912934400/image.png?ex=69c67280&is=69c52100&hm=7324a51d1e93a97e1b4d718204310c27ff8ff1df91cba48cefd99ab58df24ad6&",
+                    "rarity": "Common",
+                    "rollable": true,
+                    "stars": {
+                        "1": "https://cdn.discordapp.com/attachments/1348433490269700198/1348446593912934400/image.png?ex=69c67280&is=69c52100&hm=7324a51d1e93a97e1b4d718204310c27ff8ff1df91cba48cefd99ab58df24ad6&"
+                    }
+            },
+            "Cream": {
+                    "emoji": "<:CreamMangaAv:1346257336515428493>",             
+                    "image": "https://media.discordapp.net/attachments/1348433490269700198/1348450632402599976/image.png?ex=69c67643&is=69c524c3&hm=9edc474fa01293c3ff5f1a599417ca70aa662c33229137b3dd377b87760efff3&format=webp&quality=lossless&width=426&height=569&",
+                    "rarity": "Epic",
+                    "rollable": true,
+                    "stars": {
+                        "1": "https://media.discordapp.net/attachments/1348433490269700198/1348450632402599976/image.png?ex=69c67643&is=69c524c3&hm=9edc474fa01293c3ff5f1a599417ca70aa662c33229137b3dd377b87760efff3&format=webp&quality=lossless&width=426&height=569&"
+                    }
+            },
+            "Shadow Dio": {
+                    "emoji": "<:ShadowDio:1348506368969277520>",             
+                    "image": "https://cdn.discordapp.com/attachments/1348433490269700198/1348506095660040212/image.png?ex=69c6a9eb&is=69c5586b&hm=8334defb950922460226ce1f3ad3b0784225ec7240735d05ecea53ffbfbbc069&",
+                    "rarity": "mythical",
+                    "rollable": true,
+                    "stars": {
+                        "1": "https://cdn.discordapp.com/attachments/1348433490269700198/1348506095660040212/image.png?ex=69c6a9eb&is=69c5586b&hm=8334defb950922460226ce1f3ad3b0784225ec7240735d05ecea53ffbfbbc069&"
+                    }
+            }
+        },
+        "Part 4": {
+            "Crazy Diamond": {
+                    "emoji": "<:CrazyDiamondMangaAv:1348511812672553010>",             
+                    "image": "https://cdn.discordapp.com/attachments/1348433490269700198/1348514604719935620/image.png?ex=67cfbd97&is=67ce6c17&hm=04be5fa9d97742ea2bc40a8fccec405303634771e8840151228bf29cf210f09c&",
+                    "rarity": "Legendary",
+                    "rollable": true,
+                    "stars": {
+                            "1": "https://cdn.discordapp.com/attachments/1348433490269700198/1348514604719935620/image.png?ex=67cfbd97&is=67ce6c17&hm=04be5fa9d97742ea2bc40a8fccec405303634771e8840151228bf29cf210f09c&",
+                            "2": "https://media.discordapp.net/attachments/1355434892355436625/1355967126623752283/image.png?ex=67eada4b&is=67e988cb&hm=f8c85d16a317f8723f570f1448b146cf19b1ca769d74c27159c9dbf38537ca3a&=&format=webp&quality=lossless&width=639&height=852",
+                            "3": "https://cdn.discordapp.com/attachments/1355434919781994598/1355962306907078841/image.png?ex=67ead5ce&is=67e9844e&hm=b7c2299c2f0d8e0781dde67080a7fe2390a86e74b8541f115dd30a488fd2252c&",
+                            "4": "https://media.discordapp.net/attachments/1355434919781994598/1355965147331694712/image.png?ex=67ead873&is=67e986f3&hm=acd2f644f27389932f590fa3c944c0de2ede5b9a8310073f43cde3d4dde017f1&=&format=webp&quality=lossless&width=704&height=939",
+                            "5": "https://media.discordapp.net/attachments/1355434934491414539/1355440132068474950/image.png?ex=67ea40fe&is=67e8ef7e&hm=7ed37587de938d6ada3803598fe88c659d6e5762dd7f0c5247022e5f56b133d8&=&format=webp&quality=lossless&width=704&height=938"
+                        }
+                    },
+            "Killer Queen": {
+                    "emoji": "<:KillerQueenMangaAv:1348524746232430612>",             
+                    "image": "https://cdn.discordapp.com/attachments/1348433490269700198/1348525062373773473/image.png?ex=67cfc755&is=67ce75d5&hm=194226df0d2848d6e2c035c836675b4c860fde6a330127425ef2eaf758a6a48a&",
+                    "rarity": "Legendary",
+                    "rollable": true,
+                    "stars": {
+                        "1": "https://cdn.discordapp.com/attachments/1348433490269700198/1348525062373773473/image.png?ex=67cfc755&is=67ce75d5&hm=194226df0d2848d6e2c035c836675b4c860fde6a330127425ef2eaf758a6a48a&"
+                    }
+            },
+            "The Hand": {
+                    "emoji": "<:TheHandMangaAv:1348520733835530342>",             
+                    "image": "https://cdn.discordapp.com/attachments/1348433490269700198/1348521869023907871/image.png?ex=67cfc45b&is=67ce72db&hm=4c105da14638d0f37af09e73e49583f6876d9ccabf21820d6292281dedd155b3&",
+                    "rarity": "Rare",
+                    "rollable": true,
+                    "stars": {
+                        "1": "https://cdn.discordapp.com/attachments/1348433490269700198/1348521869023907871/image.png?ex=67cfc45b&is=67ce72db&hm=4c105da14638d0f37af09e73e49583f6876d9ccabf21820d6292281dedd155b3&"
+                    }
+            },
+            "Echoes Act1": {
+                    "emoji": "<:EchoesAct1:1348511592622325780>",             
+                    "image": "https://cdn.discordapp.com/attachments/1348433490269700198/1348522787064774716/image.png?ex=67cfc536&is=67ce73b6&hm=a45f4451b3c677706279dca7ac28b30bea7bd0be281042bcf46ce4df7c6ed741&",
+                    "rarity": "Rare",
+                    "rollable": true,
+                    "stars": {
+                        "1": "https://cdn.discordapp.com/attachments/1348433490269700198/1348522787064774716/image.png?ex=67cfc536&is=67ce73b6&hm=a45f4451b3c677706279dca7ac28b30bea7bd0be281042bcf46ce4df7c6ed741&"
+                    }
+            },
+            "Heaven's Door": {
+                    "emoji": "<:HeavenDoorMangaAv:1348523057156853780>",             
+                    "image": "https://cdn.discordapp.com/attachments/1348433490269700198/1348523555100557322/image.png?ex=67cfc5ed&is=67ce746d&hm=a8719c2d0eaff6f80570badfb011595ebce9fe985e168c3d9253c8ac2bf59eaa&",
+                    "rarity": "Epic",
+                    "rollable": true,
+                    "stars": {
+                        "1": "https://cdn.discordapp.com/attachments/1348433490269700198/1348523555100557322/image.png?ex=67cfc5ed&is=67ce746d&hm=a8719c2d0eaff6f80570badfb011595ebce9fe985e168c3d9253c8ac2bf59eaa&"
+                    }
+            },
+            "Sheer Heart Attack": {
+                    "emoji": "<:SheerHeartAttackAv:1348524220618899510>",             
+                    "image": "https://cdn.discordapp.com/attachments/1353096163410055170/1353867491864084630/image.png?ex=67e336db&is=67e1e55b&hm=562968b7abbdf9b00384f44047a3cab5f30c47441a9c43465d5e426a7f958116&",
+                    "rarity": "Epic",
+                    "rollable": true,
+                    "stars": {
+                        "1": "https://cdn.discordapp.com/attachments/1353096163410055170/1353867491864084630/image.png?ex=67e336db&is=67e1e55b&hm=562968b7abbdf9b00384f44047a3cab5f30c47441a9c43465d5e426a7f958116&"
+                    }
+            },
+            "Aqua Necklace": {
+                    "emoji": "<:AquaNecklaceMangaAv:1348525291278176319>",             
+                    "image": "https://media.discordapp.net/attachments/1348433490269700198/1348525498266947654/image.png?ex=67cfc7bd&is=67ce763d&hm=2c6ebee6e50f7b451b2d038423d1a2d768fb4b8bd7a84ef4bdfa8d4c20d9dff0&=&format=webp&quality=lossless&width=482&height=642",
+                    "rarity": "Common",
+                    "rollable": true,
+                    "stars": {
+                        "1": "https://media.discordapp.net/attachments/1348433490269700198/1348525498266947654/image.png?ex=67cfc7bd&is=67ce763d&hm=2c6ebee6e50f7b451b2d038423d1a2d768fb4b8bd7a84ef4bdfa8d4c20d9dff0&=&format=webp&quality=lossless&width=482&height=642"
+                    }
+            },
+            "Bad Company": {
+                    "emoji": "<:BadCompanyMangaAv:1348526046663807070>",             
+                    "image": "https://cdn.discordapp.com/attachments/1348433490269700198/1348525903558348862/image.png?ex=67cfc81d&is=67ce769d&hm=4a2dd203c50f89d631b9072965896ad583777af80d399a9be5177176cce1a96b&",
+                    "rarity": "Common",
+                    "rollable": true,
+                    "stars": {
+                        "1": "https://cdn.discordapp.com/attachments/1348433490269700198/1348525903558348862/image.png?ex=67cfc81d&is=67ce769d&hm=4a2dd203c50f89d631b9072965896ad583777af80d399a9be5177176cce1a96b&"
+                    }
+            },
+            "The Lock": {
+                    "emoji": "<:TheLockMangaAv:1348526336221777952>",             
+                    "image": "https://cdn.discordapp.com/attachments/1348433490269700198/1348526556406087680/image.png?ex=67cfc8b9&is=67ce7739&hm=6cb03e1ae198ec1f4c8808ad9c32ab627c0d0cc6e8b750c6d43c41b66589b375&",
+                    "rarity": "Common",
+                    "rollable": true,
+                    "stars": {
+                        "1": "https://cdn.discordapp.com/attachments/1348433490269700198/1348526556406087680/image.png?ex=67cfc8b9&is=67ce7739&hm=6cb03e1ae198ec1f4c8808ad9c32ab627c0d0cc6e8b750c6d43c41b66589b375&"
+                    }
+            },
+            "Surface": {
+                    "emoji": "<:SurfaceMangaAv:1348526884379426816>",             
+                    "image": "https://cdn.discordapp.com/attachments/1348433490269700198/1348527165272231936/image.png?ex=67cfc94a&is=67ce77ca&hm=189c3e7045bd6574268fad3fc9916f7e5980a3aa319cf69a64694243154f0922&",
+                    "rarity": "Common",
+                    "rollable": true,
+                    "stars": {
+                        "1": "https://cdn.discordapp.com/attachments/1348433490269700198/1348527165272231936/image.png?ex=67cfc94a&is=67ce77ca&hm=189c3e7045bd6574268fad3fc9916f7e5980a3aa319cf69a64694243154f0922&"
+                    }
+            },
+            "Love Deluxe": {
+                    "emoji": "<:LoveDeluxeMangaAv:1348527479366619178>",             
+                    "image": "https://cdn.discordapp.com/attachments/1353096163410055170/1353868579413692446/image.png?ex=67e337de&is=67e1e65e&hm=3e2bebf3ca9163921bdfd949d4b3a5181a60a6574243e5f334894a312da3ec24&",
+                    "rarity": "Rare",
+                    "rollable": true,
+                    "stars": {
+                        "1": "https://cdn.discordapp.com/attachments/1353096163410055170/1353868579413692446/image.png?ex=67e337de&is=67e1e65e&hm=3e2bebf3ca9163921bdfd949d4b3a5181a60a6574243e5f334894a312da3ec24&"
+                    }
+            },
+            "Red Hot Chili Pepper": {
+                    "emoji": "<:RedHotChiliPepperMangaAv:1348527532932071425>",             
+                    "image": "https://cdn.discordapp.com/attachments/1348433490269700198/1348528793446387732/image.png?ex=67cfcace&is=67ce794e&hm=e0e8afc42818889bc0b555592e81cfaa7e45edb86f394b6e275b849097eec558&",
+                    "rarity": "Rare",
+                    "rollable": true,
+                    "stars": {
+                        "1": "https://cdn.discordapp.com/attachments/1348433490269700198/1348528793446387732/image.png?ex=67cfcace&is=67ce794e&hm=e0e8afc42818889bc0b555592e81cfaa7e45edb86f394b6e275b849097eec558&"
+                    }
+            },
+            "Ratt": {
+                    "emoji": "<:RattMangaAv:1348530607424143361>",             
+                    "image": "https://cdn.discordapp.com/attachments/1348433490269700198/1348530844288942101/image.png?ex=67cfccb7&is=67ce7b37&hm=1838e4238f2ef09c1871d4a9fc8b70b3bbec716b33b9efa562b5834e3201e243&",
+                    "rarity": "Common",
+                    "rollable": true,
+                    "stars": {
+                        "1": "https://cdn.discordapp.com/attachments/1348433490269700198/1348530844288942101/image.png?ex=67cfccb7&is=67ce7b37&hm=1838e4238f2ef09c1871d4a9fc8b70b3bbec716b33b9efa562b5834e3201e243&"
+                    }
+            },
+            "Harvest": {
+                    "emoji": "<:HarvestMangaAv:1348531245851611157>",             
+                    "image": "https://cdn.discordapp.com/attachments/1348433490269700198/1348531363225272391/image.png?ex=67cfcd33&is=67ce7bb3&hm=1b9ab59b0b4cf51f4bbbbe080baff682b99b5aede4718bcd8d4f56f19df49e89&",
+                    "rarity": "Common",
+                    "rollable": true,
+                    "stars": {
+                        "1": "https://cdn.discordapp.com/attachments/1348433490269700198/1348531363225272391/image.png?ex=67cfcd33&is=67ce7bb3&hm=1b9ab59b0b4cf51f4bbbbe080baff682b99b5aede4718bcd8d4f56f19df49e89&"
+                    }
+            },
+            "Atom Heart Father": {
+                    "emoji": "<:AtomHeartFatherMangaAv:1348531751773016185>",             
+                    "image": "https://cdn.discordapp.com/attachments/1348433490269700198/1348531859583275039/image.png?ex=67cfcda9&is=67ce7c29&hm=beccc2439df68ca6ee733fc084ac5e100e9507d054d3625d1f96e609c9414af2&",
+                    "rarity": "Common",
+                    "rollable": true,
+                    "stars": {
+                        "1": "https://cdn.discordapp.com/attachments/1348433490269700198/1348531859583275039/image.png?ex=67cfcda9&is=67ce7c29&hm=beccc2439df68ca6ee733fc084ac5e100e9507d054d3625d1f96e609c9414af2&"
+                    }
+            },
+            "Boy II Man": {
+                    "emoji": "<:BoyIIManMangaAv:1348532220398145536>",             
+                    "image": "https://cdn.discordapp.com/attachments/1348433490269700198/1348532703187832884/image.png?ex=67cfce72&is=67ce7cf2&hm=19c85cc3ea802249ce5af887a0715095c767dfc9eadfba89a40c074cc72ba714&",
+                    "rarity": "Common",
+                    "rollable": true,
+                    "stars": {
+                        "1": "https://cdn.discordapp.com/attachments/1348433490269700198/1348532703187832884/image.png?ex=67cfce72&is=67ce7cf2&hm=19c85cc3ea802249ce5af887a0715095c767dfc9eadfba89a40c074cc72ba714&"
+                    }
+            },
+            "Highway Star": {
+                    "emoji": "<:HighwayStarMangaAv:1348532831734992906>",             
+                    "image": "https://cdn.discordapp.com/attachments/1348433490269700198/1348533294161072238/image.png?ex=67cfceff&is=67ce7d7f&hm=46386c902f60cdddcde44fc60e05cea9578d542afd3f72646b2d135acabe2bc3&",
+                    "rarity": "Common",
+                    "rollable": true,
+                    "stars": {
+                        "1": "https://cdn.discordapp.com/attachments/1348433490269700198/1348533294161072238/image.png?ex=67cfceff&is=67ce7d7f&hm=46386c902f60cdddcde44fc60e05cea9578d542afd3f72646b2d135acabe2bc3&"
+                    }
+            },
+            "Super Fly": {
+                    "emoji": "<:SuperFlyMangaAv:1348533428835979316>",             
+                    "image": "https://cdn.discordapp.com/attachments/1348433490269700198/1348533978268958842/image.png?ex=67cfcfa2&is=67ce7e22&hm=53cf978b9b75616754a2cb3fd2a247e109b1cf68c334b56effdac24771f544a5&",
+                    "rarity": "Common",
+                    "rollable": true,
+                    "stars": {
+                        "1": "https://cdn.discordapp.com/attachments/1348433490269700198/1348533978268958842/image.png?ex=67cfcfa2&is=67ce7e22&hm=53cf978b9b75616754a2cb3fd2a247e109b1cf68c334b56effdac24771f544a5&"
+                    }
+            },
+            "Enigma": {
+                    "emoji": "<:EnigmaMangaAv:1348535330177028206>",             
+                    "image": "https://cdn.discordapp.com/attachments/1348433490269700198/1348535251646939136/image.png?ex=67cfd0d2&is=67ce7f52&hm=a5e252aa2dbf8602b9287e427121da99ee6062d4611d33c92e55602f14c105cd&",
+                    "rarity": "Common",
+                    "rollable": true,
+                    "stars": {
+                        "1": "https://cdn.discordapp.com/attachments/1348433490269700198/1348535251646939136/image.png?ex=67cfd0d2&is=67ce7f52&hm=a5e252aa2dbf8602b9287e427121da99ee6062d4611d33c92e55602f14c105cd&"
+                    }
+            },
+            "Cheap Trick": {
+                    "emoji": "<:CheapTrickMangaAv:1348536453595922442>",             
+                    "image": "https://media.discordapp.net/attachments/1348433490269700198/1348536539046608987/image.png?ex=67d31dc5&is=67d1cc45&hm=d40e982daa608e57c5fc380b020ef6cdc7f898b39d51fb2a678d47e8b52a07b2&=&format=webp&quality=lossless&width=228&height=305",
+                    "rarity": "Common",
+                    "rollable": true,
+                    "stars": {
+                        "1": "https://media.discordapp.net/attachments/1348433490269700198/1348536539046608987/image.png?ex=67d31dc5&is=67d1cc45&hm=d40e982daa608e57c5fc380b020ef6cdc7f898b39d51fb2a678d47e8b52a07b2&=&format=webp&quality=lossless&width=228&height=305"
+                    }
+            },
+            "Pearl Jam": {
+                    "emoji": "<:PearlJamMangaAv:1348537683743608843>",             
+                    "image": "https://cdn.discordapp.com/attachments/1348433490269700198/1348537794615574611/image.png?ex=67d07bf0&is=67cf2a70&hm=cc298a8ac3781860cbcce7731e47215413b9b883938bf785bb6a6092c1299afb&",
+                    "rarity": "Common",
+                    "rollable": true,
+                    "stars": {
+                        "1": "https://cdn.discordapp.com/attachments/1348433490269700198/1348537794615574611/image.png?ex=67d07bf0&is=67cf2a70&hm=cc298a8ac3781860cbcce7731e47215413b9b883938bf785bb6a6092c1299afb&"
+                    }
+            },
+            "Achtung Baby": {
+                    "emoji": "<:AchtungBabyMangaAv:1348763693391024208>",             
+                    "image": "https://cdn.discordapp.com/attachments/1348433490269700198/1348764009373106297/image.png?ex=67d0a5de&is=67cf545e&hm=6c935e8ac7a2f37943d3735d782127416c536b136ca1c18d826ac467fbbc5e0a&",
+                    "rarity": "Common",
+                    "rollable": true,
+                    "stars": {
+                        "1": "https://cdn.discordapp.com/attachments/1348433490269700198/1348764009373106297/image.png?ex=67d0a5de&is=67cf545e&hm=6c935e8ac7a2f37943d3735d782127416c536b136ca1c18d826ac467fbbc5e0a&"
+                    }
+            },
+            "Earth Wind and Fire": {
+                    "emoji": "<:EarthWindAndFireMangaAv:1348764223852773436>",             
+                    "image": "https://media.discordapp.net/attachments/1348433490269700198/1348764492988940412/image.png?ex=67d34951&is=67d1f7d1&hm=47c7520f3465b7b930340c5acb0ae680d1daab4f79636bef713dc9d60e08d20d&=&format=webp&quality=lossless&width=296&height=394",
+                    "rarity": "Common",
+                    "rollable": true,
+                    "stars": {
+                        "1": "https://media.discordapp.net/attachments/1348433490269700198/1348764492988940412/image.png?ex=67d34951&is=67d1f7d1&hm=47c7520f3465b7b930340c5acb0ae680d1daab4f79636bef713dc9d60e08d20d&=&format=webp&quality=lossless&width=296&height=394"
+                    }
+            },
+            "Cinderella": {
+                    "emoji": "<:CinderellaMangaAv:1348764557257998477>",             
+                    "image": "https://cdn.discordapp.com/attachments/1348433490269700198/1348765181970219008/image.png?ex=67d0a6f6&is=67cf5576&hm=848a6e1457b455d3fae1fc39608fba33394849c30df2519076f67968676b6f46&",
+                    "rarity": "Common",
+                    "rollable": true,
+                    "stars": {
+                        "1": "https://cdn.discordapp.com/attachments/1348433490269700198/1348765181970219008/image.png?ex=67d0a6f6&is=67cf5576&hm=848a6e1457b455d3fae1fc39608fba33394849c30df2519076f67968676b6f46&"
+                    }
+            },
+            "Stray Cat": {
+                    "emoji": "<:StrayCatMangaAv:1348764610651754517>",             
+                    "image": "https://cdn.discordapp.com/attachments/1353096163410055170/1353870052239085648/image.png?ex=67e3393e&is=67e1e7be&hm=7de9eba40423330aae663141cd7bbfb06a5ceb08fa0808ddafcbef86d1942a60&",
+                    "rarity": "Rare",
+                    "rollable": true,
+                    "stars": {
+                        "1": "https://cdn.discordapp.com/attachments/1353096163410055170/1353870052239085648/image.png?ex=67e3393e&is=67e1e7be&hm=7de9eba40423330aae663141cd7bbfb06a5ceb08fa0808ddafcbef86d1942a60&"
+                    }
+            },
+            "Killer Queen: Bites the Dust": {
+                    "emoji": "<:180pxBitestheDustMangaAv:1348797375149379665>",             
+                    "image": "https://cdn.discordapp.com/attachments/1348433490269700198/1348797763030093834/image.png?ex=67d0c54e&is=67cf73ce&hm=bbf4c3f39a6159a1c3dd750f2bf749d867dc9304684c18ef325ff9d71da5cae0&",
+                    "rarity": "mythical",
+                    "rollable": false,
+                    "stars": {
+                        "1": "https://cdn.discordapp.com/attachments/1348433490269700198/1348797763030093834/image.png?ex=67d0c54e&is=67cf73ce&hm=bbf4c3f39a6159a1c3dd750f2bf749d867dc9304684c18ef325ff9d71da5cae0&"
+                    }
+            },
+            "Echoes Act2": {
+                    "emoji": "<:echoesact2:1349369441863077898>",             
+                    "image": "https://cdn.discordapp.com/attachments/1348433490269700198/1349369860349493299/image.png?ex=67d2da1c&is=67d1889c&hm=f42e2b658a479f23e49938013b1d2e994ffcb00182984b4b2d78a40df3d1702e&",
+                    "rarity": "Epic",
+                    "rollable": false,
+                    "stars": {
+                        "1": "https://cdn.discordapp.com/attachments/1348433490269700198/1349369860349493299/image.png?ex=67d2da1c&is=67d1889c&hm=f42e2b658a479f23e49938013b1d2e994ffcb00182984b4b2d78a40df3d1702e&"
+                    }
+            },
+            "Echoes Act3": {
+                    "emoji": "<:echoesact3:1349369471441047743>",             
+                    "image": "https://cdn.discordapp.com/attachments/1348433490269700198/1349370095909994540/image.png?ex=67d2da54&is=67d188d4&hm=8d3be0171bb7717d42ba213f3b544c89746b5866f7c9b9896001db5c00e53475&",
+                    "rarity": "Legendary",
+                    "rollable": false,
+                    "stars": {
+                        "1": "https://cdn.discordapp.com/attachments/1348433490269700198/1349370095909994540/image.png?ex=67d2da54&is=67d188d4&hm=8d3be0171bb7717d42ba213f3b544c89746b5866f7c9b9896001db5c00e53475&"
+                    }
+            }
+        },
+        "Part 5": {
+            "Gold Experience": {
+                    "emoji": "<:GoldExperienceAv:1353097891857694844>",             
+                    "image": "https://cdn.discordapp.com/attachments/1353096163410055170/1353098313033060362/image.png?ex=67e06a81&is=67df1901&hm=101503dbe57d4103475c9f29818a0f4751e8f51babe46f2f5baee7fa987db3d0&",
+                    "rarity": "Legendary",
+                    "rollable": true,
+                    "stars": {
+                        "1": "https://cdn.discordapp.com/attachments/1353096163410055170/1353098313033060362/image.png?ex=67e06a81&is=67df1901&hm=101503dbe57d4103475c9f29818a0f4751e8f51babe46f2f5baee7fa987db3d0&"
+                    }
+            },
+            "Gold Experience Requiem": {
+                    "emoji": "<:GoldExperienceRequiemAv:1353098477101383853>",             
+                    "image": "https://cdn.discordapp.com/attachments/1353096163410055170/1353098891452612658/image.png?ex=67e06b0b&is=67df198b&hm=64efcc5b13d7ec80dbad972fbdba18ff97198154aad4e8af18ae7af8351a2f4a&",
+                    "rarity": "mythical",
+                    "rollable": false,
+                    "stars": {
+                        "1": "https://cdn.discordapp.com/attachments/1353096163410055170/1353098891452612658/image.png?ex=67e06b0b&is=67df198b&hm=64efcc5b13d7ec80dbad972fbdba18ff97198154aad4e8af18ae7af8351a2f4a&"
+                    }
+            },
+            "Sticky Fingers": {
+                    "emoji": "<:StickyFingersAv:1353100895642058863>",             
+                    "image": "https://cdn.discordapp.com/attachments/1353096163410055170/1353100355277422643/image.png?ex=67e06c68&is=67df1ae8&hm=8e61de81085070c0465cf41ffe797271c60f72de727361978875d273f847903a&",
+                    "rarity": "Epic",
+                    "rollable": true,
+                    "stars": {
+                        "1": "https://cdn.discordapp.com/attachments/1353096163410055170/1353100355277422643/image.png?ex=67e06c68&is=67df1ae8&hm=8e61de81085070c0465cf41ffe797271c60f72de727361978875d273f847903a&"
+                    }
+            },
+            "Silver Chariot Requiem": {
+                    "emoji": "<:ChariotRequiemAv:1353162796262494238>",             
+                    "image": "https://cdn.discordapp.com/attachments/1353096163410055170/1353162556805746688/image.png?ex=67e0a656&is=67df54d6&hm=07171fc8795b2d62d3568ddb4d3b71ec827245621a353474a106deb185486930&",
+                    "rarity": "mythical",
+                    "rollable": false,
+                    "stars": {
+                        "1": "https://cdn.discordapp.com/attachments/1353096163410055170/1353162556805746688/image.png?ex=67e0a656&is=67df54d6&hm=07171fc8795b2d62d3568ddb4d3b71ec827245621a353474a106deb185486930&"
+                    }
+            },
+            "Moody Blues": {
+                    "emoji": "<:MoodyBluesAv:1353169562836664350>",             
+                    "image": "https://cdn.discordapp.com/attachments/1353096163410055170/1353169705220706334/image.png?ex=67e0acfe&is=67df5b7e&hm=a32534a4702a2d00ebd5cae56c1cbaa19dbb55a3006d65ccaed3657de31707fa&",
+                    "rarity": "Rare",
+                    "rollable": true,
+                    "stars": {
+                        "1": "https://cdn.discordapp.com/attachments/1353096163410055170/1353169705220706334/image.png?ex=67e0acfe&is=67df5b7e&hm=a32534a4702a2d00ebd5cae56c1cbaa19dbb55a3006d65ccaed3657de31707fa&"
+                    }
+            },
+            "Sex Pistols": {
+                    "emoji": "<:180pxSexPistolsAv:1353404336725561396>",             
+                    "image": "https://cdn.discordapp.com/attachments/1353096163410055170/1353409820488896513/image.png?ex=67e18c9e&is=67e03b1e&hm=affc33a2fafaa2056f2bc59204c67330db84a60815e4c7ff0a2317668da0a95f&",
+                    "rarity": "Rare",
+                    "rollable": true,
+                    "stars": {
+                        "1": "https://cdn.discordapp.com/attachments/1353096163410055170/1353409820488896513/image.png?ex=67e18c9e&is=67e03b1e&hm=affc33a2fafaa2056f2bc59204c67330db84a60815e4c7ff0a2317668da0a95f&"
+                    }
+            },
+            "Aerosmith": {
+                    "emoji": "<:AerosmithAv:1353410356868808754>",             
+                    "image": "https://cdn.discordapp.com/attachments/1353096163410055170/1353410641037103236/image.png?ex=67e18d61&is=67e03be1&hm=8cc6cbc4bd12a81b36a3f65f3a23b5d69ca687ed1cdc4802e0887f5037db8a88&",
+                    "rarity": "Rare",
+                    "rollable": true,
+                    "stars": {
+                        "1": "https://cdn.discordapp.com/attachments/1353096163410055170/1353410641037103236/image.png?ex=67e18d61&is=67e03be1&hm=8cc6cbc4bd12a81b36a3f65f3a23b5d69ca687ed1cdc4802e0887f5037db8a88&"
+                    }
+            },
+            "Purple Haze": {
+                    "emoji": "<:PurpleHazeAv:1353410783324934214>",             
+                    "image": "https://cdn.discordapp.com/attachments/1353096163410055170/1353411133649977364/image.png?ex=67e18dd7&is=67e03c57&hm=c87cecdc877e7c7216606b4ccb43307102818b739b1643fc20bad9f151160d96&",
+                    "rarity": "Rare",
+                    "rollable": true,
+                    "stars": {
+                        "1": "https://cdn.discordapp.com/attachments/1353096163410055170/1353411133649977364/image.png?ex=67e18dd7&is=67e03c57&hm=c87cecdc877e7c7216606b4ccb43307102818b739b1643fc20bad9f151160d96&"
+                    }
+            },
+            "Spice Girl": {
+                    "emoji": "<:SpiceGirlAv:1353412985485266944>",             
+                    "image": "https://cdn.discordapp.com/attachments/1353096163410055170/1353414858384605305/image.png?ex=67e1914f&is=67e03fcf&hm=950ce4aa4c2415e3dec1953425657cfa50771dabdbbda9db8cb40698f6cc4e4c&",
+                    "rarity": "Rare",
+                    "rollable": true,
+                    "stars": {
+                        "1": "https://cdn.discordapp.com/attachments/1353096163410055170/1353414858384605305/image.png?ex=67e1914f&is=67e03fcf&hm=950ce4aa4c2415e3dec1953425657cfa50771dabdbbda9db8cb40698f6cc4e4c&"
+                    }
+            },
+            "Mr.President": {
+                    "emoji": "<:MrPresidentAv:1353415386346819705>",             
+                    "image": "https://cdn.discordapp.com/attachments/1353096163410055170/1353416379105153084/image.png?ex=67e192ba&is=67e0413a&hm=daecc5e3afedafd1f4afdbeece5d9d7e001940ff917dfdedbab1570bfe3f26b5&",
+                    "rarity": "Common",
+                    "rollable": true,
+                    "stars": {
+                        "1": "https://cdn.discordapp.com/attachments/1353096163410055170/1353416379105153084/image.png?ex=67e192ba&is=67e0413a&hm=daecc5e3afedafd1f4afdbeece5d9d7e001940ff917dfdedbab1570bfe3f26b5&"
+                    }
+            },
+            "King Crimson": {
+                    "emoji": "<:KingCrimsonAv:1353416559019692174>",             
+                    "image": "https://cdn.discordapp.com/attachments/1355434876291125258/1356397525392822463/image.png?ex=67ec6b22&is=67eb19a2&hm=2381ebe8e48f707d14e465002e215991b885a159a8af8a9bfd7478300c5443de&",
+                    "rarity": "Legendary",
+                    "rollable": true,
+                    "stars": {
+                            "1": "https://cdn.discordapp.com/attachments/1355434876291125258/1356397525392822463/image.png?ex=67ec6b22&is=67eb19a2&hm=2381ebe8e48f707d14e465002e215991b885a159a8af8a9bfd7478300c5443de&",
+                            "2": "https://media.discordapp.net/attachments/1355434892355436625/1355967126623752283/image.png?ex=67eada4b&is=67e988cb&hm=f8c85d16a317f8723f570f1448b146cf19b1ca769d74c27159c9dbf38537ca3a&=&format=webp&quality=lossless&width=639&height=852",
+                            "3": "https://cdn.discordapp.com/attachments/1355434919781994598/1355962306907078841/image.png?ex=67ead5ce&is=67e9844e&hm=b7c2299c2f0d8e0781dde67080a7fe2390a86e74b8541f115dd30a488fd2252c&",
+                            "4": "https://cdn.discordapp.com/attachments/1355434919781994598/1356026854884249792/image.png?ex=67eb11eb&is=67e9c06b&hm=ee41ab73771d9792b15bf8833e37c0b8f73af8cd17f0aead3da1e1347a97a140&",
+                            "5": "https://cdn.discordapp.com/attachments/1355434934491414539/1356023754202939572/image.png?ex=67eb0f08&is=67e9bd88&hm=8cbb1d19ad447e2d8388d4b70f66d4f4f05415e895f1c9d6ea8eed08f12e48eb&"
+                        }
+            },
+            "Black Sabbath": {
+                    "emoji": "<:BlackSabbathAv:1353862364356808834>",             
+                    "image": "https://cdn.discordapp.com/attachments/1353096163410055170/1353863439805845534/image.png?ex=67e33315&is=67e1e195&hm=d136ca9cb6a9fde2cba777d85893f5ba0b94d9bf536c5ebd2455590520e90b34&",
+                    "rarity": "Rare",
+                    "rollable": true,
+                    "stars": {
+                        "1": "https://cdn.discordapp.com/attachments/1353096163410055170/1353863439805845534/image.png?ex=67e33315&is=67e1e195&hm=d136ca9cb6a9fde2cba777d85893f5ba0b94d9bf536c5ebd2455590520e90b34&"
+                    }
+            },
+            "Soft Machine": {
+                    "emoji": "<:SoftMachineAv:1353862410410262568>",             
+                    "image": "https://cdn.discordapp.com/attachments/1353096163410055170/1353863765677965386/image.png?ex=67e33363&is=67e1e1e3&hm=4eb8a8175792b1ff3fa0e517b8e3486e64901e7ceb11154708c738cc15511190&",
+                    "rarity": "Common",
+                    "rollable": true,
+                    "stars": {
+                        "1": "https://cdn.discordapp.com/attachments/1353096163410055170/1353863765677965386/image.png?ex=67e33363&is=67e1e1e3&hm=4eb8a8175792b1ff3fa0e517b8e3486e64901e7ceb11154708c738cc15511190&"
+                    }
+            },
+            "Kraft Work": {
+                    "emoji": "<:KraftWorkAv:1353862456233168897>",             
+                    "image": "https://cdn.discordapp.com/attachments/1353096163410055170/1353864018737107094/image.png?ex=67e3339f&is=67e1e21f&hm=efd2b138c731c2e7e3c7479c9bf9d22aaa2dd604cef8dd504d0dee2c15ae51fb&",
+                    "rarity": "Common",
+                    "rollable": true,
+                    "stars": {
+                        "1": "https://cdn.discordapp.com/attachments/1353096163410055170/1353864018737107094/image.png?ex=67e3339f&is=67e1e21f&hm=efd2b138c731c2e7e3c7479c9bf9d22aaa2dd604cef8dd504d0dee2c15ae51fb&"
+                    }
+            },
+            "Metallica": {
+                    "emoji": "<:MetallicaAv:1353862489422692373>",             
+                    "image": "https://cdn.discordapp.com/attachments/1353096163410055170/1353864226418069604/image.png?ex=67e333d1&is=67e1e251&hm=e2f7a130a48826edb9f2823ee2fc7ffd9fd14744e0b606d436cf8e38fcc956cb&",
+                    "rarity": "Epic",
+                    "rollable": true,
+                    "stars": {
+                        "1": "https://cdn.discordapp.com/attachments/1353096163410055170/1353864226418069604/image.png?ex=67e333d1&is=67e1e251&hm=e2f7a130a48826edb9f2823ee2fc7ffd9fd14744e0b606d436cf8e38fcc956cb&"
+                    }
+            },
+            "Little Feet": {
+                    "emoji": "<:LittleFeetAv:1353862614769340488>",             
+                    "image": "https://cdn.discordapp.com/attachments/1353096163410055170/1353864464474050693/image.png?ex=67e33409&is=67e1e289&hm=8f96d2bea5d40ac0a805091084ce1d41657f0927a5677b7360b801c1742bc706&",
+                    "rarity": "Common",
+                    "rollable": true,
+                    "stars": {
+                        "1": "https://cdn.discordapp.com/attachments/1353096163410055170/1353864464474050693/image.png?ex=67e33409&is=67e1e289&hm=8f96d2bea5d40ac0a805091084ce1d41657f0927a5677b7360b801c1742bc706&"
+                    }
+            },
+            "Man in the Mirror": {
+                    "emoji": "<:ManInTheMirrorAv:1353862634461724764>",             
+                    "image": "https://cdn.discordapp.com/attachments/1353096163410055170/1353864933825052762/image.png?ex=67e33479&is=67e1e2f9&hm=afc1a8a553c3ab7d8f1a739ea5862767f15078730aabe7460b40bd2e781e7d9f&",
+                    "rarity": "Rare",
+                    "rollable": true,
+                    "stars": {
+                        "1": "https://cdn.discordapp.com/attachments/1353096163410055170/1353864933825052762/image.png?ex=67e33479&is=67e1e2f9&hm=afc1a8a553c3ab7d8f1a739ea5862767f15078730aabe7460b40bd2e781e7d9f&"
+                    }
+            },
+            "Beach Boy": {
+                    "emoji": "<:BeachBoyAv:1353862654455840808>",             
+                    "image": "https://cdn.discordapp.com/attachments/1353096163410055170/1353865141757808770/image.png?ex=67e334ab&is=67e1e32b&hm=78788d72d8f368a4a3bb1560aa29461554385381dd841426d0345c90a0d23524&",
+                    "rarity": "Common",
+                    "rollable": true,
+                    "stars": {
+                        "1": "https://cdn.discordapp.com/attachments/1353096163410055170/1353865141757808770/image.png?ex=67e334ab&is=67e1e32b&hm=78788d72d8f368a4a3bb1560aa29461554385381dd841426d0345c90a0d23524&"
+                    }
+            },
+            "The Grateful Dead": {
+                    "emoji": "<:TheGratefulDeadAv:1358227715819307210>",             
+                    "image": "https://cdn.discordapp.com/attachments/1355434876291125258/1358227476538720276/image.png?ex=67f31369&is=67f1c1e9&hm=60aff48c168e1b25707ab5f2a41dbcdf0f79ddf58c98939b50d3bdaaa15cac90&",
+                    "rarity": "Common",
+                    "rollable": true,
+                    "stars": {
+                        "1": "https://cdn.discordapp.com/attachments/1355434876291125258/1358227476538720276/image.png?ex=67f31369&is=67f1c1e9&hm=60aff48c168e1b25707ab5f2a41dbcdf0f79ddf58c98939b50d3bdaaa15cac90&"
+                    }
+            },
+            "Baby Face": {
+                    "emoji": "<:babyFaceAv:1358232198624448532>",             
+                    "image": "https://cdn.discordapp.com/attachments/1348433490269700198/1358231958060269718/image.png?ex=67f31795&is=67f1c615&hm=3f864c1833711f6e340ec2b58caaad38c883642c3330d674bbfe738d01514d50&",
+                    "rarity": "Common",
+                    "rollable": true,
+                    "stars": {
+                        "1": "https://cdn.discordapp.com/attachments/1348433490269700198/1358231958060269718/image.png?ex=67f31795&is=67f1c615&hm=3f864c1833711f6e340ec2b58caaad38c883642c3330d674bbfe738d01514d50&"
+                    }
+            },
+            "White Album": {
+                    "emoji": "<:WhiteAlbumAv:1358232401599271033>",             
+                    "image": "https://cdn.discordapp.com/attachments/1355434876291125258/1358232806144082000/image.png?ex=67f3185f&is=67f1c6df&hm=44d69bb61b88d583e51be120939905004c4b176d8a6878bbda99a7c0b6bddc8b&",
+                    "rarity": "Rare",
+                    "rollable": true,
+                    "stars": {
+                        "1": "https://cdn.discordapp.com/attachments/1355434876291125258/1358232806144082000/image.png?ex=67f3185f&is=67f1c6df&hm=44d69bb61b88d583e51be120939905004c4b176d8a6878bbda99a7c0b6bddc8b&",
+                        "2": "https://cdn.discordapp.com/attachments/1355434892355436625/1358232680835186940/image.png?ex=67f31841&is=67f1c6c1&hm=76ccbc4189c7f93091f8b6cec73dd0a9b70f891c015c0db2f0e68228cda36ab1&"
+                    }
+            },
+            "Clash": {
+                    "emoji": "<:ClashAv:1358233423239446630>",             
+                    "image": "https://cdn.discordapp.com/attachments/1355434876291125258/1358234444711854323/image.png?ex=67f319e6&is=67f1c866&hm=521788c6af98b070746f5e8ae7e206ec09668903ac7d1c80a3105c603ad2aca5&",
+                    "rarity": "Common",
+                    "rollable": true,
+                    "stars": {
+                        "1": "https://cdn.discordapp.com/attachments/1355434876291125258/1358234444711854323/image.png?ex=67f319e6&is=67f1c866&hm=521788c6af98b070746f5e8ae7e206ec09668903ac7d1c80a3105c603ad2aca5&"
+                    }
+            },
+            "Talking Head": {
+                    "emoji": "<:TalkingHeadAv:1358234835012944013>",             
+                    "image": "https://cdn.discordapp.com/attachments/1355434876291125258/1358235437587763291/image.png?ex=67f31ad3&is=67f1c953&hm=5a5c377cdd8100e8fe3d885a3242104a9910ba51b5b2bad7b32a0da677fdc5f5&",
+                    "rarity": "Common",
+                    "rollable": true,
+                    "stars": {
+                        "1": "https://cdn.discordapp.com/attachments/1355434876291125258/1358235437587763291/image.png?ex=67f31ad3&is=67f1c953&hm=5a5c377cdd8100e8fe3d885a3242104a9910ba51b5b2bad7b32a0da677fdc5f5&"
+                    }
+            },
+            "Notorious B.I.G": {
+                    "emoji": "<:NotoriousBIGAv:1358235647286182119>",             
+                    "image": "https://cdn.discordapp.com/attachments/1355434876291125258/1358237383736299650/image.png?ex=67f31ca3&is=67f1cb23&hm=dc5ec3f582c7941d42b22f017ca4af27b1c458d0a6849f06e6a3b82be185ce15&",
+                    "rarity": "Common",
+                    "rollable": true,
+                    "stars": {
+                        "1": "https://cdn.discordapp.com/attachments/1355434876291125258/1358237383736299650/image.png?ex=67f31ca3&is=67f1cb23&hm=dc5ec3f582c7941d42b22f017ca4af27b1c458d0a6849f06e6a3b82be185ce15&"
+                    }
+            },
+            "Green Day": {
+                    "emoji": "<:GreenDayAv:1358237617078141030>",             
+                    "image": "https://cdn.discordapp.com/attachments/1355434876291125258/1358237810494017607/image.png?ex=67f31d08&is=67f1cb88&hm=c4aaaf4b64deece8d21c7068feeb26d17fd5cf4c362de72ced7626e4fb7f7c76&",
+                    "rarity": "Common",
+                    "rollable": true,
+                    "stars": {
+                        "1": "https://cdn.discordapp.com/attachments/1355434876291125258/1358237810494017607/image.png?ex=67f31d08&is=67f1cb88&hm=c4aaaf4b64deece8d21c7068feeb26d17fd5cf4c362de72ced7626e4fb7f7c76&"
+                    }
+            },
+            "Oasis": {
+                    "emoji": "<:OasisAv:1358238051297661048>",             
+                    "image": "https://cdn.discordapp.com/attachments/1355434876291125258/1358238432341786785/image.png?ex=67f31d9d&is=67f1cc1d&hm=9720ca15857590caf6c3eeb9293977e7ce30570792556e20bb5934778edc4aaa&",
+                    "rarity": "Common",
+                    "rollable": true,
+                    "stars": {
+                        "1": "https://cdn.discordapp.com/attachments/1355434876291125258/1358238432341786785/image.png?ex=67f31d9d&is=67f1cc1d&hm=9720ca15857590caf6c3eeb9293977e7ce30570792556e20bb5934778edc4aaa&"
+                    }
+            },
+            "Rolling Stones": {
+                    "emoji": "<:RollingStonesAv:1358238663007539320>",             
+                    "image": "https://cdn.discordapp.com/attachments/1355434876291125258/1358238933858783384/image.png?ex=67f31e14&is=67f1cc94&hm=eee2654b8c7dbb5c1f6f3da558886b69ddaf43ad5d1b070715cf2aa07d05259b&",
+                    "rarity": "Rare",
+                    "rollable": true,
+                    "stars": {
+                        "1": "https://cdn.discordapp.com/attachments/1355434876291125258/1358238933858783384/image.png?ex=67f31e14&is=67f1cc94&hm=eee2654b8c7dbb5c1f6f3da558886b69ddaf43ad5d1b070715cf2aa07d05259b&"
+                    }
+            }
+        },
+        "Part 6": {
+            "Stone Free": {
+                    "emoji": "<:StoneFreeAv:1358240169467318472>",             
+                    "image": "https://cdn.discordapp.com/attachments/1355434876291125258/1358243817849094165/image.png?ex=67f322a1&is=67f1d121&hm=d6757f133f039d5dd87e1c7ca1e4c0b224905d5a768a38e43ff1a8f08f0c5be6&",
+                    "rarity": "Legendary",
+                    "rollable": true,
+                    "stars": {
+                        "1": "https://cdn.discordapp.com/attachments/1355434876291125258/1358243817849094165/image.png?ex=67f322a1&is=67f1d121&hm=d6757f133f039d5dd87e1c7ca1e4c0b224905d5a768a38e43ff1a8f08f0c5be6&",
+                        "2": "https://cdn.discordapp.com/attachments/1355434876291125258/1358243817849094165/image.png?ex=67f322a1&is=67f1d121&hm=d6757f133f039d5dd87e1c7ca1e4c0b224905d5a768a38e43ff1a8f08f0c5be6&",
+                        "3": "https://cdn.discordapp.com/attachments/1355434876291125258/1358243817849094165/image.png?ex=67f322a1&is=67f1d121&hm=d6757f133f039d5dd87e1c7ca1e4c0b224905d5a768a38e43ff1a8f08f0c5be6&",
+                        "4": "https://media.discordapp.net/attachments/1355434919781994598/1358241253560684706/image.png?ex=67f3203d&is=67f1cebd&hm=9b401e2f68f9377a539756ef6d797aa2dc5408d5fd668dda5eccf3aa979ae31b&=&format=webp&quality=lossless&width=296&height=394",
+                        "5": "https://cdn.discordapp.com/attachments/1355434934491414539/1358243862627225781/1.png?ex=67f322ab&is=67f1d12b&hm=931614c511bb447b239813fc046a1ee4d30739fb9d1b3a8231253478c16b1019&"
+                    }
+            },
+            "Burning Down the House": {
+                "emoji": "<:180pxBurningDowntheHouseAv:1358281882936148149>",
+                "image": "https://cdn.discordapp.com/attachments/1355434876291125258/1358282067682525194/image.png?ex=67f34640&is=67f1f4c0&hm=50529a76651622fe2d2d2270e124b4053098069f2db7fd06727cb078891cdd2c&",
+                "rarity": "Common",
+                "rollable": true,
+                "stars": {
+                    "1": "https://cdn.discordapp.com/attachments/1355434876291125258/1358282067682525194/image.png?ex=67f34640&is=67f1f4c0&hm=50529a76651622fe2d2d2270e124b4053098069f2db7fd06727cb078891cdd2c&"
+                }
+            },
+            "Kiss": {
+                "emoji": "<:180pxKissAv:1358283158235385887>",
+                "image": "https://cdn.discordapp.com/attachments/1355434876291125258/1358283542609662032/image.png?ex=67f347a0&is=67f1f620&hm=2b2119b4db4f52af19adb787f9b7368f3a4f74b7e0cf75eaf53f1b2e0fb2c46c&",
+                "rarity": "Epic",
+                "rollable": true,
+                "stars": {
+                    "1": "https://cdn.discordapp.com/attachments/1355434876291125258/1358283542609662032/image.png?ex=67f347a0&is=67f1f620&hm=2b2119b4db4f52af19adb787f9b7368f3a4f74b7e0cf75eaf53f1b2e0fb2c46c&"
+                }
+            },
+            "Foo Fighters": {
+                "emoji": "<:180pxFooFightersAv:1358283670351511713>",
+                "image": "https://cdn.discordapp.com/attachments/1355434876291125258/1358284903510179880/image.png?ex=67f348e4&is=67f1f764&hm=7a59633a29e11e0ca7c690b7443bc42c6c48ec28691b066ec387ea4aa97d1ee7&",
+                "rarity": "Rare",
+                "rollable": true,
+                "stars": {
+                    "1": "https://cdn.discordapp.com/attachments/1355434876291125258/1358284903510179880/image.png?ex=67f348e4&is=67f1f764&hm=7a59633a29e11e0ca7c690b7443bc42c6c48ec28691b066ec387ea4aa97d1ee7&"
+                }
+            },
+            "Weather Report": {
+                "emoji": "<:180pxWeatherReportSAv:1358285764525555762>",
+                "image": "https://cdn.discordapp.com/attachments/1355434876291125258/1358285478905905380/image.png?ex=67f3496d&is=67f1f7ed&hm=8af6f97126fa058bf8668835167d7d43d4635e01185168cce8a7bd64ca1f710e&",
+                "rarity": "Legendary",
+                "rollable": true,
+                "stars": {
+                    "1": "https://cdn.discordapp.com/attachments/1355434876291125258/1358285478905905380/image.png?ex=67f3496d&is=67f1f7ed&hm=8af6f97126fa058bf8668835167d7d43d4635e01185168cce8a7bd64ca1f710e&"
+                }
+            },
+            "Diver Down": {
+                "emoji": "<:180pxDiverDownAv:1358285762176745632>",
+                "image": "https://cdn.discordapp.com/attachments/1355434876291125258/1358285288924774623/image.png?ex=67f34940&is=67f1f7c0&hm=aa7ea2f80c8d27f18a1e94923ff94597a9dbc8de9fc1b0f52dca8332f7ad6dc1&",
+                "rarity": "Rare",
+                "rollable": true,
+                "stars": {
+                    "1": "https://cdn.discordapp.com/attachments/1355434876291125258/1358285288924774623/image.png?ex=67f34940&is=67f1f7c0&hm=aa7ea2f80c8d27f18a1e94923ff94597a9dbc8de9fc1b0f52dca8332f7ad6dc1&"
+                }
+            },
+            "White Snake": {
+                "emoji": "<:WhitesnakeAv:1358286380261707776>",
+                "image": "https://cdn.discordapp.com/attachments/1355434876291125258/1358286875252490431/image.png?ex=67f34aba&is=67f1f93a&hm=5f23ac0f7b050784f6e3c9dbab511c24b9b99ffd9278cf25d82a2b19c7c8788d&",
+                "rarity": "Epic",
+                "rollable": true,
+                "stars": {
+                    "1": "https://cdn.discordapp.com/attachments/1355434876291125258/1358286875252490431/image.png?ex=67f34aba&is=67f1f93a&hm=5f23ac0f7b050784f6e3c9dbab511c24b9b99ffd9278cf25d82a2b19c7c8788d&"
+                }
+            },
+            "C-Moon": {
+                "emoji": "<:CMOONAv:1358286377988526100>",
+                "image": "https://cdn.discordapp.com/attachments/1355434876291125258/1358287199493292134/image.png?ex=67f34b08&is=67f1f988&hm=5ea43094dfe55717e3a2468f2afc42db6adc3cbcfcdff800bd7356111844e87e&",
+                "rarity": "Legendary",
+                "rollable": false,
+                "stars": {
+                    "1": "https://cdn.discordapp.com/attachments/1355434876291125258/1358287199493292134/image.png?ex=67f34b08&is=67f1f988&hm=5ea43094dfe55717e3a2468f2afc42db6adc3cbcfcdff800bd7356111844e87e&"
+                }
+            },
+            "Made in Heaven": {
+                "emoji": "<:MadeinHeavenAv:1358286379179708436>",
+                "image": "https://cdn.discordapp.com/attachments/1355434934491414539/1358287846309630094/2021111721265421Made_in_Heaven_Infobox_Manga.png?ex=67f34ba2&is=67f1fa22&hm=a776968d87e76fb86dc54a59775ed264ead7f3c4758433c395d590c964c86d54&",
+                "rarity": "mythical",
+                "rollable": false,
+                "stars": {
+                    "1": "https://cdn.discordapp.com/attachments/1355434934491414539/1358287846309630094/2021111721265421Made_in_Heaven_Infobox_Manga.png?ex=67f34ba2&is=67f1fa22&hm=a776968d87e76fb86dc54a59775ed264ead7f3c4758433c395d590c964c86d54&"
+                }
+            },
+            "Goo Goo Dolls": {
+                "emoji": "<:GooGooDollsAv:1358288096394870804>",
+                "image": "https://cdn.discordapp.com/attachments/1355434876291125258/1358288811171512491/image.png?ex=67f34c88&is=67f1fb08&hm=3f0a2a9039932430410a37a967df23944eeaae1f753f925e8159b5cdebcc819b&",
+                "rarity": "Common",
+                "rollable": true,
+                "stars": {
+                    "1": "https://cdn.discordapp.com/attachments/1355434876291125258/1358288811171512491/image.png?ex=67f34c88&is=67f1fb08&hm=3f0a2a9039932430410a37a967df23944eeaae1f753f925e8159b5cdebcc819b&"
+                }
+            },
+            "Manhattan Transfer": {
+                "emoji": "<:ManhattanTransferAv:1358288098764783646>",
+                "image": "https://cdn.discordapp.com/attachments/1355434876291125258/1358289326257209405/image.png?ex=67f34d03&is=67f1fb83&hm=1e3f1f50f6207ceaff83a6cdf752464b22df591e9e87c36146046b120db1558b&",
+                "rarity": "Common",
+                "rollable": true,
+                "stars": {
+                    "1": "https://cdn.discordapp.com/attachments/1355434876291125258/1358289326257209405/image.png?ex=67f34d03&is=67f1fb83&hm=1e3f1f50f6207ceaff83a6cdf752464b22df591e9e87c36146046b120db1558b&"
+                }
+            },
+            "Highway to Hell": {
+                "emoji": "<:HighwayToHellAv:1358288097607029006>",
+                "image": "https://cdn.discordapp.com/attachments/1355434876291125258/1358289710371311686/image.png?ex=67f34d5e&is=67f1fbde&hm=e3dc6f6eed1e13e0aaad7a366b8ea545ad652e32d11de1cd643c0d90ab155c54&",
+                "rarity": "Common",
+                "rollable": true,
+                "stars": {
+                    "1": "https://cdn.discordapp.com/attachments/1355434876291125258/1358289710371311686/image.png?ex=67f34d5e&is=67f1fbde&hm=e3dc6f6eed1e13e0aaad7a366b8ea545ad652e32d11de1cd643c0d90ab155c54&"
+                }
+            },
+            "Marilyn Manson": {
+                "emoji": "<:MarilynMansonAv:1358288099691729018>",
+                "image": "https://cdn.discordapp.com/attachments/1355434876291125258/1358289893012275352/image.png?ex=67f34d8a&is=67f1fc0a&hm=469e8d73cd429561164b5bad4594347a5e7b4cab3197f3a19ceef0272780897f&",
+                "rarity": "Common",
+                "rollable": true,
+                "stars": {
+                    "1": "https://cdn.discordapp.com/attachments/1355434876291125258/1358289893012275352/image.png?ex=67f34d8a&is=67f1fc0a&hm=469e8d73cd429561164b5bad4594347a5e7b4cab3197f3a19ceef0272780897f&"
+                }
+            },
+            "Jumpin' Jack Flash": {
+                "emoji": "<:JumpinJackFlashAv:1358290860546199724>",
+                "image": "https://cdn.discordapp.com/attachments/1355434876291125258/1358291593924448408/image.png?ex=67f34f1f&is=67f1fd9f&hm=de00d073d9f807924c2a1973ee592a73aba335c6f0090cefa3dcaef8a8a6272a&",
+                "rarity": "Common",
+                "rollable": true,
+                "stars": {
+                    "1": "https://cdn.discordapp.com/attachments/1355434876291125258/1358291593924448408/image.png?ex=67f34f1f&is=67f1fd9f&hm=de00d073d9f807924c2a1973ee592a73aba335c6f0090cefa3dcaef8a8a6272a&"
+                }
+            },
+            "Limp Bizkit": {
+                "emoji": "<:LimpBizkitAv:1358290861397381274>",
+                "image": "https://cdn.discordapp.com/attachments/1355434876291125258/1358291974456610834/image.png?ex=67f34f7a&is=67f1fdfa&hm=a1bede819c627c56e5550fd08a3e6a62dc98f71a5d1525723a2e8d35f69e1c82&",
+                "rarity": "Common",
+                "rollable": true,
+                "stars": {
+                    "1": "https://cdn.discordapp.com/attachments/1355434876291125258/1358291974456610834/image.png?ex=67f34f7a&is=67f1fdfa&hm=a1bede819c627c56e5550fd08a3e6a62dc98f71a5d1525723a2e8d35f69e1c82&"
+                }
+            },
+            "Survivor": {
+                "emoji": "<:SurvivorAv:1358290863696117881>",
+                "image": "https://cdn.discordapp.com/attachments/1355434876291125258/1358292707977728132/image.png?ex=67f35029&is=67f1fea9&hm=79d7a9cbb8451fcdb1a777df2d3c80a16720e2e12a37eaa9eeb0c227d03213a1&",
+                "rarity": "Common",
+                "rollable": true,
+                "stars": {
+                    "1": "https://cdn.discordapp.com/attachments/1355434876291125258/1358292707977728132/image.png?ex=67f35029&is=67f1fea9&hm=79d7a9cbb8451fcdb1a777df2d3c80a16720e2e12a37eaa9eeb0c227d03213a1&"
+                }
+            },
+            "Planet Waves": {
+                "emoji": "<:PlanetWavesAv:1358290862441894070>",
+                "image": "https://cdn.discordapp.com/attachments/1355434876291125258/1358293011423035553/image.png?ex=67f35071&is=67f1fef1&hm=c94d1a14f4cbd2058defa5bac1e4b45e897ff90fc37489ef9b24b8d17414374c&",
+                "rarity": "Common",
+                "rollable": true,
+                "stars": {
+                    "1": "https://cdn.discordapp.com/attachments/1355434876291125258/1358293011423035553/image.png?ex=67f35071&is=67f1fef1&hm=c94d1a14f4cbd2058defa5bac1e4b45e897ff90fc37489ef9b24b8d17414374c&"
+                }
+            },
+            "Dragon's Dream": {
+                "emoji": "<:DragonDreamAv:1358290855143669801>",
+                "image": "https://cdn.discordapp.com/attachments/1355434876291125258/1358293331456688308/image.png?ex=67f350be&is=67f1ff3e&hm=101ecb716f37834b886f2791fe15bd9e02122985b0ba00110bed5211b1c887af&",
+                "rarity": "Common",
+                "rollable": true,
+                "stars": {
+                    "1": "https://cdn.discordapp.com/attachments/1355434876291125258/1358293331456688308/image.png?ex=67f350be&is=67f1ff3e&hm=101ecb716f37834b886f2791fe15bd9e02122985b0ba00110bed5211b1c887af&"
+                }
+            },
+            "Yo-Yo Ma": {
+                "emoji": "<:YoYoMaAv:1358290864782442690>",
+                "image": "https://cdn.discordapp.com/attachments/1355434876291125258/1358293514328346714/image.png?ex=67f350e9&is=67f1ff69&hm=47df5398d0c05d49de1d191c72892b71af3a78aeedddbc4056a4efee085d519a&",
+                "rarity": "Common",
+                "rollable": true,
+                "stars": {
+                    "1": "https://cdn.discordapp.com/attachments/1355434876291125258/1358293514328346714/image.png?ex=67f350e9&is=67f1ff69&hm=47df5398d0c05d49de1d191c72892b71af3a78aeedddbc4056a4efee085d519a&"
+                }
+            },
+            "Green, Green Grass of Home": {
+                "emoji": "<:GrassOfHomeAv:1358290856007827466>",
+                "image": "https://cdn.discordapp.com/attachments/1355434876291125258/1358293659577094346/image.png?ex=67f3510c&is=67f1ff8c&hm=eed6506cf9b0d52f9576da30c3c23c773085dbd566b9f3082cf805dd9999aab1&",
+                "rarity": "Common",
+                "rollable": true,
+                "stars": {
+                    "1": "https://cdn.discordapp.com/attachments/1355434876291125258/1358293659577094346/image.png?ex=67f3510c&is=67f1ff8c&hm=eed6506cf9b0d52f9576da30c3c23c773085dbd566b9f3082cf805dd9999aab1&"
+                }
+            },
+            "Jail House Lock": {
+                "emoji": "<:JailHouseLockAv:1358294546651418774>",
+                "image": "https://cdn.discordapp.com/attachments/1355434876291125258/1358295987382255707/image.png?ex=67f35337&is=67f201b7&hm=eaa677e977d61182112f523a85c477327696653e8c66de830e43cf92232c3868&",
+                "rarity": "Common",
+                "rollable": true,
+                "stars": {
+                    "1": "https://cdn.discordapp.com/attachments/1355434876291125258/1358295987382255707/image.png?ex=67f35337&is=67f201b7&hm=eaa677e977d61182112f523a85c477327696653e8c66de830e43cf92232c3868&"
+                }
+            },
+            "Bohemian Rhapsody": {
+                "emoji": "<:BohemianRhapsodyAv:1358294530461401195>",
+                "image": "https://cdn.discordapp.com/attachments/1355434876291125258/1358296474382766201/image.png?ex=67f353ab&is=67f2022b&hm=a252ed507eec7f99b1e798f3c712c2fa6bdc3e0076566f6a97d499416311b149&",
+                "rarity": "Common",
+                "rollable": true,
+                "stars": {
+                    "1": "https://cdn.discordapp.com/attachments/1355434876291125258/1358296474382766201/image.png?ex=67f353ab&is=67f2022b&hm=a252ed507eec7f99b1e798f3c712c2fa6bdc3e0076566f6a97d499416311b149&"
+                }
+            },
+            "Sky High": {
+                "emoji": "<:SkyHighAv:1358294563063730176>",
+                "image": "https://cdn.discordapp.com/attachments/1355434876291125258/1358296764544716890/image.png?ex=67f353f0&is=67f20270&hm=63795ea965577d5fd9ca2268ca20699d42a8e95d744d8befe175f036b06ef5a4&",
+                "rarity": "Common",
+                "rollable": true,
+                "stars": {
+                    "1": "https://cdn.discordapp.com/attachments/1355434876291125258/1358296764544716890/image.png?ex=67f353f0&is=67f20270&hm=63795ea965577d5fd9ca2268ca20699d42a8e95d744d8befe175f036b06ef5a4&"
+                }
+            },
+            "Under World": {
+                "emoji": "<:UnderworldAv:1358295178670117004>n",
+                "image": "https://cdn.discordapp.com/attachments/1355434876291125258/1358297032376193277/image.png?ex=67f35430&is=67f202b0&hm=1c5ec14240925eedfa34ac61d8ab6ed2f7d2a191c820f14c6a30bebddf6cadce&",
+                "rarity": "Common",
+                "rollable": true,
+                "stars": {
+                    "1": "https://cdn.discordapp.com/attachments/1355434876291125258/1358297032376193277/image.png?ex=67f35430&is=67f202b0&hm=1c5ec14240925eedfa34ac61d8ab6ed2f7d2a191c820f14c6a30bebddf6cadce&"
+                }
+            }
+        },
+        "Part 7": {
+            "Tusk ACT1": {
+                    "emoji": "<:StoneFreeAv:1358240169467318472>",             
+                    "image": "https://cdn.discordapp.com/attachments/1355434876291125258/1358243817849094165/image.png?ex=67f322a1&is=67f1d121&hm=d6757f133f039d5dd87e1c7ca1e4c0b224905d5a768a38e43ff1a8f08f0c5be6&",
+                    "rarity": "Common",
+                    "rollable": false,
+                    "stars": {
+                        "1": "https://cdn.discordapp.com/attachments/1355434876291125258/1358243817849094165/image.png?ex=67f322a1&is=67f1d121&hm=d6757f133f039d5dd87e1c7ca1e4c0b224905d5a768a38e43ff1a8f08f0c5be6&",
+                        "2": "https://cdn.discordapp.com/attachments/1355434876291125258/1358243817849094165/image.png?ex=67f322a1&is=67f1d121&hm=d6757f133f039d5dd87e1c7ca1e4c0b224905d5a768a38e43ff1a8f08f0c5be6&",
+                        "3": "https://cdn.discordapp.com/attachments/1355434876291125258/1358243817849094165/image.png?ex=67f322a1&is=67f1d121&hm=d6757f133f039d5dd87e1c7ca1e4c0b224905d5a768a38e43ff1a8f08f0c5be6&",
+                        "4": "https://media.discordapp.net/attachments/1355434919781994598/1358241253560684706/image.png?ex=67f3203d&is=67f1cebd&hm=9b401e2f68f9377a539756ef6d797aa2dc5408d5fd668dda5eccf3aa979ae31b&=&format=webp&quality=lossless&width=296&height=394",
+                        "5": "https://cdn.discordapp.com/attachments/1355434934491414539/1358243862627225781/1.png?ex=67f322ab&is=67f1d12b&hm=931614c511bb447b239813fc046a1ee4d30739fb9d1b3a8231253478c16b1019&"
+                    }
+            }
+        },
+        "Part 8": {
+            "Shenron Platinum": {
+                    "emoji": "🐉",             
+                    "image": "https://media.discordapp.net/attachments/1348006324599914556/1348367646441214085/a7174a1a316fbe68a3c4c8d8d59ad5c4.png?ex=67d3293a&is=67d1d7ba&hm=2d9066cb63102bcc5ac5050b465e681473ce3735fc729eec81a2fc31596b0975&=&format=webp&quality=lossless&width=470&height=939",
+                    "rarity": "mythical",
+                    "rollable": false,
+                    "stars": {
+                        "1": "https://media.discordapp.net/attachments/1348006324599914556/1348367646441214085/a7174a1a316fbe68a3c4c8d8d59ad5c4.png?ex=67d3293a&is=67d1d7ba&hm=2d9066cb63102bcc5ac5050b465e681473ce3735fc729eec81a2fc31596b0975&=&format=webp&quality=lossless&width=470&height=939"
+                    }
+            },
+            "Goro Zeppeli": {
+                    "emoji": "<:glitchlmfao:819048111527559178>",             
+                    "image": "https://cdn.discordapp.com/attachments/1348433490269700198/1349501455140130898/auckgp0ws4r51.png?ex=67d354ab&is=67d2032b&hm=1bf6f7c13d2bb4a69d430e6b4dd17711782edffd3faea9b662dc73d1a4024624&",
+                    "rarity": "mythical",
+                    "rollable": false,
+                    "stars": {
+                        "1": "https://cdn.discordapp.com/attachments/1348433490269700198/1349501455140130898/auckgp0ws4r51.png?ex=67d354ab&is=67d2032b&hm=1bf6f7c13d2bb4a69d430e6b4dd17711782edffd3faea9b662dc73d1a4024624&"
+                    }
+            },
+            "The Duck": {
+                    "emoji": "🦆",             
+                    "image": "https://cdn.discordapp.com/attachments/1348433490269700198/1349501921928679574/wd5o8ifdq4i61.png?ex=67d3551a&is=67d2039a&hm=7b587bebcc244fb673c922c91c23d5e6fc8d62d3d5ea398c300ccff72f6ddf10&",
+                    "rarity": "mythical",
+                    "rollable": false,
+                    "stars": {
+                        "1": "https://cdn.discordapp.com/attachments/1348433490269700198/1349501921928679574/wd5o8ifdq4i61.png?ex=67d3551a&is=67d2039a&hm=7b587bebcc244fb673c922c91c23d5e6fc8d62d3d5ea398c300ccff72f6ddf10&"
+                    }
+            },
+            "Star Platinum: Act 2": {
+                    "emoji": "🐬",
+                    "image": "https://cdn.discordapp.com/attachments/1353096163410055170/1353583755087970345/7ug6wj0kdo531.jpg?ex=67e22e9b&is=67e0dd1b&hm=f63020f42be987c6324d3f20bb3452da63518ddb9b2ee986683bf3d490204bc6&",
+                    "rarity": "mythical",
+                    "rollable": false,
+                    "stars": {
+                        "1": "https://cdn.discordapp.com/attachments/1353096163410055170/1353583755087970345/7ug6wj0kdo531.jpg?ex=67e22e9b&is=67e0dd1b&hm=f63020f42be987c6324d3f20bb3452da63518ddb9b2ee986683bf3d490204bc6&"
+                    }
+            }
+        }
+    }
