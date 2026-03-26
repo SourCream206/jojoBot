@@ -123,7 +123,7 @@ class Economy(commands.Cog):
 
     # ── Sshop ─────────────────────────────────────────────────────────────────
 
-    @commands.command(name="cd", aliases=["cooldown", "cooldowns", "cds", "cooldown", "cld", "cooldwn", "timer", "timers"])
+    @commands.command(name="cd", aliases=["cooldown", "cooldowns", "cds", "cld", "cooldwn", "timer", "timers"])
     async def scd(self, ctx: commands.Context):
         """Check all your active cooldowns."""
         user_id = str(ctx.author.id)

@@ -140,7 +140,7 @@ class Inventory(commands.Cog):
 
     # ── Sequip ────────────────────────────────────────────────────────────────
 
-    @commands.command(name="equip", aliases=["eq", "set", "primary", "setprimary", "equipstand", "eqp", "equp", "equipt", "setstand", "use"])
+    @commands.command(name="equip", aliases=["eq", "set", "primary", "setprimary", "equipstand", "eqp", "equp", "equipt", "setstand"])
     async def sequip(self, ctx: commands.Context, *, stand_name: str):
         """Set a stand as your primary (equipped) stand. Usage: Sequip <stand name>"""
         await db.get_or_create_user(str(ctx.author.id), ctx.author.name)

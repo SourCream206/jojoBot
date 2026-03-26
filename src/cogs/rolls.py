@@ -224,7 +224,7 @@ class Rolls(commands.Cog):
 
     # ── Spity ──────────────────────────────────────────────────────────────────
 
-    @commands.command(name="pity", aliases=["p", "counter"])
+    @commands.command(name="pity", aliases=["counter"])
     async def spity(self, ctx: commands.Context):
         """Check your current pity counters."""
         user = await db.get_or_create_user(str(ctx.author.id), ctx.author.name)
