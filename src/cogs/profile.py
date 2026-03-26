@@ -5,6 +5,7 @@ Sprofile, Sbio
 
 import discord
 from discord.ext import commands
+import asyncio
 
 from src.db import client as db
 from src.utils.embeds import profile_embed
@@ -18,9 +19,12 @@ class Profile(commands.Cog):
     async def sprofile(self, ctx: commands.Context, member: discord.Member = None):
         """View your (or another player's) profile. Usage: Sprofile [@user]"""
         target = member or ctx.author
-        user   = await db.get_or_create_user(str(target.id), target.name)
-        primary = await db.get_primary_stand(str(target.id))
-        secondary = await db.get_secondary_stand(str(target.id))
+        # Fetch all data in parallel
+        user, primary, secondary = await asyncio.gather(
+            db.get_or_create_user(str(target.id), target.name),
+            db.get_primary_stand(str(target.id)),
+            db.get_secondary_stand(str(target.id))
+        )
         embed  = profile_embed(user, primary, secondary)
         if target.avatar:
             embed.set_thumbnail(url=target.avatar.url)

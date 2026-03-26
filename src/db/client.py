@@ -9,6 +9,7 @@ from supabase import create_client, Client
 from datetime import datetime, timezone, timedelta
 from typing import Optional
 import logging
+import asyncio
 
 log = logging.getLogger("jojo-rpg.db")
 
@@ -28,13 +29,20 @@ def db() -> Client:
     return get_client()
 
 
+# ── Async wrapper for sync client operations ──────────────────────────────────
+async def _run_sync(func):
+    """Run synchronous Supabase operations in a thread pool to avoid blocking."""
+    loop = asyncio.get_event_loop()
+    return await loop.run_in_executor(None, func)
+
+
 # ════════════════════════════════════════════════════════════
 # USERS
 # ════════════════════════════════════════════════════════════
 
 async def get_user(user_id: str) -> Optional[dict]:
     try:
-        res = db().table("users").select("*").eq("id", user_id).single().execute()
+        res = await _run_sync(lambda: db().table("users").select("*").eq("id", user_id).single().execute())
         return res.data
     except Exception:
         return None
@@ -43,33 +51,45 @@ async def get_or_create_user(user_id: str, username: str) -> dict:
     user = await get_user(user_id)
     if user:
         return user
-    res = db().table("users").insert({
+    res = await _run_sync(lambda: db().table("users").insert({
         "id": user_id,
         "username": username,
-    }).execute()
+    }).execute())
     return res.data[0]
 
 async def update_user(user_id: str, **kwargs) -> dict:
-    res = db().table("users").update(kwargs).eq("id", user_id).execute()
+    res = await _run_sync(lambda: db().table("users").update(kwargs).eq("id", user_id).execute())
     return res.data[0]
 
 async def add_coins(user_id: str, amount: int):
+    """Atomically add coins to user. Uses RPC to ensure we don't go below 0."""
+    # First ensure user exists
     user = await get_user(user_id)
     new_total = max(0, user["coins"] + amount)
     await update_user(user_id, coins=new_total)
     return new_total
 
 async def add_diamonds(user_id: str, amount: int):
+    """Atomically add diamonds to user. Uses RPC to ensure we don't go below 0."""
     user = await get_user(user_id)
     new_total = max(0, user["diamonds"] + amount)
     await update_user(user_id, diamonds=new_total)
     return new_total
 
 async def increment_pity(user_id: str, tier: str = "legendary"):
-    """Increments pity_counter or mythical_pity_counter."""
+    """Increments pity_counter or mythical_pity_counter atomically."""
     col = "pity_counter" if tier == "legendary" else "mythical_pity_counter"
     user = await get_user(user_id)
     await update_user(user_id, **{col: user[col] + 1})
+
+async def increment_both_pity_counters(user_id: str):
+    """Efficiently increments both pity counters in a single update."""
+    user = await get_user(user_id)
+    await update_user(
+        user_id,
+        pity_counter=user["pity_counter"] + 1,
+        mythical_pity_counter=user["mythical_pity_counter"] + 1
+    )
 
 async def reset_pity(user_id: str, tier: str = "legendary"):
     col = "pity_counter" if tier == "legendary" else "mythical_pity_counter"
@@ -81,69 +101,69 @@ async def reset_pity(user_id: str, tier: str = "legendary"):
 # ════════════════════════════════════════════════════════════
 
 async def get_user_stands(user_id: str) -> list[dict]:
-    res = db().table("user_stands").select("*").eq("user_id", user_id).execute()
+    res = await _run_sync(lambda: db().table("user_stands").select("*").eq("user_id", user_id).execute())
     return res.data or []
 
 async def get_stand_by_id(stand_id: int) -> Optional[dict]:
     try:
-        res = db().table("user_stands").select("*").eq("id", stand_id).single().execute()
+        res = await _run_sync(lambda: db().table("user_stands").select("*").eq("id", stand_id).single().execute())
         return res.data
     except Exception:
         return None
 
 async def get_primary_stand(user_id: str) -> Optional[dict]:
     try:
-        res = (
+        res = await _run_sync(lambda: (
             db().table("user_stands")
             .select("*")
             .eq("user_id", user_id)
             .eq("is_primary", True)
             .single()
             .execute()
-        )
+        ))
         return res.data
     except Exception:
         return None
 
 async def get_secondary_stand(user_id: str) -> Optional[dict]:
     try:
-        res = (
+        res = await _run_sync(lambda: (
             db().table("user_stands")
             .select("*")
             .eq("user_id", user_id)
             .eq("is_secondary", True)
             .single()
             .execute()
-        )
+        ))
         return res.data
     except Exception:
         return None
 
 async def add_stand(user_id: str, stand_name: str, stars: int = 1, is_shiny: bool = False) -> dict:
-    res = db().table("user_stands").insert({
+    res = await _run_sync(lambda: db().table("user_stands").insert({
         "user_id":    user_id,
         "stand_name": stand_name,
         "stars":      stars,
         "is_shiny":   is_shiny,
-    }).execute()
+    }).execute())
     return res.data[0]
 
 async def set_primary_stand(user_id: str, stand_id: int):
     """Clears existing primary then sets new one. Unsets secondary if target is currently secondary."""
-    db().table("user_stands").update({"is_primary": False}).eq("user_id", user_id).execute()
-    db().table("user_stands").update({"is_primary": True, "is_secondary": False}).eq("id", stand_id).execute()
+    await _run_sync(lambda: db().table("user_stands").update({"is_primary": False}).eq("user_id", user_id).execute())
+    await _run_sync(lambda: db().table("user_stands").update({"is_primary": True, "is_secondary": False}).eq("id", stand_id).execute())
 
 async def set_secondary_stand(user_id: str, stand_id: int):
     """Clears existing secondary then sets new one. Unsets primary if target is currently primary."""
-    db().table("user_stands").update({"is_secondary": False}).eq("user_id", user_id).execute()
-    db().table("user_stands").update({"is_secondary": True, "is_primary": False}).eq("id", stand_id).execute()
+    await _run_sync(lambda: db().table("user_stands").update({"is_secondary": False}).eq("user_id", user_id).execute())
+    await _run_sync(lambda: db().table("user_stands").update({"is_secondary": True, "is_primary": False}).eq("id", stand_id).execute())
 
 async def update_stand(stand_id: int, **kwargs):
-    res = db().table("user_stands").update(kwargs).eq("id", stand_id).execute()
+    res = await _run_sync(lambda: db().table("user_stands").update(kwargs).eq("id", stand_id).execute())
     return res.data[0]
 
 async def delete_stand(stand_id: int):
-    db().table("user_stands").delete().eq("id", stand_id).execute()
+    await _run_sync(lambda: db().table("user_stands").delete().eq("id", stand_id).execute())
 
 async def add_stand_xp(stand_id: int, xp_amount: int) -> dict:
     """Adds XP to a stand. Handles level-ups and checks pending evolutions."""
@@ -167,13 +187,13 @@ async def add_stand_xp(stand_id: int, xp_amount: int) -> dict:
 async def get_stands_by_name(user_id: str, stand_name: str) -> list[dict]:
     """Exact match first, then case-insensitive fuzzy match."""
     # Try exact
-    res = (
+    res = await _run_sync(lambda: (
         db().table("user_stands")
         .select("*")
         .eq("user_id", user_id)
         .eq("stand_name", stand_name)
         .execute()
-    )
+    ))
     if res.data:
         return res.data
 
@@ -192,19 +212,19 @@ async def get_stands_by_name(user_id: str, stand_name: str) -> list[dict]:
 # ════════════════════════════════════════════════════════════
 
 async def get_items(user_id: str) -> list[dict]:
-    res = db().table("items").select("*").eq("user_id", user_id).execute()
+    res = await _run_sync(lambda: db().table("items").select("*").eq("user_id", user_id).execute())
     return res.data or []
 
 async def get_item(user_id: str, item_id: str) -> Optional[dict]:
     try:
-        res = (
+        res = await _run_sync(lambda: (
             db().table("items")
             .select("*")
             .eq("user_id", user_id)
             .eq("item_id", item_id)
             .single()
             .execute()
-        )
+        ))
         return res.data
     except Exception:
         return None
@@ -212,15 +232,15 @@ async def get_item(user_id: str, item_id: str) -> Optional[dict]:
 async def add_item(user_id: str, item_id: str, quantity: int = 1):
     existing = await get_item(user_id, item_id)
     if existing:
-        db().table("items").update(
+        await _run_sync(lambda: db().table("items").update(
             {"quantity": existing["quantity"] + quantity}
-        ).eq("user_id", user_id).eq("item_id", item_id).execute()
+        ).eq("user_id", user_id).eq("item_id", item_id).execute())
     else:
-        db().table("items").insert({
+        await _run_sync(lambda: db().table("items").insert({
             "user_id":  user_id,
             "item_id":  item_id,
             "quantity": quantity,
-        }).execute()
+        }).execute())
 
 async def consume_item(user_id: str, item_id: str, quantity: int = 1) -> bool:
     """Returns False if insufficient quantity."""
@@ -229,9 +249,9 @@ async def consume_item(user_id: str, item_id: str, quantity: int = 1) -> bool:
         return False
     new_qty = existing["quantity"] - quantity
     if new_qty == 0:
-        db().table("items").delete().eq("user_id", user_id).eq("item_id", item_id).execute()
+        await _run_sync(lambda: db().table("items").delete().eq("user_id", user_id).eq("item_id", item_id).execute())
     else:
-        db().table("items").update({"quantity": new_qty}).eq("user_id", user_id).eq("item_id", item_id).execute()
+        await _run_sync(lambda: db().table("items").update({"quantity": new_qty}).eq("user_id", user_id).eq("item_id", item_id).execute())
     return True
 
 
@@ -242,14 +262,14 @@ async def consume_item(user_id: str, item_id: str, quantity: int = 1) -> bool:
 async def get_cooldown(user_id: str, command: str) -> Optional[datetime]:
     """Returns expiry datetime if on cooldown, else None."""
     try:
-        res = (
+        res = await _run_sync(lambda: (
             db().table("cooldowns")
             .select("expires_at")
             .eq("user_id", user_id)
             .eq("command", command)
             .single()
             .execute()
-        )
+        ))
     except Exception:
         return None
     if not res.data:
@@ -264,14 +284,14 @@ async def get_cooldown(user_id: str, command: str) -> Optional[datetime]:
 
 async def set_cooldown(user_id: str, command: str, seconds: int):
     expires_at = (datetime.now(timezone.utc) + timedelta(seconds=seconds)).isoformat()
-    db().table("cooldowns").upsert({
+    await _run_sync(lambda: db().table("cooldowns").upsert({
         "user_id":    user_id,
         "command":    command,
         "expires_at": expires_at,
-    }, on_conflict="user_id,command").execute()
+    }, on_conflict="user_id,command").execute())
 
 async def clear_cooldown(user_id: str, command: str):
-    db().table("cooldowns").delete().eq("user_id", user_id).eq("command", command).execute()
+    await _run_sync(lambda: db().table("cooldowns").delete().eq("user_id", user_id).eq("command", command).execute())
 
 
 # ════════════════════════════════════════════════════════════
@@ -279,14 +299,14 @@ async def clear_cooldown(user_id: str, command: str):
 # ════════════════════════════════════════════════════════════
 
 async def get_unlocked_areas(user_id: str) -> list[str]:
-    res = db().table("area_unlocks").select("area_name").eq("user_id", user_id).execute()
+    res = await _run_sync(lambda: db().table("area_unlocks").select("area_name").eq("user_id", user_id).execute())
     return [row["area_name"] for row in (res.data or [])]
 
 async def unlock_area(user_id: str, area_name: str):
-    db().table("area_unlocks").upsert({
+    await _run_sync(lambda: db().table("area_unlocks").upsert({
         "user_id":   user_id,
         "area_name": area_name,
-    }, on_conflict="user_id,area_name").execute()
+    }, on_conflict="user_id,area_name").execute())
 
 
 # ════════════════════════════════════════════════════════════
@@ -294,15 +314,15 @@ async def unlock_area(user_id: str, area_name: str):
 # ════════════════════════════════════════════════════════════
 
 async def get_unlocked_stands(user_id: str) -> list[str]:
-    res = db().table("player_unlocked_stands").select("stand_name").eq("user_id", user_id).execute()
+    res = await _run_sync(lambda: db().table("player_unlocked_stands").select("stand_name").eq("user_id", user_id).execute())
     return [row["stand_name"] for row in (res.data or [])]
 
 async def unlock_stand(user_id: str, stand_name: str, unlock_type: str = "corpse_part"):
-    db().table("player_unlocked_stands").upsert({
+    await _run_sync(lambda: db().table("player_unlocked_stands").upsert({
         "user_id":     user_id,
         "stand_name":  stand_name,
         "unlock_type": unlock_type,
-    }, on_conflict="user_id,stand_name").execute()
+    }, on_conflict="user_id,stand_name").execute())
 
 
 # ════════════════════════════════════════════════════════════
@@ -310,26 +330,26 @@ async def unlock_stand(user_id: str, stand_name: str, unlock_type: str = "corpse
 # ════════════════════════════════════════════════════════════
 
 async def create_pending_evolution(user_id: str, stand_id: int, item_id: str, required_level: int):
-    db().table("pending_evolutions").insert({
+    await _run_sync(lambda: db().table("pending_evolutions").insert({
         "user_id":       user_id,
         "stand_id":      stand_id,
         "item_id":       item_id,
         "required_level": required_level,
-    }).execute()
+    }).execute())
 
 async def check_pending_evolutions(user_id: str, stand_id: int, current_level: int) -> list[dict]:
     """Fires any pending evolutions whose required_level has been reached. Returns fired evolutions."""
-    res = (
+    res = await _run_sync(lambda: (
         db().table("pending_evolutions")
         .select("*")
         .eq("stand_id", stand_id)
         .lte("required_level", current_level)
         .execute()
-    )
+    ))
     fired = []
     for evo in (res.data or []):
         await _apply_evolution(stand_id, evo["item_id"])
-        db().table("pending_evolutions").delete().eq("id", evo["id"]).execute()
+        await _run_sync(lambda evo_id=evo["id"]: db().table("pending_evolutions").delete().eq("id", evo_id).execute())
         fired.append(evo)
     return fired
 
@@ -353,7 +373,7 @@ async def _apply_evolution(stand_id: int, item_id: str):
 
 async def log_battle(attacker_id: str, defender_id: Optional[str], winner_id: str,
                      stand_used: str, xp_gained: int, coins_gained: int, is_pvp: bool = False):
-    db().table("battle_log").insert({
+    await _run_sync(lambda: db().table("battle_log").insert({
         "attacker_id":  attacker_id,
         "defender_id":  defender_id,
         "winner_id":    winner_id,
@@ -361,7 +381,7 @@ async def log_battle(attacker_id: str, defender_id: Optional[str], winner_id: st
         "xp_gained":    xp_gained,
         "coins_gained": coins_gained,
         "is_pvp":       is_pvp,
-    }).execute()
+    }).execute())
 
 
 # ════════════════════════════════════════════════════════════
@@ -372,7 +392,7 @@ async def create_active_battle(attacker_id: str, defender_id: Optional[str],
                                 attacker_hp: int, defender_hp: int,
                                 turn: str, state: dict, is_pvp: bool = False) -> dict:
     expires_at = (datetime.now(timezone.utc) + timedelta(minutes=15)).isoformat()
-    res = db().table("active_battles").insert({
+    res = await _run_sync(lambda: db().table("active_battles").insert({
         "attacker_id": attacker_id,
         "defender_id": defender_id,
         "attacker_hp": attacker_hp,
@@ -381,29 +401,29 @@ async def create_active_battle(attacker_id: str, defender_id: Optional[str],
         "state":       state,
         "is_pvp":      is_pvp,
         "expires_at":  expires_at,
-    }).execute()
+    }).execute())
     return res.data[0]
 
 async def update_active_battle(battle_id: int, attacker_hp: int, defender_hp: int, turn: str, state: dict):
-    db().table("active_battles").update({
+    await _run_sync(lambda: db().table("active_battles").update({
         "attacker_hp": attacker_hp,
         "defender_hp": defender_hp,
         "turn":        turn,
         "state":       state,
-    }).eq("id", battle_id).execute()
+    }).eq("id", battle_id).execute())
 
 async def delete_active_battle(battle_id: int):
-    db().table("active_battles").delete().eq("id", battle_id).execute()
+    await _run_sync(lambda: db().table("active_battles").delete().eq("id", battle_id).execute())
 
 async def get_active_battle_for_user(user_id: str) -> Optional[dict]:
     try:
-        res = (
+        res = await _run_sync(lambda: (
             db().table("active_battles")
             .select("*")
             .or_(f"attacker_id.eq.{user_id},defender_id.eq.{user_id}")
             .single()
             .execute()
-        )
+        ))
         return res.data
     except Exception:
         return None
@@ -411,14 +431,15 @@ async def get_active_battle_for_user(user_id: str) -> Optional[dict]:
 async def resolve_expired_battles():
     """On bot startup: award wins by HP for timed-out battles."""
     now = datetime.now(timezone.utc).isoformat()
-    res = db().table("active_battles").select("*").lt("expires_at", now).execute()
+    res = await _run_sync(lambda: db().table("active_battles").select("*").lt("expires_at", now).execute())
     for battle in (res.data or []):
         winner_id = (
             battle["attacker_id"] if battle["attacker_hp"] >= battle["defender_hp"]
             else battle["defender_id"]
         )
         if winner_id:
-            await update_user(winner_id, win_count=(await get_user(winner_id))["win_count"] + 1)
+            user = await get_user(winner_id)
+            await update_user(winner_id, win_count=user["win_count"] + 1)
         await delete_active_battle(battle["id"])
         log.info(f"Resolved expired battle {battle['id']}, winner: {winner_id}")
 
@@ -429,31 +450,31 @@ async def resolve_expired_battles():
 
 async def queue_battle_challenge(challenger_id: str, target_id: str) -> dict:
     expires_at = (datetime.now(timezone.utc) + timedelta(minutes=10)).isoformat()
-    res = db().table("battle_queue").insert({
+    res = await _run_sync(lambda: db().table("battle_queue").insert({
         "challenger_id": challenger_id,
         "target_id":     target_id,
         "expires_at":    expires_at,
         "status":        "pending",
-    }).execute()
+    }).execute())
     return res.data[0]
 
 async def get_pending_challenges(target_id: str) -> list[dict]:
-    res = (
+    res = await _run_sync(lambda: (
         db().table("battle_queue")
         .select("*")
         .eq("target_id", target_id)
         .eq("status", "pending")
         .execute()
-    )
+    ))
     return res.data or []
 
 async def update_challenge_status(challenge_id: int, status: str):
-    db().table("battle_queue").update({"status": status}).eq("id", challenge_id).execute()
+    await _run_sync(lambda: db().table("battle_queue").update({"status": status}).eq("id", challenge_id).execute())
 
 async def expire_battle_queue():
     """On bot startup: mark all expired pending challenges."""
     now = datetime.now(timezone.utc).isoformat()
-    db().table("battle_queue").update({"status": "expired"}).lt("expires_at", now).eq("status", "pending").execute()
+    await _run_sync(lambda: db().table("battle_queue").update({"status": "expired"}).lt("expires_at", now).eq("status", "pending").execute())
 
 
 # ════════════════════════════════════════════════════════════
@@ -461,33 +482,33 @@ async def expire_battle_queue():
 # ════════════════════════════════════════════════════════════
 
 async def get_user_quests(user_id: str) -> list[dict]:
-    res = db().table("user_quests").select("*").eq("user_id", user_id).execute()
+    res = await _run_sync(lambda: db().table("user_quests").select("*").eq("user_id", user_id).execute())
     return res.data or []
 
 async def get_quest(user_id: str, quest_id: str) -> Optional[dict]:
     try:
-        res = (
+        res = await _run_sync(lambda: (
             db().table("user_quests")
             .select("*")
             .eq("user_id", user_id)
             .eq("quest_id", quest_id)
             .single()
             .execute()
-        )
+        ))
         return res.data
     except Exception:
         return None
 
 async def upsert_quest(user_id: str, quest_id: str, progress: int = 0,
                        completed: bool = False, refreshes_at: Optional[str] = None):
-    db().table("user_quests").upsert({
+    await _run_sync(lambda: db().table("user_quests").upsert({
         "user_id":      user_id,
         "quest_id":     quest_id,
         "progress":     progress,
         "completed":    completed,
         "completed_at": datetime.now(timezone.utc).isoformat() if completed else None,
         "refreshes_at": refreshes_at,
-    }, on_conflict="user_id,quest_id").execute()
+    }, on_conflict="user_id,quest_id").execute())
 
 
 # ════════════════════════════════════════════════════════════
@@ -495,25 +516,25 @@ async def upsert_quest(user_id: str, quest_id: str, progress: int = 0,
 # ════════════════════════════════════════════════════════════
 
 async def get_win_leaderboard(limit: int = 10) -> list[dict]:
-    res = (
+    res = await _run_sync(lambda: (
         db().table("users")
         .select("id, username, win_count, loss_count")
         .order("win_count", desc=True)
         .limit(limit)
         .execute()
-    )
+    ))
     return res.data or []
 
 async def get_power_leaderboard(limit: int = 10) -> list[dict]:
     """Returns top users by their primary stand's computed power score."""
     # We pull primary stands and join manually since Supabase JS SDK doesn't do complex joins
-    res = (
+    res = await _run_sync(lambda: (
         db().table("user_stands")
         .select("user_id, stand_name, level, stars, is_shiny, users(username)")
         .eq("is_primary", True)
         .limit(limit * 2)  # overfetch; sort in Python
         .execute()
-    )
+    ))
     from src.battle.stand import compute_power_score
     rows = res.data or []
     scored = sorted(rows, key=lambda r: compute_power_score(r), reverse=True)

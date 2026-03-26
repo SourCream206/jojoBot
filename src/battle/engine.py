@@ -290,8 +290,9 @@ class BattleView(discord.ui.View):
             await self._end_battle(interaction)
             return
 
-        # Sync DB snapshot
-        await self._sync_to_db()
+        # Sync DB snapshot only for PvP battles (PvE battles are fast and don't need persistence)
+        if s.is_pvp:
+            await self._sync_to_db()
         self._rebuild_buttons()
         await interaction.message.edit(embed=self._build_embed(), view=self)
 
