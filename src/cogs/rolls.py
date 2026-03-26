@@ -15,7 +15,7 @@ from src.utils.constants import (
     PITY_LEGENDARY_THRESHOLD, PITY_MYTHICAL_THRESHOLD, SHINY_RATE, RARITY_EMOJIS, RARITY_COLORS,
 )
 from src.utils.passives import get_sroll_cooldown
-from src.utils.embeds import stand_roll_embed
+from src.utils.embeds import stand_roll_embed_async
 
 
 class Rolls(commands.Cog):
@@ -103,9 +103,9 @@ class Rolls(commands.Cog):
         for quest_title, rewards in completed:
             await ctx.send(embed=quest_complete_embed(quest_title, rewards))
 
-        embed = stand_roll_embed(stand_name, rarity, 1, is_shiny)
+        embed, file = await stand_roll_embed_async(stand_name, rarity, 1, is_shiny)
         embed.set_footer(text=f"Area: {area} | Pity: {user['pity_counter'] + 1}/{PITY_LEGENDARY_THRESHOLD}")
-        await ctx.reply(embed=embed, mention_author=False)
+        await ctx.reply(embed=embed, file=file, mention_author=False) if file else await ctx.reply(embed=embed, mention_author=False)
 
     # ── Item Rolls ─────────────────────────────────────────────────────────────
 
@@ -162,9 +162,9 @@ class Rolls(commands.Cog):
 
         await db.add_stand(str(ctx.author.id), stand_name, stars=1, is_shiny=is_shiny)
 
-        embed = stand_roll_embed(stand_name, rarity, 1, is_shiny)
+        embed, file = await stand_roll_embed_async(stand_name, rarity, 1, is_shiny)
         embed.set_footer(text=f"🎰 Used a Rare Roll! | Area: {area}")
-        await ctx.reply(embed=embed, mention_author=False)
+        await ctx.reply(embed=embed, file=file, mention_author=False) if file else await ctx.reply(embed=embed, mention_author=False)
 
     @commands.command(name="epicroll")
     async def epicroll(self, ctx: commands.Context):
@@ -218,9 +218,9 @@ class Rolls(commands.Cog):
 
         await db.add_stand(str(ctx.author.id), stand_name, stars=1, is_shiny=is_shiny)
 
-        embed = stand_roll_embed(stand_name, rarity, 1, is_shiny)
+        embed, file = await stand_roll_embed_async(stand_name, rarity, 1, is_shiny)
         embed.set_footer(text=f"🎲 Used an Epic Roll! | Area: {area}")
-        await ctx.reply(embed=embed, mention_author=False)
+        await ctx.reply(embed=embed, file=file, mention_author=False) if file else await ctx.reply(embed=embed, mention_author=False)
 
     # ── Spity ──────────────────────────────────────────────────────────────────
 

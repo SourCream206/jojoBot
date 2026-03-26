@@ -86,17 +86,20 @@ class Inventory(commands.Cog):
         max_star_level = max(s["stars"] for s in all_copies) if all_copies else 1
 
         from src.battle.stand_stats import STAND_CATALOG, make_stand
-        from src.utils.embeds import stand_info_embed, StandImageView
+        from src.utils.embeds import stand_info_embed_async, StandImageView
 
         catalog   = STAND_CATALOG.get(stand["stand_name"])
         stand_obj = make_stand(stand["stand_name"], stand["level"], stand["stars"], stand["is_shiny"]) if catalog else None
-        embed     = stand_info_embed(stand, catalog, stand_obj)
+        embed, file = await stand_info_embed_async(stand, catalog, stand_obj)
 
         # Create view for star navigation
         view = StandImageView(stand["stand_name"], max_stars=max_star_level)
         view.current_star = stand["stars"]  # Start at this copy's star level
         view._update_button_labels()
-        message = await ctx.reply(embed=embed, view=view, mention_author=False)
+        if file:
+            message = await ctx.reply(embed=embed, file=file, view=view, mention_author=False)
+        else:
+            message = await ctx.reply(embed=embed, view=view, mention_author=False)
         view.message = message
 
     # ── Sitems ────────────────────────────────────────────────────────────────
@@ -628,18 +631,21 @@ class InfoSelectView(discord.ui.View):
         max_star_level = max(s["stars"] for s in self.copies)
 
         from src.battle.stand_stats import STAND_CATALOG, make_stand
-        from src.utils.embeds import stand_info_embed, StandImageView
+        from src.utils.embeds import stand_info_embed_async, StandImageView
 
         catalog   = STAND_CATALOG.get(selected_stand["stand_name"])
         stand_obj = make_stand(selected_stand["stand_name"], selected_stand["level"], selected_stand["stars"], selected_stand["is_shiny"]) if catalog else None
-        embed     = stand_info_embed(selected_stand, catalog, stand_obj)
+        embed, file = await stand_info_embed_async(selected_stand, catalog, stand_obj)
 
         # Create view for star navigation
         view = StandImageView(selected_stand["stand_name"], max_stars=max_star_level)
         view.current_star = selected_stand["stars"]
         view._update_button_labels()
 
-        await interaction.response.edit_message(embed=embed, view=view)
+        if file:
+            await interaction.response.edit_message(embed=embed, view=view, attachments=[file])
+        else:
+            await interaction.response.edit_message(embed=embed, view=view)
 
     async def on_timeout(self):
         self.clear_items()

@@ -8,6 +8,9 @@ from src.utils.constants import RARITY_COLORS, RARITY_EMOJIS, META_PASSIVES
 from src.utils.constants import xp_to_next_level
 from src.utils.stands_data import get_image, get_emoji
 
+# Shiny-specific color (bright gold)
+SHINY_COLOR = 0xFFD700
+
 
 class StandImageView(discord.ui.View):
     """Navigation view for cycling through stand images at different star levels."""
@@ -115,11 +118,12 @@ def get_active_synergies(primary: str, secondary: str) -> list[str]:
 
 
 def stand_roll_embed(stand_name: str, rarity: str, stars: int, is_shiny: bool) -> discord.Embed:
-    color        = RARITY_COLORS.get(rarity, 0xAAAAAA)
-    rarity_emoji = RARITY_EMOJIS.get(rarity, "⚪")
+    """Synchronous embed builder - use async version for shiny glow effect."""
+    color        = SHINY_COLOR if is_shiny else RARITY_COLORS.get(rarity, 0xAAAAAA)
+    rarity_emoji = RARITY_EMOJIS.get(rarity, "")
     stand_emoji  = get_emoji(stand_name)
-    shiny_str    = " ✨ **SHINY!**" if is_shiny else ""
-    star_str     = "★" * stars
+    shiny_str    = " **SHINY!**" if is_shiny else ""
+    star_str     = "" * stars
 
     embed = discord.Embed(
         title=f"{rarity_emoji} You obtained **{stand_name}**!{shiny_str}",
@@ -137,52 +141,155 @@ def stand_roll_embed(stand_name: str, rarity: str, stars: int, is_shiny: bool) -
     return embed
 
 
+async def stand_roll_embed_async(stand_name: str, rarity: str, stars: int, is_shiny: bool) -> tuple[discord.Embed, discord.File | None]:
+    """
+    Async embed builder that adds glowing border for shiny stands.
+    Returns (embed, file) where file is the shiny-processed image or None.
+    """
+    color        = SHINY_COLOR if is_shiny else RARITY_COLORS.get(rarity, 0xAAAAAA)
+    rarity_emoji = RARITY_EMOJIS.get(rarity, "")
+    stand_emoji  = get_emoji(stand_name)
+    shiny_str    = " **SHINY!**" if is_shiny else ""
+    star_str     = "" * stars
+
+    embed = discord.Embed(
+        title=f"{rarity_emoji} You obtained **{stand_name}**!{shiny_str}",
+        color=color,
+    )
+    embed.add_field(name="Rarity", value=f"{rarity_emoji} {rarity}", inline=True)
+    embed.add_field(name="Stars",  value=star_str,                   inline=True)
+    if stand_emoji:
+        embed.add_field(name="Stand", value=stand_emoji, inline=True)
+
+    image_url = get_image(stand_name, stars)
+    file = None
+
+    if image_url:
+        if is_shiny:
+            # Apply glowing border effect
+            from src.utils.image_effects import get_shiny_image
+            import io
+            shiny_bytes = await get_shiny_image(image_url)
+            if shiny_bytes:
+                file = discord.File(io.BytesIO(shiny_bytes), filename="shiny_stand.png")
+                embed.set_image(url="attachment://shiny_stand.png")
+            else:
+                # Fallback to original if processing fails
+                embed.set_image(url=image_url)
+        else:
+            embed.set_image(url=image_url)
+
+    return embed, file
+
+
 def stand_info_embed(stand_row: dict, catalog_entry: dict | None = None, stand_obj=None) -> discord.Embed:
-    """Rich embed for Sinfo — shows star-correct image."""
+    """Synchronous embed builder - use async version for shiny glow effect."""
     name   = stand_row["stand_name"]
     stars  = stand_row["stars"]
     level  = stand_row["level"]
     shiny  = stand_row.get("is_shiny", False)
 
     rarity    = catalog_entry["rarity"] if catalog_entry else "Common"
-    color     = RARITY_COLORS.get(rarity, 0xAAAAAA)
+    color     = SHINY_COLOR if shiny else RARITY_COLORS.get(rarity, 0xAAAAAA)
     emoji     = get_emoji(name)
     image_url = get_image(name, stars)
 
     title = f"{emoji} {name}".strip() if emoji else name
     if shiny:
-        title += " ✨"
+        title += " "
 
     embed = discord.Embed(title=title, color=color)
     embed.add_field(name="Level",   value=str(level),                     inline=True)
-    embed.add_field(name="Stars",   value="★" * stars,                    inline=True)
-    embed.add_field(name="Shiny",   value="✨ Yes" if shiny else "No",    inline=True)
+    embed.add_field(name="Stars",   value="" * stars,                    inline=True)
+    embed.add_field(name="Shiny",   value=" Yes" if shiny else "No",    inline=True)
 
     xp_needed = xp_to_next_level(level)
     embed.add_field(name="XP",     value=f"{stand_row['exp']}/{xp_needed}", inline=True)
     embed.add_field(name="Merges", value=str(stand_row["merge_count"]),      inline=True)
-    embed.add_field(name="Primary",value="⭐ Yes" if stand_row["is_primary"] else "No", inline=True)
+    embed.add_field(name="Primary",value=" Yes" if stand_row["is_primary"] else "No", inline=True)
 
     if stand_obj:
         stats_str = (
             f"HP: {stand_obj.max_hp} | ATK: {stand_obj.atk} | DEF: {stand_obj.defense}\n"
             f"SPA: {stand_obj.spa} | SPD: {stand_obj.spd} | RNG: {stand_obj.rng}"
         )
-        embed.add_field(name="📊 Stats", value=stats_str, inline=False)
+        embed.add_field(name=" Stats", value=stats_str, inline=False)
 
         unlock_levels = [1, 1, 15, 30]
         moves_lines = []
         for i, m in enumerate(stand_obj.moves):
             locked = f" *(unlocks Lv.{unlock_levels[i]})*" if level < unlock_levels[i] else ""
             moves_lines.append(
-                f"• **{m.name}** ({m.category}, Pwr {m.power}, Acc {int(m.accuracy*100)}%, PP {m.pp}){locked}"
+                f" **{m.name}** ({m.category}, Pwr {m.power}, Acc {int(m.accuracy*100)}%, PP {m.pp}){locked}"
             )
-        embed.add_field(name="🥊 Moves", value="\n".join(moves_lines), inline=False)
+        embed.add_field(name=" Moves", value="\n".join(moves_lines), inline=False)
 
     if image_url:
         embed.set_image(url=image_url)
 
     return embed
+
+
+async def stand_info_embed_async(stand_row: dict, catalog_entry: dict | None = None, stand_obj=None) -> tuple[discord.Embed, discord.File | None]:
+    """
+    Async embed builder that adds glowing border for shiny stands.
+    Returns (embed, file) where file is the shiny-processed image or None.
+    """
+    name   = stand_row["stand_name"]
+    stars  = stand_row["stars"]
+    level  = stand_row["level"]
+    shiny  = stand_row.get("is_shiny", False)
+
+    rarity    = catalog_entry["rarity"] if catalog_entry else "Common"
+    color     = SHINY_COLOR if shiny else RARITY_COLORS.get(rarity, 0xAAAAAA)
+    emoji     = get_emoji(name)
+    image_url = get_image(name, stars)
+
+    title = f"{emoji} {name}".strip() if emoji else name
+    if shiny:
+        title += " "
+
+    embed = discord.Embed(title=title, color=color)
+    embed.add_field(name="Level",   value=str(level),                     inline=True)
+    embed.add_field(name="Stars",   value="" * stars,                    inline=True)
+    embed.add_field(name="Shiny",   value=" Yes" if shiny else "No",    inline=True)
+
+    xp_needed = xp_to_next_level(level)
+    embed.add_field(name="XP",     value=f"{stand_row['exp']}/{xp_needed}", inline=True)
+    embed.add_field(name="Merges", value=str(stand_row["merge_count"]),      inline=True)
+    embed.add_field(name="Primary",value=" Yes" if stand_row["is_primary"] else "No", inline=True)
+
+    if stand_obj:
+        stats_str = (
+            f"HP: {stand_obj.max_hp} | ATK: {stand_obj.atk} | DEF: {stand_obj.defense}\n"
+            f"SPA: {stand_obj.spa} | SPD: {stand_obj.spd} | RNG: {stand_obj.rng}"
+        )
+        embed.add_field(name=" Stats", value=stats_str, inline=False)
+
+        unlock_levels = [1, 1, 15, 30]
+        moves_lines = []
+        for i, m in enumerate(stand_obj.moves):
+            locked = f" *(unlocks Lv.{unlock_levels[i]})*" if level < unlock_levels[i] else ""
+            moves_lines.append(
+                f" **{m.name}** ({m.category}, Pwr {m.power}, Acc {int(m.accuracy*100)}%, PP {m.pp}){locked}"
+            )
+        embed.add_field(name=" Moves", value="\n".join(moves_lines), inline=False)
+
+    file = None
+    if image_url:
+        if shiny:
+            from src.utils.image_effects import get_shiny_image
+            import io
+            shiny_bytes = await get_shiny_image(image_url)
+            if shiny_bytes:
+                file = discord.File(io.BytesIO(shiny_bytes), filename="shiny_stand.png")
+                embed.set_image(url="attachment://shiny_stand.png")
+            else:
+                embed.set_image(url=image_url)
+        else:
+            embed.set_image(url=image_url)
+
+    return embed, file
 
 
 def profile_embed(user: dict, primary_stand: dict | None, secondary_stand: dict | None = None) -> discord.Embed:
