@@ -33,99 +33,130 @@ async def fetch_image(url: str) -> Image.Image | None:
 
 def add_solar_flare_explosion(img: Image.Image) -> Image.Image:
     """
-    Add a shiny vignette effect embedded directly on the image.
-    Golden/fiery glow bleeds inward from edges - no frame, just overlay.
+    Add a stylized shiny vignette effect embedded directly on the image.
+    Irregular golden glow at edges with sparkle accents.
     """
-    # Work directly on the image size - no padding
+    import random
+    random.seed(42)  # Consistent but "random" look
+
     result = img.copy()
     w, h = img.width, img.height
-    cx, cy = w // 2, h // 2
 
-    # === LAYER 1: Radial vignette glow from edges ===
-    vignette = Image.new("RGBA", (w, h), (0, 0, 0, 0))
-    draw = ImageDraw.Draw(vignette)
+    # === LAYER 1: Irregular edge glow (not uniform) ===
+    edge_glow = Image.new("RGBA", (w, h), (0, 0, 0, 0))
+    draw = ImageDraw.Draw(edge_glow)
 
-    # Draw elliptical glow from outside inward (larger ellipses = outer edge)
-    max_radius = int(math.sqrt(w * w + h * h) / 2)
+    # Top edge - varying intensity blobs
+    for x in range(0, w, 15):
+        intensity = 0.5 + 0.5 * math.sin(x * 0.05)
+        blob_h = int(25 + 20 * intensity)
+        alpha = int(120 * intensity)
+        for y in range(blob_h, 0, -3):
+            a = int(alpha * (y / blob_h))
+            draw.ellipse([x - 20, -10 - y, x + 20, 10 + y], fill=(255, 180, 60, a))
 
-    # Glow rings from edge bleeding toward center
-    for i in range(max_radius, 0, -3):
-        # How far from edge (0 = at edge, 1 = at center)
-        progress = 1 - (i / max_radius)
+    # Bottom edge
+    for x in range(0, w, 15):
+        intensity = 0.5 + 0.5 * math.sin(x * 0.07 + 1)
+        blob_h = int(25 + 20 * intensity)
+        alpha = int(120 * intensity)
+        for y in range(blob_h, 0, -3):
+            a = int(alpha * (y / blob_h))
+            draw.ellipse([x - 20, h - 10 - y, x + 20, h + 10 + y], fill=(255, 180, 60, a))
 
-        # Only glow in outer ~60% of the image
-        if progress > 0.4:
-            continue
+    # Left edge
+    for y in range(0, h, 15):
+        intensity = 0.5 + 0.5 * math.sin(y * 0.06)
+        blob_w = int(25 + 20 * intensity)
+        alpha = int(120 * intensity)
+        for x in range(blob_w, 0, -3):
+            a = int(alpha * (x / blob_w))
+            draw.ellipse([-10 - x, y - 20, 10 + x, y + 20], fill=(255, 180, 60, a))
 
-        # Intensity peaks at edge, fades toward center
-        intensity = (0.4 - progress) / 0.4
-        alpha = int(180 * intensity ** 1.5)
+    # Right edge
+    for y in range(0, h, 15):
+        intensity = 0.5 + 0.5 * math.sin(y * 0.08 + 2)
+        blob_w = int(25 + 20 * intensity)
+        alpha = int(120 * intensity)
+        for x in range(blob_w, 0, -3):
+            a = int(alpha * (x / blob_w))
+            draw.ellipse([w - 10 - x, y - 20, w + 10 + x, y + 20], fill=(255, 180, 60, a))
 
-        # Color shifts from deep orange at edge to golden yellow inward
-        r = 255
-        g = int(150 + 100 * progress)
-        b = int(50 * progress)
+    edge_glow = edge_glow.filter(ImageFilter.GaussianBlur(radius=12))
+    result = Image.alpha_composite(result, edge_glow)
 
-        draw.ellipse(
-            [cx - i, cy - i, cx + i, cy + i],
-            fill=(r, g, b, alpha)
-        )
-
-    vignette = vignette.filter(ImageFilter.GaussianBlur(radius=25))
-    result = Image.alpha_composite(result, vignette)
-
-    # === LAYER 2: Corner flares (circular, bleeding inward) ===
+    # === LAYER 2: Corner flares (asymmetric) ===
     corners = Image.new("RGBA", (w, h), (0, 0, 0, 0))
     draw = ImageDraw.Draw(corners)
 
-    corner_positions = [
-        (0, 0), (w, 0), (0, h), (w, h)
+    corner_data = [
+        (0, 0, 1.0),      # Top-left: full
+        (w, 0, 0.7),      # Top-right: medium
+        (0, h, 0.8),      # Bottom-left: medium-high
+        (w, h, 0.6),      # Bottom-right: subtle
     ]
 
-    for corner_x, corner_y in corner_positions:
-        # Large circular glow at each corner
-        max_r = int(min(w, h) * 0.5)
-        for r in range(max_r, 0, -4):
+    for corner_x, corner_y, strength in corner_data:
+        max_r = int(min(w, h) * 0.3 * strength)
+        for r in range(max_r, 0, -3):
             progress = r / max_r
-            alpha = int(140 * progress ** 0.8)
+            alpha = int(160 * progress * strength)
             draw.ellipse(
                 [corner_x - r, corner_y - r, corner_x + r, corner_y + r],
-                fill=(255, 200, 80, alpha)
+                fill=(255, 210, 100, alpha)
             )
 
-    corners = corners.filter(ImageFilter.GaussianBlur(radius=20))
+    corners = corners.filter(ImageFilter.GaussianBlur(radius=15))
     result = Image.alpha_composite(result, corners)
 
-    # === LAYER 3: Soft light rays from corners ===
-    rays = Image.new("RGBA", (w, h), (0, 0, 0, 0))
-    draw = ImageDraw.Draw(rays)
+    # === LAYER 3: Sparkle/flare accents scattered near edges ===
+    sparkles = Image.new("RGBA", (w, h), (0, 0, 0, 0))
+    draw = ImageDraw.Draw(sparkles)
 
-    for corner_x, corner_y in corner_positions:
-        # Direction toward center
-        dx = 1 if corner_x == 0 else -1
-        dy = 1 if corner_y == 0 else -1
+    # Scatter sparkles near edges
+    sparkle_positions = [
+        # Top edge sparkles
+        (w * 0.15, 12), (w * 0.4, 8), (w * 0.7, 15), (w * 0.9, 10),
+        # Bottom edge
+        (w * 0.1, h - 14), (w * 0.5, h - 10), (w * 0.85, h - 12),
+        # Left edge
+        (10, h * 0.2), (14, h * 0.6), (8, h * 0.85),
+        # Right edge
+        (w - 12, h * 0.15), (w - 10, h * 0.5), (w - 15, h * 0.75),
+    ]
 
-        # Draw several rays from this corner
-        for j in range(5):
-            angle = math.atan2(cy - corner_y, cx - corner_x) + (j - 2) * 0.25
-            ray_len = int(min(w, h) * 0.6)
+    for sx, sy in sparkle_positions:
+        sx, sy = int(sx), int(sy)
+        # Draw 4-point star sparkle
+        spark_size = random.randint(8, 16)
+        # Horizontal line
+        draw.line([(sx - spark_size, sy), (sx + spark_size, sy)],
+                  fill=(255, 255, 200, 200), width=2)
+        # Vertical line
+        draw.line([(sx, sy - spark_size), (sx, sy + spark_size)],
+                  fill=(255, 255, 200, 200), width=2)
+        # Center glow
+        draw.ellipse([sx - 4, sy - 4, sx + 4, sy + 4],
+                     fill=(255, 255, 220, 255))
 
-            end_x = corner_x + int(math.cos(angle) * ray_len)
-            end_y = corner_y + int(math.sin(angle) * ray_len)
+    sparkles = sparkles.filter(ImageFilter.GaussianBlur(radius=3))
+    result = Image.alpha_composite(result, sparkles)
 
-            for width, alpha in [(10, 30), (6, 50), (3, 70)]:
-                draw.line(
-                    [(corner_x, corner_y), (end_x, end_y)],
-                    fill=(255, 230, 150, alpha),
-                    width=width
-                )
+    # === LAYER 4: Thin bright edge line (subtle) ===
+    edge_line = Image.new("RGBA", (w, h), (0, 0, 0, 0))
+    draw = ImageDraw.Draw(edge_line)
 
-    rays = rays.filter(ImageFilter.GaussianBlur(radius=15))
-    result = Image.alpha_composite(result, rays)
+    # Draw thin glowing border just inside the edge
+    for offset in [2, 4, 6]:
+        alpha = 100 - offset * 12
+        draw.rectangle(
+            [offset, offset, w - offset - 1, h - offset - 1],
+            outline=(255, 220, 150, alpha),
+            width=1
+        )
 
-    # === LAYER 4: Enhance brightness/saturation slightly ===
-    enhancer = ImageEnhance.Brightness(result)
-    result = enhancer.enhance(1.05)
+    edge_line = edge_line.filter(ImageFilter.GaussianBlur(radius=4))
+    result = Image.alpha_composite(result, edge_line)
 
     return result
 
@@ -142,7 +173,7 @@ async def get_shiny_image(url: str, effect: str = "solar_flare") -> bytes | None
     Returns:
         PNG image bytes with glow effect, or None on failure
     """
-    cache_key = f"{url}_{effect}_v4"  # v4 for embedded vignette effect
+    cache_key = f"{url}_{effect}_v5"  # v5 for stylized edge effect
 
     if cache_key in _GLOW_CACHE:
         return _GLOW_CACHE[cache_key]
