@@ -33,134 +33,104 @@ async def fetch_image(url: str) -> Image.Image | None:
 
 def add_solar_flare_explosion(img: Image.Image) -> Image.Image:
     """
-    Add a stylized shiny vignette effect embedded directly on the image.
-    Irregular golden glow at edges with sparkle accents.
+    Overhauled for a 'Powerful Shiny Stand' look.
+    Adds high contrast, a bottom-up radiant power aura, glowing embers, 
+    and a crisp holographic foil border.
     """
     import random
-    random.seed(42)  # Consistent but "random" look
+    from PIL import ImageEnhance, ImageFilter, ImageDraw, Image
+    random.seed(42)  # Consistent but dynamic look per rendering
 
-    result = img.copy()
     w, h = img.width, img.height
+    
+    # === LAYER 1: Base Card Enhancement ===
+    # Pop the colors and contrast to make it look "Shiny/Rare"
+    enhancer = ImageEnhance.Contrast(img)
+    img = enhancer.enhance(1.25)
+    enhancer = ImageEnhance.Color(img)
+    img = enhancer.enhance(1.4)
+    result = img.copy()
 
-    # === LAYER 1: Irregular edge glow (not uniform) ===
-    edge_glow = Image.new("RGBA", (w, h), (0, 0, 0, 0))
-    draw = ImageDraw.Draw(edge_glow)
+    # === LAYER 2: Anime Power Aura ===
+    # Rays shooting up from the bottom to simulate raw energy
+    aura = Image.new("RGBA", (w, h), (0, 0, 0, 0))
+    draw_aura = ImageDraw.Draw(aura)
+    
+    num_rays = 18
+    for _ in range(num_rays):
+        # Origin point near the bottom center
+        start_x = random.randint(w // 4, (w * 3) // 4)
+        start_y = h + 20 
+        
+        # Destination point spreading outwards toward the top
+        end_x = start_x + random.randint(-w // 2, w // 2)
+        end_y = random.randint(-50, h // 2)
+        
+        # Draw an elongated polygon (beam)
+        width = random.randint(10, 45)
+        alpha = random.randint(20, 70)
+        
+        draw_aura.polygon([
+            (start_x - width // 2, start_y),
+            (start_x + width // 2, start_y),
+            (end_x + width // 4, end_y),
+            (end_x - width // 4, end_y)
+        ], fill=(255, 215, 0, alpha)) # Golden aura
 
-    # Top edge - varying intensity blobs
-    for x in range(0, w, 15):
-        intensity = 0.5 + 0.5 * math.sin(x * 0.05)
-        blob_h = int(25 + 20 * intensity)
-        alpha = int(120 * intensity)
-        for y in range(blob_h, 0, -3):
-            a = int(alpha * (y / blob_h))
-            draw.ellipse([x - 20, -10 - y, x + 20, 10 + y], fill=(255, 180, 60, a))
+    # Blur the rays to make them look like ethereal energy, not geometry
+    aura = aura.filter(ImageFilter.GaussianBlur(radius=8))
+    result = Image.alpha_composite(result, aura)
 
-    # Bottom edge
-    for x in range(0, w, 15):
-        intensity = 0.5 + 0.5 * math.sin(x * 0.07 + 1)
-        blob_h = int(25 + 20 * intensity)
-        alpha = int(120 * intensity)
-        for y in range(blob_h, 0, -3):
-            a = int(alpha * (y / blob_h))
-            draw.ellipse([x - 20, h - 10 - y, x + 20, h + 10 + y], fill=(255, 180, 60, a))
-
-    # Left edge
-    for y in range(0, h, 15):
-        intensity = 0.5 + 0.5 * math.sin(y * 0.06)
-        blob_w = int(25 + 20 * intensity)
-        alpha = int(120 * intensity)
-        for x in range(blob_w, 0, -3):
-            a = int(alpha * (x / blob_w))
-            draw.ellipse([-10 - x, y - 20, 10 + x, y + 20], fill=(255, 180, 60, a))
-
-    # Right edge
-    for y in range(0, h, 15):
-        intensity = 0.5 + 0.5 * math.sin(y * 0.08 + 2)
-        blob_w = int(25 + 20 * intensity)
-        alpha = int(120 * intensity)
-        for x in range(blob_w, 0, -3):
-            a = int(alpha * (x / blob_w))
-            draw.ellipse([w - 10 - x, y - 20, w + 10 + x, y + 20], fill=(255, 180, 60, a))
-
-    edge_glow = edge_glow.filter(ImageFilter.GaussianBlur(radius=12))
-    result = Image.alpha_composite(result, edge_glow)
-
-    # === LAYER 2: Corner flares (asymmetric) ===
-    corners = Image.new("RGBA", (w, h), (0, 0, 0, 0))
-    draw = ImageDraw.Draw(corners)
-
-    corner_data = [
-        (0, 0, 1.0),      # Top-left: full
-        (w, 0, 0.7),      # Top-right: medium
-        (0, h, 0.8),      # Bottom-left: medium-high
-        (w, h, 0.6),      # Bottom-right: subtle
-    ]
-
-    for corner_x, corner_y, strength in corner_data:
-        max_r = int(min(w, h) * 0.3 * strength)
-        for r in range(max_r, 0, -3):
-            progress = r / max_r
-            alpha = int(160 * progress * strength)
-            draw.ellipse(
-                [corner_x - r, corner_y - r, corner_x + r, corner_y + r],
-                fill=(255, 210, 100, alpha)
-            )
-
-    corners = corners.filter(ImageFilter.GaussianBlur(radius=15))
-    result = Image.alpha_composite(result, corners)
-
-    # === LAYER 3: Sparkle/flare accents scattered near edges ===
-    sparkles = Image.new("RGBA", (w, h), (0, 0, 0, 0))
-    draw = ImageDraw.Draw(sparkles)
-
-    # Scatter sparkles near edges
-    sparkle_positions = [
-        # Top edge sparkles
-        (w * 0.15, 12), (w * 0.4, 8), (w * 0.7, 15), (w * 0.9, 10),
-        # Bottom edge
-        (w * 0.1, h - 14), (w * 0.5, h - 10), (w * 0.85, h - 12),
-        # Left edge
-        (10, h * 0.2), (14, h * 0.6), (8, h * 0.85),
-        # Right edge
-        (w - 12, h * 0.15), (w - 10, h * 0.5), (w - 15, h * 0.75),
-    ]
-
-    for sx, sy in sparkle_positions:
-        sx, sy = int(sx), int(sy)
-        # Draw 4-point star sparkle
-        spark_size = random.randint(8, 16)
-        # Horizontal line
-        draw.line([(sx - spark_size, sy), (sx + spark_size, sy)],
-                  fill=(255, 255, 200, 200), width=2)
-        # Vertical line
-        draw.line([(sx, sy - spark_size), (sx, sy + spark_size)],
-                  fill=(255, 255, 200, 200), width=2)
-        # Center glow
-        draw.ellipse([sx - 4, sy - 4, sx + 4, sy + 4],
-                     fill=(255, 255, 220, 255))
-
-    sparkles = sparkles.filter(ImageFilter.GaussianBlur(radius=3))
-    result = Image.alpha_composite(result, sparkles)
-
-    # === LAYER 4: Thin bright edge line (subtle) ===
-    edge_line = Image.new("RGBA", (w, h), (0, 0, 0, 0))
-    draw = ImageDraw.Draw(edge_line)
-
-    # Draw thin glowing border just inside the edge
-    for offset in [2, 4, 6]:
-        alpha = 100 - offset * 12
-        draw.rectangle(
-            [offset, offset, w - offset - 1, h - offset - 1],
-            outline=(255, 220, 150, alpha),
-            width=1
+    # === LAYER 3: Inner Energy Glow (Vignette) ===
+    glow = Image.new("RGBA", (w, h), (0, 0, 0, 0))
+    draw_glow = ImageDraw.Draw(glow)
+    
+    # Draw concentric rectangles to create a smooth inward gradient
+    for i in range(25):
+        alpha = int(140 * (1 - (i / 25))**2)  
+        draw_glow.rectangle(
+            [i, i, w - i - 1, h - i - 1],
+            outline=(255, 120, 0, alpha), # Fiery orange deep glow
+            width=2
         )
+    glow = glow.filter(ImageFilter.GaussianBlur(radius=4))
+    result = Image.alpha_composite(result, glow)
 
-    edge_line = edge_line.filter(ImageFilter.GaussianBlur(radius=4))
-    result = Image.alpha_composite(result, edge_line)
+    # === LAYER 4: Floating Embers & Flares ===
+    embers = Image.new("RGBA", (w, h), (0, 0, 0, 0))
+    draw_embers = ImageDraw.Draw(embers)
+    
+    for _ in range(35):
+        ex = random.randint(0, w)
+        ey = random.randint(0, h)
+        size = random.randint(1, 4)
+        alpha = random.randint(100, 255)
+        
+        # Core of ember (White/Hot)
+        draw_embers.ellipse([ex-size, ey-size, ex+size, ey+size], fill=(255, 255, 255, alpha))
+        # Outer glow (Orange/Warm)
+        draw_embers.ellipse([ex-size*2, ey-size*2, ex+size*2, ey+size*2], fill=(255, 150, 0, alpha//2))
+        
+        # Add a classic 4-point anime lens flare to a few random motes
+        if random.random() > 0.85:
+            flare = size * 5
+            draw_embers.line([(ex-flare, ey), (ex+flare, ey)], fill=(255, 255, 200, alpha), width=1)
+            draw_embers.line([(ex, ey-flare), (ex, ey+flare)], fill=(255, 255, 200, alpha), width=1)
+
+    embers = embers.filter(ImageFilter.GaussianBlur(radius=1))
+    result = Image.alpha_composite(result, embers)
+
+    # === LAYER 5: TCG Foil Border ===
+    # Crisp outer edge to frame the card and hold the energy in
+    border = Image.new("RGBA", (w, h), (0, 0, 0, 0))
+    draw_border = ImageDraw.Draw(border)
+    # Outer bright line
+    draw_border.rectangle([0, 0, w-1, h-1], outline=(255, 255, 220, 255), width=2)
+    # Inner thin line
+    draw_border.rectangle([4, 4, w-5, h-5], outline=(255, 200, 0, 180), width=1)
+    result = Image.alpha_composite(result, border)
 
     return result
-
-
 async def get_shiny_image(url: str, effect: str = "solar_flare") -> bytes | None:
     """
     Get a shiny version of an image with glowing border.
