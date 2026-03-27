@@ -33,152 +33,99 @@ async def fetch_image(url: str) -> Image.Image | None:
 
 def add_solar_flare_explosion(img: Image.Image) -> Image.Image:
     """
-    Add an INTENSE solar flare explosion effect that bleeds outward organically:
-    - Radial glow emanating from the image
-    - Soft light rays bursting in all directions
-    - No hard frame borders - everything fades naturally
+    Add a shiny vignette effect embedded directly on the image.
+    Golden/fiery glow bleeds inward from edges - no frame, just overlay.
     """
-    # Large padding for the glow to bleed into
-    padding = 80
+    # Work directly on the image size - no padding
+    result = img.copy()
+    w, h = img.width, img.height
+    cx, cy = w // 2, h // 2
 
-    new_width = img.width + padding * 2
-    new_height = img.height + padding * 2
-
-    # Create result canvas
-    result = Image.new("RGBA", (new_width, new_height), (0, 0, 0, 0))
-
-    img_x = padding
-    img_y = padding
-    cx = new_width // 2
-    cy = new_height // 2
-
-    # === LAYER 1: Massive radial glow (organic, not rectangular) ===
-    outer_glow = Image.new("RGBA", (new_width, new_height), (0, 0, 0, 0))
-    draw = ImageDraw.Draw(outer_glow)
-
-    # Draw concentric ellipses for organic radial glow
-    max_radius = max(new_width, new_height)
-    glow_steps = [
-        (1.0, (255, 50, 0, 30)),      # Deep red outer
-        (0.9, (255, 80, 0, 45)),      # Red-orange
-        (0.8, (255, 120, 0, 60)),     # Orange
-        (0.7, (255, 160, 30, 80)),    # Orange-yellow
-        (0.6, (255, 190, 50, 100)),   # Yellow-orange
-        (0.5, (255, 210, 80, 130)),   # Golden
-        (0.4, (255, 230, 120, 160)),  # Bright gold
-        (0.3, (255, 245, 160, 190)),  # Light gold
-        (0.2, (255, 255, 200, 220)),  # Near white
-        (0.15, (255, 255, 230, 240)), # White-hot
-    ]
-
-    for scale, color in glow_steps:
-        rx = int(max_radius * scale * 0.7)
-        ry = int(max_radius * scale * 0.6)
-        draw.ellipse(
-            [cx - rx, cy - ry, cx + rx, cy + ry],
-            fill=color
-        )
-
-    outer_glow = outer_glow.filter(ImageFilter.GaussianBlur(radius=35))
-    result = Image.alpha_composite(result, outer_glow)
-
-    # === LAYER 2: Light rays bursting outward from center ===
-    rays = Image.new("RGBA", (new_width, new_height), (0, 0, 0, 0))
-    draw = ImageDraw.Draw(rays)
-
-    # Draw rays emanating from center
-    num_rays = 48
-    ray_length_base = 120
-
-    for i in range(num_rays):
-        angle = (2 * math.pi * i) / num_rays
-        # Vary ray length for organic feel
-        ray_length = ray_length_base + (i % 5) * 15
-
-        # Start from near center
-        start_x = cx + int(math.cos(angle) * 30)
-        start_y = cy + int(math.sin(angle) * 30)
-
-        # End point extends outward
-        end_x = cx + int(math.cos(angle) * ray_length)
-        end_y = cy + int(math.sin(angle) * ray_length)
-
-        # Draw ray with gradient (multiple lines getting thinner)
-        for width, alpha in [(12, 40), (8, 70), (5, 100), (2, 140)]:
-            color = (255, 230, 150, alpha)
-            draw.line([(start_x, start_y), (end_x, end_y)], fill=color, width=width)
-
-    rays = rays.filter(ImageFilter.GaussianBlur(radius=10))
-    result = Image.alpha_composite(result, rays)
-
-    # === LAYER 3: Secondary glow pulsing outward ===
-    pulse = Image.new("RGBA", (new_width, new_height), (0, 0, 0, 0))
-    draw = ImageDraw.Draw(pulse)
-
-    # Organic blobs around the edges
-    for i in range(16):
-        angle = (2 * math.pi * i) / 16
-        dist = 60 + (i % 3) * 20
-        bx = cx + int(math.cos(angle) * dist)
-        by = cy + int(math.sin(angle) * dist)
-        blob_size = 40 + (i % 4) * 10
-
-        for r in range(blob_size, 0, -5):
-            alpha = int(120 * (r / blob_size))
-            draw.ellipse(
-                [bx - r, by - r, bx + r, by + r],
-                fill=(255, 220, 100, alpha)
-            )
-
-    pulse = pulse.filter(ImageFilter.GaussianBlur(radius=15))
-    result = Image.alpha_composite(result, pulse)
-
-    # === LAYER 4: Paste original image ===
-    result.paste(img, (img_x, img_y), img if img.mode == "RGBA" else None)
-
-    # === LAYER 5: Soft inner glow bleeding onto the image ===
-    vignette = Image.new("RGBA", (img.width, img.height), (0, 0, 0, 0))
+    # === LAYER 1: Radial vignette glow from edges ===
+    vignette = Image.new("RGBA", (w, h), (0, 0, 0, 0))
     draw = ImageDraw.Draw(vignette)
 
-    # Radial glow from edges bleeding inward (soft, no hard edges)
-    img_cx = img.width // 2
-    img_cy = img.height // 2
+    # Draw elliptical glow from outside inward (larger ellipses = outer edge)
+    max_radius = int(math.sqrt(w * w + h * h) / 2)
 
-    # Corner glows that bleed inward organically
+    # Glow rings from edge bleeding toward center
+    for i in range(max_radius, 0, -3):
+        # How far from edge (0 = at edge, 1 = at center)
+        progress = 1 - (i / max_radius)
+
+        # Only glow in outer ~60% of the image
+        if progress > 0.4:
+            continue
+
+        # Intensity peaks at edge, fades toward center
+        intensity = (0.4 - progress) / 0.4
+        alpha = int(180 * intensity ** 1.5)
+
+        # Color shifts from deep orange at edge to golden yellow inward
+        r = 255
+        g = int(150 + 100 * progress)
+        b = int(50 * progress)
+
+        draw.ellipse(
+            [cx - i, cy - i, cx + i, cy + i],
+            fill=(r, g, b, alpha)
+        )
+
+    vignette = vignette.filter(ImageFilter.GaussianBlur(radius=25))
+    result = Image.alpha_composite(result, vignette)
+
+    # === LAYER 2: Corner flares (circular, bleeding inward) ===
+    corners = Image.new("RGBA", (w, h), (0, 0, 0, 0))
+    draw = ImageDraw.Draw(corners)
+
     corner_positions = [
-        (0, 0), (img.width, 0),
-        (0, img.height), (img.width, img.height)
+        (0, 0), (w, 0), (0, h), (w, h)
     ]
 
     for corner_x, corner_y in corner_positions:
-        for r in range(80, 0, -4):
-            alpha = int(100 * (1 - r / 80) ** 1.5)
+        # Large circular glow at each corner
+        max_r = int(min(w, h) * 0.5)
+        for r in range(max_r, 0, -4):
+            progress = r / max_r
+            alpha = int(140 * progress ** 0.8)
             draw.ellipse(
                 [corner_x - r, corner_y - r, corner_x + r, corner_y + r],
-                fill=(255, 220, 100, alpha)
+                fill=(255, 200, 80, alpha)
             )
 
-    # Edge glow bleeding inward
-    edge_glow_depth = 30
-    for i in range(edge_glow_depth):
-        alpha = int(80 * (1 - i / edge_glow_depth) ** 2)
-        color = (255, 200, 80, alpha)
-        draw.rectangle(
-            [i, i, img.width - i - 1, img.height - i - 1],
-            outline=color,
-            width=3
-        )
+    corners = corners.filter(ImageFilter.GaussianBlur(radius=20))
+    result = Image.alpha_composite(result, corners)
 
-    vignette = vignette.filter(ImageFilter.GaussianBlur(radius=12))
+    # === LAYER 3: Soft light rays from corners ===
+    rays = Image.new("RGBA", (w, h), (0, 0, 0, 0))
+    draw = ImageDraw.Draw(rays)
 
-    # Composite vignette onto the card area
-    result.paste(
-        Image.alpha_composite(
-            result.crop((img_x, img_y, img_x + img.width, img_y + img.height)),
-            vignette
-        ),
-        (img_x, img_y)
-    )
+    for corner_x, corner_y in corner_positions:
+        # Direction toward center
+        dx = 1 if corner_x == 0 else -1
+        dy = 1 if corner_y == 0 else -1
+
+        # Draw several rays from this corner
+        for j in range(5):
+            angle = math.atan2(cy - corner_y, cx - corner_x) + (j - 2) * 0.25
+            ray_len = int(min(w, h) * 0.6)
+
+            end_x = corner_x + int(math.cos(angle) * ray_len)
+            end_y = corner_y + int(math.sin(angle) * ray_len)
+
+            for width, alpha in [(10, 30), (6, 50), (3, 70)]:
+                draw.line(
+                    [(corner_x, corner_y), (end_x, end_y)],
+                    fill=(255, 230, 150, alpha),
+                    width=width
+                )
+
+    rays = rays.filter(ImageFilter.GaussianBlur(radius=15))
+    result = Image.alpha_composite(result, rays)
+
+    # === LAYER 4: Enhance brightness/saturation slightly ===
+    enhancer = ImageEnhance.Brightness(result)
+    result = enhancer.enhance(1.05)
 
     return result
 
@@ -195,7 +142,7 @@ async def get_shiny_image(url: str, effect: str = "solar_flare") -> bytes | None
     Returns:
         PNG image bytes with glow effect, or None on failure
     """
-    cache_key = f"{url}_{effect}_v3"  # v3 for bleeding glow effect
+    cache_key = f"{url}_{effect}_v4"  # v4 for embedded vignette effect
 
     if cache_key in _GLOW_CACHE:
         return _GLOW_CACHE[cache_key]
