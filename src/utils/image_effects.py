@@ -33,11 +33,9 @@ async def fetch_image(url: str) -> Image.Image | None:
 
 def add_solar_flare_explosion(img: Image.Image) -> Image.Image:
     """
-    Creates a stylized plasma border effect.
-    Acts as a transparent overlay along the edges without covering the center.
+    Creates an even, symmetrical solar star shiny border.
+    Uses smooth gradients and geometric star flares instead of uneven fire.
     """
-    import random
-    import math
     from PIL import Image, ImageDraw, ImageFilter, ImageEnhance
 
     w, h = img.width, img.height
@@ -48,53 +46,81 @@ def add_solar_flare_explosion(img: Image.Image) -> Image.Image:
     result = ImageEnhance.Contrast(result).enhance(1.15)
     result = ImageEnhance.Color(result).enhance(1.2)
 
-    # === LAYER 2: Transparent Plasma Overlay ===
-    # A single transparent layer for the border effect
-    overlay = Image.new("RGBA", (w, h), (0, 0, 0, 0))
-    draw_overlay = ImageDraw.Draw(overlay)
+    # === LAYER 2: Even, Smooth Solar Glow (Transparent Overlay) ===
+    # This creates a perfectly uniform, glowing inner border
+    glow_layer = Image.new("RGBA", (w, h), (0, 0, 0, 0))
+    draw_glow = ImageDraw.Draw(glow_layer)
 
-    # Scale border thickness dynamically, keeping it thin enough to leave the center clear
-    base_t = int(min(w, h) * 0.08) 
-
-    def draw_plasma_edge(draw_obj, edge_type, base_thickness, color, wave_freq):
-        steps = 80
-        for i in range(steps + 1):
-            progress = i / steps
-            
-            # Create rolling, organic waves combining sin and cos
-            wave = math.sin(progress * math.pi * wave_freq) + math.cos(progress * math.pi * wave_freq * 0.5)
-            thickness = int(base_thickness + (wave * base_thickness * 0.3))
-            
-            # Determine coordinates based on edge
-            if edge_type == 'top':
-                x, y = int(progress * w), 0
-            elif edge_type == 'bottom':
-                x, y = int(progress * w), h
-            elif edge_type == 'left':
-                x, y = 0, int(progress * h)
-            elif edge_type == 'right':
-                x, y = w, int(progress * h)
-
-            # Draw the plasma node
-            draw_obj.ellipse([x - thickness, y - thickness, x + thickness, y + thickness], fill=color)
-
-    edges = ['top', 'bottom', 'left', 'right']
+    glow_thickness = int(min(w, h) * 0.12)
     
-    for e in edges:
-        freq = random.uniform(2.5, 5.0)
-        # Deep Orange outer corona
-        draw_plasma_edge(draw_overlay, e, base_t, (255, 80, 0, 160), freq)       
-        # Bright Yellow/Orange inner plasma (removed the solid white)
-        draw_plasma_edge(draw_overlay, e, int(base_t * 0.55), (255, 180, 0, 220), freq) 
+    for i in range(glow_thickness):
+        # Smooth exponential falloff for the glow opacity
+        progress = i / glow_thickness
+        alpha = int(220 * (1 - progress)**1.5)
+        
+        # Color transition: deep golden-orange at the very edge to bright pale yellow inside
+        r = 255
+        g = int(160 + 95 * progress)
+        b = int(50 + 150 * progress)
+        
+        # Draw concentric rectangles moving inward
+        draw_glow.rectangle(
+            [i, i, w - i - 1, h - i - 1],
+            outline=(r, g, b, alpha),
+            width=1
+        )
+        
+    # Blur the concentric rectangles so they form a smooth, seamless band of light
+    glow_layer = glow_layer.filter(ImageFilter.GaussianBlur(radius=8))
 
-    # Smooth the entire overlay to blend it seamlessly
-    overlay = overlay.filter(ImageFilter.GaussianBlur(radius=10))
-    
-    # Composite the transparent frame directly over the image
-    result = Image.alpha_composite(result, overlay)
+    # === LAYER 3: Solar Star Flares ===
+    # Adds crisp, even starbursts at the corners and midpoints
+    flare_layer = Image.new("RGBA", (w, h), (0, 0, 0, 0))
+    draw_flare = ImageDraw.Draw(flare_layer)
+
+    def draw_star(cx, cy, radius, alpha_center, color):
+        """Draws a sharp, 4-point optical star flare."""
+        # Bright center core
+        draw_flare.ellipse(
+            [cx - radius//5, cy - radius//5, cx + radius//5, cy + radius//5], 
+            fill=(255, 255, 255, alpha_center)
+        )
+        # Horizontal beam
+        draw_flare.polygon([
+            (cx - radius, cy), (cx, cy - radius//10), 
+            (cx + radius, cy), (cx, cy + radius//10)
+        ], fill=color)
+        # Vertical beam
+        draw_flare.polygon([
+            (cx, cy - radius), (cx - radius//10, cy), 
+            (cx, cy + radius), (cx + radius//10, cy)
+        ], fill=color)
+
+    # Dynamically scale the stars based on the image size
+    inset = int(glow_thickness * 0.3)
+    flare_size_corner = int(min(w, h) * 0.18)
+    flare_size_mid = int(min(w, h) * 0.12)
+    flare_color = (255, 240, 150, 200) # Bright pale gold
+
+    # Place large stars near the 4 corners
+    corners = [(inset, inset), (w - inset, inset), (inset, h - inset), (w - inset, h - inset)]
+    for cx, cy in corners:
+        draw_star(cx, cy, flare_size_corner, 255, flare_color)
+
+    # Place slightly smaller stars at the exact midpoints of the 4 edges
+    midpoints = [(w//2, inset), (w//2, h - inset), (inset, h//2), (w - inset, h//2)]
+    for cx, cy in midpoints:
+        draw_star(cx, cy, flare_size_mid, 200, flare_color)
+
+    # A very light blur to make the stars look like glowing light rather than solid polygons
+    flare_layer = flare_layer.filter(ImageFilter.GaussianBlur(radius=2))
+
+    # === LAYER 4: Compositing ===
+    # Stack the transparent glow and the transparent flares over the original image
+    result = Image.alpha_composite(result, glow_layer)
+    result = Image.alpha_composite(result, flare_layer)
 
     return result
-
 async def get_shiny_image(url: str, effect: str = "solar_flare") -> bytes | None:
     """
     Get a shiny version of an image with glowing border.
