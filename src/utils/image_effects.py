@@ -33,104 +33,108 @@ async def fetch_image(url: str) -> Image.Image | None:
 
 def add_solar_flare_explosion(img: Image.Image) -> Image.Image:
     """
-    Overhauled for a 'Powerful Shiny Stand' look.
-    Adds high contrast, a bottom-up radiant power aura, glowing embers, 
-    and a crisp holographic foil border.
+    Creates a stylized, border-esque solar flare effect.
+    Wraps the edges with glowing plasma, bright cores, and magnetic loops.
     """
     import random
-    from PIL import ImageEnhance, ImageFilter, ImageDraw, Image
-    random.seed(42)  # Consistent but dynamic look per rendering
+    import math
+    from PIL import Image, ImageDraw, ImageFilter, ImageEnhance
 
     w, h = img.width, img.height
-    
+    result = img.copy().convert("RGBA")
+
     # === LAYER 1: Base Card Enhancement ===
-    # Pop the colors and contrast to make it look "Shiny/Rare"
-    enhancer = ImageEnhance.Contrast(img)
-    img = enhancer.enhance(1.25)
-    enhancer = ImageEnhance.Color(img)
-    img = enhancer.enhance(1.4)
-    result = img.copy()
+    # Punch up the contrast to make the center pop against the bright border
+    result = ImageEnhance.Contrast(result).enhance(1.15)
+    result = ImageEnhance.Color(result).enhance(1.2)
 
-    # === LAYER 2: Anime Power Aura ===
-    # Rays shooting up from the bottom to simulate raw energy
-    aura = Image.new("RGBA", (w, h), (0, 0, 0, 0))
-    draw_aura = ImageDraw.Draw(aura)
+    # Prepare transparent layers for the frame
+    corona = Image.new("RGBA", (w, h), (0, 0, 0, 0))
+    core = Image.new("RGBA", (w, h), (0, 0, 0, 0))
+    loops = Image.new("RGBA", (w, h), (0, 0, 0, 0))
     
-    num_rays = 18
-    for _ in range(num_rays):
-        # Origin point near the bottom center
-        start_x = random.randint(w // 4, (w * 3) // 4)
-        start_y = h + 20 
-        
-        # Destination point spreading outwards toward the top
-        end_x = start_x + random.randint(-w // 2, w // 2)
-        end_y = random.randint(-50, h // 2)
-        
-        # Draw an elongated polygon (beam)
-        width = random.randint(10, 45)
-        alpha = random.randint(20, 70)
-        
-        draw_aura.polygon([
-            (start_x - width // 2, start_y),
-            (start_x + width // 2, start_y),
-            (end_x + width // 4, end_y),
-            (end_x - width // 4, end_y)
-        ], fill=(255, 215, 0, alpha)) # Golden aura
+    draw_corona = ImageDraw.Draw(corona)
+    draw_core = ImageDraw.Draw(core)
+    draw_loops = ImageDraw.Draw(loops)
 
-    # Blur the rays to make them look like ethereal energy, not geometry
-    aura = aura.filter(ImageFilter.GaussianBlur(radius=8))
-    result = Image.alpha_composite(result, aura)
+    # Scale the border thickness dynamically based on image size
+    base_t = int(min(w, h) * 0.10) 
 
-    # === LAYER 3: Inner Energy Glow (Vignette) ===
-    glow = Image.new("RGBA", (w, h), (0, 0, 0, 0))
-    draw_glow = ImageDraw.Draw(glow)
+    # --- Helper to draw stylized plasma waves along an edge ---
+    def draw_plasma_edge(draw, edge_type, base_thickness, color, wave_freq):
+        steps = 60
+        for i in range(steps + 1):
+            progress = i / steps
+            
+            # Create rolling, organic waves combining sin and cos
+            wave = math.sin(progress * math.pi * wave_freq) + math.cos(progress * math.pi * wave_freq * 0.5)
+            thickness = int(base_thickness + (wave * base_thickness * 0.4))
+            
+            # Add a tiny bit of random jitter
+            thickness += random.randint(-int(base_thickness*0.1), int(base_thickness*0.1))
+
+            # Determine coordinates based on which edge we are drawing
+            if edge_type == 'top':
+                x, y = int(progress * w), 0
+            elif edge_type == 'bottom':
+                x, y = int(progress * w), h
+            elif edge_type == 'left':
+                x, y = 0, int(progress * h)
+            elif edge_type == 'right':
+                x, y = w, int(progress * h)
+
+            # Draw the glowing orb
+            draw.ellipse([x - thickness, y - thickness, x + thickness, y + thickness], fill=color)
+
+    # === LAYER 2 & 3: Plasma Corona & Hot Core ===
+    edges = ['top', 'bottom', 'left', 'right']
     
-    # Draw concentric rectangles to create a smooth inward gradient
-    for i in range(25):
-        alpha = int(140 * (1 - (i / 25))**2)  
-        draw_glow.rectangle(
-            [i, i, w - i - 1, h - i - 1],
-            outline=(255, 120, 0, alpha), # Fiery orange deep glow
-            width=2
-        )
-    glow = glow.filter(ImageFilter.GaussianBlur(radius=4))
-    result = Image.alpha_composite(result, glow)
+    for e in edges:
+        # Randomize the wave frequency per edge so it doesn't look perfectly symmetrical
+        freq = random.uniform(2.5, 5.0)
+        
+        # Deep Orange/Red outer corona
+        draw_plasma_edge(draw_corona, e, base_t, (255, 80, 0, 160), freq)       
+        # Bright Golden middle layer
+        draw_plasma_edge(draw_core, e, base_t * 0.6, (255, 200, 50, 200), freq) 
+        # White hot inner edge
+        draw_plasma_edge(draw_core, e, base_t * 0.25, (255, 255, 255, 255), freq) 
 
-    # === LAYER 4: Floating Embers & Flares ===
-    embers = Image.new("RGBA", (w, h), (0, 0, 0, 0))
-    draw_embers = ImageDraw.Draw(embers)
+    # === LAYER 4: Solar Prominences (Magnetic Loops) ===
+    # Draw arcs of energy shooting inward from the edges
+    for _ in range(12): 
+        edge = random.choice(edges)
+        start_p = random.uniform(0.1, 0.7)
+        end_p = start_p + random.uniform(0.1, 0.25)
+        loop_h = random.randint(int(base_t * 1.5), int(base_t * 3))
+        
+        # Drawing an ellipse partially out of bounds creates a perfect loop/arc inside the image
+        if edge == 'top':
+            x1, x2 = int(start_p * w), int(end_p * w)
+            draw_loops.ellipse([x1, -loop_h, x2, loop_h], outline=(255, 230, 100, 150), width=3)
+        elif edge == 'bottom':
+            x1, x2 = int(start_p * w), int(end_p * w)
+            draw_loops.ellipse([x1, h - loop_h, x2, h + loop_h], outline=(255, 230, 100, 150), width=3)
+        elif edge == 'left':
+            y1, y2 = int(start_p * h), int(end_p * h)
+            draw_loops.ellipse([-loop_h, y1, loop_h, y2], outline=(255, 230, 100, 150), width=3)
+        elif edge == 'right':
+            y1, y2 = int(start_p * h), int(end_p * h)
+            draw_loops.ellipse([w - loop_h, y1, w + loop_h, y2], outline=(255, 230, 100, 150), width=3)
+
+    # === LAYER 5: Blurring and Compositing ===
+    # Heavy blur on the outer corona, medium blur on the core, light blur on the loops
+    corona = corona.filter(ImageFilter.GaussianBlur(radius=18))
+    core = core.filter(ImageFilter.GaussianBlur(radius=6))
+    loops = loops.filter(ImageFilter.GaussianBlur(radius=2))
     
-    for _ in range(35):
-        ex = random.randint(0, w)
-        ey = random.randint(0, h)
-        size = random.randint(1, 4)
-        alpha = random.randint(100, 255)
-        
-        # Core of ember (White/Hot)
-        draw_embers.ellipse([ex-size, ey-size, ex+size, ey+size], fill=(255, 255, 255, alpha))
-        # Outer glow (Orange/Warm)
-        draw_embers.ellipse([ex-size*2, ey-size*2, ex+size*2, ey+size*2], fill=(255, 150, 0, alpha//2))
-        
-        # Add a classic 4-point anime lens flare to a few random motes
-        if random.random() > 0.85:
-            flare = size * 5
-            draw_embers.line([(ex-flare, ey), (ex+flare, ey)], fill=(255, 255, 200, alpha), width=1)
-            draw_embers.line([(ex, ey-flare), (ex, ey+flare)], fill=(255, 255, 200, alpha), width=1)
-
-    embers = embers.filter(ImageFilter.GaussianBlur(radius=1))
-    result = Image.alpha_composite(result, embers)
-
-    # === LAYER 5: TCG Foil Border ===
-    # Crisp outer edge to frame the card and hold the energy in
-    border = Image.new("RGBA", (w, h), (0, 0, 0, 0))
-    draw_border = ImageDraw.Draw(border)
-    # Outer bright line
-    draw_border.rectangle([0, 0, w-1, h-1], outline=(255, 255, 220, 255), width=2)
-    # Inner thin line
-    draw_border.rectangle([4, 4, w-5, h-5], outline=(255, 200, 0, 180), width=1)
-    result = Image.alpha_composite(result, border)
+    # Merge everything together
+    result = Image.alpha_composite(result, corona)
+    result = Image.alpha_composite(result, core)
+    result = Image.alpha_composite(result, loops)
 
     return result
+
 async def get_shiny_image(url: str, effect: str = "solar_flare") -> bytes | None:
     """
     Get a shiny version of an image with glowing border.
