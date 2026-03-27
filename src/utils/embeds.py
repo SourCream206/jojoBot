@@ -65,7 +65,9 @@ class StandImageView(discord.ui.View):
         embed.title = new_title
 
         await interaction.response.defer()
-        await self.message.edit(embed=embed, view=self)
+        # Use interaction.message as fallback if self.message wasn't set
+        message = self.message or interaction.message
+        await message.edit(embed=embed, view=self)
 
     @discord.ui.button(label="⮜ ★1", style=discord.ButtonStyle.primary, custom_id="prev_star")
     async def prev_star(self, interaction: discord.Interaction, button: discord.ui.Button):
