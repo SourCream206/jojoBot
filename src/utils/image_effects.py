@@ -33,8 +33,8 @@ async def fetch_image(url: str) -> Image.Image | None:
 
 def add_solar_flare_explosion(img: Image.Image) -> Image.Image:
     """
-    Creates a stylized, border-esque solar flare effect.
-    Wraps the edges with glowing plasma, bright cores, and magnetic loops.
+    Creates a stylized plasma border effect.
+    Acts as a transparent overlay along the edges without covering the center.
     """
     import random
     import math
@@ -44,36 +44,28 @@ def add_solar_flare_explosion(img: Image.Image) -> Image.Image:
     result = img.copy().convert("RGBA")
 
     # === LAYER 1: Base Card Enhancement ===
-    # Punch up the contrast to make the center pop against the bright border
+    # Punch up the contrast to make the Stand pop
     result = ImageEnhance.Contrast(result).enhance(1.15)
     result = ImageEnhance.Color(result).enhance(1.2)
 
-    # Prepare transparent layers for the frame
-    corona = Image.new("RGBA", (w, h), (0, 0, 0, 0))
-    core = Image.new("RGBA", (w, h), (0, 0, 0, 0))
-    loops = Image.new("RGBA", (w, h), (0, 0, 0, 0))
-    
-    draw_corona = ImageDraw.Draw(corona)
-    draw_core = ImageDraw.Draw(core)
-    draw_loops = ImageDraw.Draw(loops)
+    # === LAYER 2: Transparent Plasma Overlay ===
+    # A single transparent layer for the border effect
+    overlay = Image.new("RGBA", (w, h), (0, 0, 0, 0))
+    draw_overlay = ImageDraw.Draw(overlay)
 
-    # Scale the border thickness dynamically based on image size
-    base_t = int(min(w, h) * 0.10) 
+    # Scale border thickness dynamically, keeping it thin enough to leave the center clear
+    base_t = int(min(w, h) * 0.08) 
 
-    # --- Helper to draw stylized plasma waves along an edge ---
-    def draw_plasma_edge(draw, edge_type, base_thickness, color, wave_freq):
-        steps = 60
+    def draw_plasma_edge(draw_obj, edge_type, base_thickness, color, wave_freq):
+        steps = 80
         for i in range(steps + 1):
             progress = i / steps
             
             # Create rolling, organic waves combining sin and cos
             wave = math.sin(progress * math.pi * wave_freq) + math.cos(progress * math.pi * wave_freq * 0.5)
-            thickness = int(base_thickness + (wave * base_thickness * 0.4))
+            thickness = int(base_thickness + (wave * base_thickness * 0.3))
             
-            # Add a tiny bit of random jitter
-            thickness += random.randint(-int(base_thickness*0.1), int(base_thickness*0.1))
-
-            # Determine coordinates based on which edge we are drawing
+            # Determine coordinates based on edge
             if edge_type == 'top':
                 x, y = int(progress * w), 0
             elif edge_type == 'bottom':
@@ -83,55 +75,23 @@ def add_solar_flare_explosion(img: Image.Image) -> Image.Image:
             elif edge_type == 'right':
                 x, y = w, int(progress * h)
 
-            # Draw the glowing orb
-            draw.ellipse([x - thickness, y - thickness, x + thickness, y + thickness], fill=color)
+            # Draw the plasma node
+            draw_obj.ellipse([x - thickness, y - thickness, x + thickness, y + thickness], fill=color)
 
-    # === LAYER 2 & 3: Plasma Corona & Hot Core ===
     edges = ['top', 'bottom', 'left', 'right']
     
     for e in edges:
-        # Randomize the wave frequency per edge so it doesn't look perfectly symmetrical
         freq = random.uniform(2.5, 5.0)
-        
-        # Deep Orange/Red outer corona
-        draw_plasma_edge(draw_corona, e, base_t, (255, 80, 0, 160), freq)       
-        # Bright Golden middle layer
-        draw_plasma_edge(draw_core, e, base_t * 0.6, (255, 200, 50, 200), freq) 
-        # White hot inner edge
-        draw_plasma_edge(draw_core, e, base_t * 0.25, (255, 255, 255, 255), freq) 
+        # Deep Orange outer corona
+        draw_plasma_edge(draw_overlay, e, base_t, (255, 80, 0, 160), freq)       
+        # Bright Yellow/Orange inner plasma (removed the solid white)
+        draw_plasma_edge(draw_overlay, e, int(base_t * 0.55), (255, 180, 0, 220), freq) 
 
-    # === LAYER 4: Solar Prominences (Magnetic Loops) ===
-    # Draw arcs of energy shooting inward from the edges
-    for _ in range(12): 
-        edge = random.choice(edges)
-        start_p = random.uniform(0.1, 0.7)
-        end_p = start_p + random.uniform(0.1, 0.25)
-        loop_h = random.randint(int(base_t * 1.5), int(base_t * 3))
-        
-        # Drawing an ellipse partially out of bounds creates a perfect loop/arc inside the image
-        if edge == 'top':
-            x1, x2 = int(start_p * w), int(end_p * w)
-            draw_loops.ellipse([x1, -loop_h, x2, loop_h], outline=(255, 230, 100, 150), width=3)
-        elif edge == 'bottom':
-            x1, x2 = int(start_p * w), int(end_p * w)
-            draw_loops.ellipse([x1, h - loop_h, x2, h + loop_h], outline=(255, 230, 100, 150), width=3)
-        elif edge == 'left':
-            y1, y2 = int(start_p * h), int(end_p * h)
-            draw_loops.ellipse([-loop_h, y1, loop_h, y2], outline=(255, 230, 100, 150), width=3)
-        elif edge == 'right':
-            y1, y2 = int(start_p * h), int(end_p * h)
-            draw_loops.ellipse([w - loop_h, y1, w + loop_h, y2], outline=(255, 230, 100, 150), width=3)
-
-    # === LAYER 5: Blurring and Compositing ===
-    # Heavy blur on the outer corona, medium blur on the core, light blur on the loops
-    corona = corona.filter(ImageFilter.GaussianBlur(radius=18))
-    core = core.filter(ImageFilter.GaussianBlur(radius=6))
-    loops = loops.filter(ImageFilter.GaussianBlur(radius=2))
+    # Smooth the entire overlay to blend it seamlessly
+    overlay = overlay.filter(ImageFilter.GaussianBlur(radius=10))
     
-    # Merge everything together
-    result = Image.alpha_composite(result, corona)
-    result = Image.alpha_composite(result, core)
-    result = Image.alpha_composite(result, loops)
+    # Composite the transparent frame directly over the image
+    result = Image.alpha_composite(result, overlay)
 
     return result
 
