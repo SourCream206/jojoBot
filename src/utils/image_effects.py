@@ -33,9 +33,11 @@ async def fetch_image(url: str) -> Image.Image | None:
 
 def add_solar_flare_explosion(img: Image.Image) -> Image.Image:
     """
-    Creates an even, symmetrical solar star shiny border.
-    Uses smooth gradients and geometric star flares instead of uneven fire.
+    Creates an even, symmetrical solar shiny border with dynamic radial action lines.
+    Leaves the center perfectly clear to showcase the Stand.
     """
+    import math
+    import random
     from PIL import Image, ImageDraw, ImageFilter, ImageEnhance
 
     w, h = img.width, img.height
@@ -46,8 +48,51 @@ def add_solar_flare_explosion(img: Image.Image) -> Image.Image:
     result = ImageEnhance.Contrast(result).enhance(1.15)
     result = ImageEnhance.Color(result).enhance(1.2)
 
-    # === LAYER 2: Even, Smooth Solar Glow (Transparent Overlay) ===
-    # This creates a perfectly uniform, glowing inner border
+    # === LAYER 2: Radial Action Lines ===
+    # Manga-style speed/focus lines that radiate outward
+    lines_layer = Image.new("RGBA", (w, h), (0, 0, 0, 0))
+    draw_lines = ImageDraw.Draw(lines_layer)
+
+    cx, cy = w // 2, h // 2
+    max_r = math.hypot(cx, cy)
+    # This determines how large the empty center is (30% of the image size)
+    min_r = min(w, h) * 0.30 
+
+    num_lines = 65
+    for i in range(num_lines):
+        # Base angle with a tiny bit of random jitter
+        angle_deg = i * (360 / num_lines) + random.uniform(-1.5, 1.5)
+        angle = math.radians(angle_deg)
+        
+        # Vary the thickness of the lines dynamically
+        width_angle = math.radians(random.uniform(0.5, 2.5))
+        
+        # Vary opacity so some rays are bright and others are subtle
+        alpha = random.randint(30, 150)
+        
+        # Inner points of the wedge (narrower, starting outside the center)
+        x1 = cx + min_r * math.cos(angle - width_angle/4)
+        y1 = cy + min_r * math.sin(angle - width_angle/4)
+        x2 = cx + min_r * math.cos(angle + width_angle/4)
+        y2 = cy + min_r * math.sin(angle + width_angle/4)
+        
+        # Outer points of the wedge (wider, reaching the edges)
+        x3 = cx + max_r * math.cos(angle + width_angle)
+        y3 = cy + max_r * math.sin(angle + width_angle)
+        x4 = cx + max_r * math.cos(angle - width_angle)
+        y4 = cy + max_r * math.sin(angle - width_angle)
+
+        # Draw the ray using a pale golden-white color
+        draw_lines.polygon(
+            [(x1, y1), (x2, y2), (x3, y3), (x4, y4)], 
+            fill=(255, 245, 180, alpha) 
+        )
+
+    # A very light blur to soften the harsh vector edges of the rays
+    lines_layer = lines_layer.filter(ImageFilter.GaussianBlur(radius=1))
+
+    # === LAYER 3: Even, Smooth Solar Glow (Transparent Overlay) ===
+    # This creates a perfectly uniform, glowing inner border over the lines
     glow_layer = Image.new("RGBA", (w, h), (0, 0, 0, 0))
     draw_glow = ImageDraw.Draw(glow_layer)
 
@@ -63,62 +108,18 @@ def add_solar_flare_explosion(img: Image.Image) -> Image.Image:
         g = int(160 + 95 * progress)
         b = int(50 + 150 * progress)
         
-        # Draw concentric rectangles moving inward
         draw_glow.rectangle(
             [i, i, w - i - 1, h - i - 1],
             outline=(r, g, b, alpha),
             width=1
         )
         
-    # Blur the concentric rectangles so they form a smooth, seamless band of light
     glow_layer = glow_layer.filter(ImageFilter.GaussianBlur(radius=8))
 
-    # === LAYER 3: Solar Star Flares ===
-    # Adds crisp, even starbursts at the corners and midpoints
-    flare_layer = Image.new("RGBA", (w, h), (0, 0, 0, 0))
-    draw_flare = ImageDraw.Draw(flare_layer)
-
-    def draw_star(cx, cy, radius, alpha_center, color):
-        """Draws a sharp, 4-point optical star flare."""
-        # Bright center core
-        draw_flare.ellipse(
-            [cx - radius//5, cy - radius//5, cx + radius//5, cy + radius//5], 
-            fill=(255, 255, 255, alpha_center)
-        )
-        # Horizontal beam
-        draw_flare.polygon([
-            (cx - radius, cy), (cx, cy - radius//10), 
-            (cx + radius, cy), (cx, cy + radius//10)
-        ], fill=color)
-        # Vertical beam
-        draw_flare.polygon([
-            (cx, cy - radius), (cx - radius//10, cy), 
-            (cx, cy + radius), (cx + radius//10, cy)
-        ], fill=color)
-
-    # Dynamically scale the stars based on the image size
-    inset = int(glow_thickness * 0.3)
-    flare_size_corner = int(min(w, h) * 0.18)
-    flare_size_mid = int(min(w, h) * 0.12)
-    flare_color = (255, 240, 150, 200) # Bright pale gold
-
-    # Place large stars near the 4 corners
-    corners = [(inset, inset), (w - inset, inset), (inset, h - inset), (w - inset, h - inset)]
-    for cx, cy in corners:
-        draw_star(cx, cy, flare_size_corner, 255, flare_color)
-
-    # Place slightly smaller stars at the exact midpoints of the 4 edges
-    midpoints = [(w//2, inset), (w//2, h - inset), (inset, h//2), (w - inset, h//2)]
-    for cx, cy in midpoints:
-        draw_star(cx, cy, flare_size_mid, 200, flare_color)
-
-    # A very light blur to make the stars look like glowing light rather than solid polygons
-    flare_layer = flare_layer.filter(ImageFilter.GaussianBlur(radius=2))
-
-    # === LAYER 4: Compositing ===
-    # Stack the transparent glow and the transparent flares over the original image
+    # === COMPOSITING ===
+    # Stack the lines and the glow over the original image
+    result = Image.alpha_composite(result, lines_layer)
     result = Image.alpha_composite(result, glow_layer)
-    result = Image.alpha_composite(result, flare_layer)
 
     return result
 async def get_shiny_image(url: str, effect: str = "solar_flare") -> bytes | None:
