@@ -261,12 +261,26 @@ class Economy(commands.Cog):
         """
         Challenge D'Arby to a game of Blackjack.
         Usage: Sdarby <bet amount>
-        Requires Osiris's Stand equipped for +10% win chance.
+        Requires a 2-star Osiris.
+        Osiris equipped gives +10% win chance.
         """
         user_id = str(ctx.author.id)
         user    = await db.get_or_create_user(user_id, ctx.author.name)
 
-        # Cooldown check (2 minutes)
+        # Check if user has a 2-star Osiris
+        user_stands = await db.get_user_stands(user_id)
+        osiris = next(
+            (s for s in user_stands if s["stand_name"] == "Osiris" and s["stars"] >= 2),
+            None
+        )
+        if not osiris:
+            await ctx.reply(
+                "🃏 You need a **2-star Osiris** to challenge D'Arby!",
+                mention_author=False
+            )
+            return
+
+        # Cooldown check (45 minutes)
         expires = await db.get_cooldown(user_id, "sdarby")
         if expires:
             remaining = (expires - datetime.now(timezone.utc)).total_seconds()
@@ -289,7 +303,7 @@ class Economy(commands.Cog):
             )
             return
 
-        await db.set_cooldown(user_id, "sdarby", 120)  # 2 minute cooldown
+        await db.set_cooldown(user_id, "sdarby", 2700)  # 45 minute cooldown
 
         # Check Osiris passive for win bonus
         primary = await db.get_primary_stand(user_id)
