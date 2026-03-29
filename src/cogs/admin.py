@@ -1,18 +1,23 @@
 """
 cogs/admin.py
-Admin-only commands. Restricted to users with Administrator permission.
+Admin-only commands. Restricted to the bot owner only.
 """
 
 import discord
 from discord.ext import commands
+import os
 
 from src.db import client as db
 from src.utils.constants import ITEMS
 
 
-def is_admin():
+def is_owner():
+    """Check if the command user is the bot owner."""
     async def predicate(ctx: commands.Context):
-        return ctx.author.guild_permissions.administrator
+        owner_id = os.getenv("OWNER_ID")
+        if not owner_id:
+            return False
+        return str(ctx.author.id) == owner_id
     return commands.check(predicate)
 
 
@@ -23,7 +28,7 @@ class Admin(commands.Cog):
     # ── Give coins ────────────────────────────────────────────────────────────
 
     @commands.command(name="givecoins")
-    @is_admin()
+    @is_owner()
     async def givecoins(self, ctx: commands.Context, member: discord.Member, amount: int):
         """Give coins to a user. Usage: Sgivecoins @user <amount>"""
         await db.get_or_create_user(str(member.id), member.name)
@@ -36,7 +41,7 @@ class Admin(commands.Cog):
     # ── Give diamonds ─────────────────────────────────────────────────────────
 
     @commands.command(name="givediamonds")
-    @is_admin()
+    @is_owner()
     async def givediamonds(self, ctx: commands.Context, member: discord.Member, amount: int):
         """Give diamonds to a user. Usage: Sgivediamonds @user <amount>"""
         await db.get_or_create_user(str(member.id), member.name)
@@ -49,7 +54,7 @@ class Admin(commands.Cog):
     # ── Give item ─────────────────────────────────────────────────────────────
 
     @commands.command(name="giveitem")
-    @is_admin()
+    @is_owner()
     async def giveitem(self, ctx: commands.Context, member: discord.Member, item_id: str, quantity: int = 1):
         """Give an item to a user. Usage: Sgiveitem @user <item_id> [quantity]"""
         if item_id not in ITEMS:
@@ -69,7 +74,7 @@ class Admin(commands.Cog):
     # ── Give stand ────────────────────────────────────────────────────────────
 
     @commands.command(name="givestand")
-    @is_admin()
+    @is_owner()
     async def givestand(self, ctx: commands.Context, member: discord.Member, *, stand_name: str):
         """Give a stand to a user. Usage: Sgivestand @user <stand name>"""
         from src.battle.stand_stats import STAND_CATALOG
@@ -86,7 +91,7 @@ class Admin(commands.Cog):
     # ── Force unlock area ─────────────────────────────────────────────────────
 
     @commands.command(name="unlockarea")
-    @is_admin()
+    @is_owner()
     async def unlockarea(self, ctx: commands.Context, member: discord.Member, *, area_name: str):
         """Force-unlock an area for a user. Usage: Sunlockarea @user <area>"""
         from src.utils.constants import AREA_ORDER
@@ -105,7 +110,7 @@ class Admin(commands.Cog):
     # ── Reset cooldown ────────────────────────────────────────────────────────
 
     @commands.command(name="resetcd")
-    @is_admin()
+    @is_owner()
     async def resetcd(self, ctx: commands.Context, member: discord.Member, command: str):
         """Reset a cooldown for a user. Usage: Sresetcd @user <command>"""
         await db.clear_cooldown(str(member.id), command)
@@ -117,7 +122,7 @@ class Admin(commands.Cog):
     # ── Wipe user ─────────────────────────────────────────────────────────────
 
     @commands.command(name="wipeuser")
-    @is_admin()
+    @is_owner()
     async def wipeuser(self, ctx: commands.Context, member: discord.Member):
         """
         Completely wipe a user's data (all stands, items, quests).
