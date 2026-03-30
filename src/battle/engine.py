@@ -490,11 +490,18 @@ class BattleView(discord.ui.View):
             )
 
     async def on_timeout(self):
+        from src.db import client as db
+        
         self.clear_items()
         try:
             await self.ctx.send("⏱️ Battle timed out. Winner determined by HP remaining.")
         except Exception:
             pass
+        
+        # Clean up the database record so user can start new battles
+        if self.session.db_battle_id:
+            await db.delete_active_battle(self.session.db_battle_id)
+        
         self.stop()
 
 
