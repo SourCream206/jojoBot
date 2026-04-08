@@ -346,6 +346,7 @@ class ChallengeView(discord.ui.View):
             attacker_stand = att_stand,
             defender_stand = dfd_stand,
             is_pvp         = True,
+            current_turn_user_id = self.challenger_id,  # Challenger goes first
         )
         battle_row = await db.create_active_battle(
             attacker_id = self.challenger_id,

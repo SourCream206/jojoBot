@@ -246,15 +246,18 @@ class Inventory(commands.Cog):
         for s in to_consume[1:]:
             await db.delete_stand(s["id"])
 
-        bonus_xp = 100 * star_level
-        await db.update_stand(keeper["id"], stars=new_stars, merge_count=keeper["merge_count"] + 1)
-        await db.add_stand_xp(keeper["id"], bonus_xp)
+        # Keep current level and add bonus levels from merging
+        current_level = keeper.get("level", 1)
+        bonus_levels = star_level  # Get number of levels equal to current star level
+        new_level = min(current_level + bonus_levels, 50)  # Cap at max level 50
+
+        await db.update_stand(keeper["id"], stars=new_stars, level=new_level, merge_count=keeper["merge_count"] + 1)
 
         from src.utils.stands_data import get_image
 
         embed = discord.Embed(
             title="⭐ Merge Successful!",
-            description=f"5× **{stand_name}** ★{star_level} → **{stand_name}** ★{new_stars}\n+{bonus_xp} bonus XP!",
+            description=f"5× **{stand_name}** ★{star_level} → **{stand_name}** ★{new_stars}\n**Lv. {current_level}** → **Lv. {new_level}** (+{new_level - current_level} levels)",
             color=0xF1C40F,
         )
 

@@ -392,25 +392,31 @@ async def create_active_battle(attacker_id: str, defender_id: Optional[str],
                                 attacker_hp: int, defender_hp: int,
                                 turn: str, state: dict, is_pvp: bool = False) -> dict:
     expires_at = (datetime.now(timezone.utc) + timedelta(minutes=15)).isoformat()
+    # For PvP, current_turn_user_id starts with attacker; for PvE it's None
+    current_turn_user_id = attacker_id if is_pvp else None
     res = await _run_sync(lambda: db().table("active_battles").insert({
         "attacker_id": attacker_id,
         "defender_id": defender_id,
         "attacker_hp": attacker_hp,
         "defender_hp": defender_hp,
         "turn":        turn,
+        "current_turn_user_id": current_turn_user_id,
         "state":       state,
         "is_pvp":      is_pvp,
         "expires_at":  expires_at,
     }).execute())
     return res.data[0]
 
-async def update_active_battle(battle_id: int, attacker_hp: int, defender_hp: int, turn: str, state: dict):
-    await _run_sync(lambda: db().table("active_battles").update({
+async def update_active_battle(battle_id: int, attacker_hp: int, defender_hp: int, turn: str, state: dict, current_turn_user_id: Optional[str] = None):
+    update_data = {
         "attacker_hp": attacker_hp,
         "defender_hp": defender_hp,
         "turn":        turn,
         "state":       state,
-    }).eq("id", battle_id).execute())
+    }
+    if current_turn_user_id is not None:
+        update_data["current_turn_user_id"] = current_turn_user_id
+    await _run_sync(lambda: db().table("active_battles").update(update_data).eq("id", battle_id).execute())
 
 async def delete_active_battle(battle_id: int):
     await _run_sync(lambda: db().table("active_battles").delete().eq("id", battle_id).execute())

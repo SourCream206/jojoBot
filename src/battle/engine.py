@@ -46,6 +46,7 @@ class BattleSession:
     winner_is_attacker: Optional[bool] = None
     db_battle_id:       Optional[int]  = None
     defender_items:     Optional[dict] = None  # item_id -> quantity for reveals_info effect
+    current_turn_user_id: Optional[str] = None  # Discord user ID of player whose turn it is (for PvP)
 
     def execute_move(self, move: Move, attacker: Stand, defender: Stand) -> str:
         """
@@ -206,9 +207,17 @@ class BattleView(discord.ui.View):
 
     def _make_move_callback(self, move: Move):
         async def callback(interaction: discord.Interaction):
-            if str(interaction.user.id) != self.session.attacker_id:
-                await interaction.response.send_message("This isn't your battle!", ephemeral=True)
-                return
+            s = self.session
+            # For PvP: check if it's this player's turn
+            if s.is_pvp:
+                if str(interaction.user.id) != s.current_turn_user_id:
+                    await interaction.response.send_message("❌ It's not your turn!", ephemeral=True)
+                    return
+            else:
+                # For PvE: only attacker can act
+                if str(interaction.user.id) != s.attacker_id:
+                    await interaction.response.send_message("This isn't your battle!", ephemeral=True)
+                    return
             await interaction.response.defer()
             await self._process_full_turn(interaction, move)
         return callback
@@ -217,12 +226,34 @@ class BattleView(discord.ui.View):
 
     async def _process_full_turn(self, interaction: discord.Interaction, move: Move):
         s = self.session
+        
+        # Determine who is attacking based on whose turn it is
+        if s.is_pvp:
+            # In PvP, determine attacker/defender based on current turn
+            is_attacker_turn = (s.current_turn_user_id == s.attacker_id)
+            if is_attacker_turn:
+                active_stand = s.attacker_stand
+                target_stand = s.defender_stand
+                active_player_name = await self._get_player_name(s.attacker_id)
+                target_player_name = await self._get_player_name(s.defender_id)
+            else:
+                active_stand = s.defender_stand
+                target_stand = s.attacker_stand
+                active_player_name = await self._get_player_name(s.defender_id)
+                target_player_name = await self._get_player_name(s.attacker_id)
+        else:
+            # PvE: always attacker vs defender
+            is_attacker_turn = True
+            active_stand = s.attacker_stand
+            target_stand = s.defender_stand
+            active_player_name = None
+            target_player_name = None
 
-        # ── Player's gimmick on turn start (Restoration heals etc.)
-        gimmick_log = apply_gimmick_on_turn_start(s, is_attacker=True)
+        # ── Active player's gimmick on turn start
+        gimmick_log = apply_gimmick_on_turn_start(s, is_attacker=is_attacker_turn)
 
-        # ── Player attacks
-        player_log = s.execute_move(move, s.attacker_stand, s.defender_stand)
+        # ── Active player attacks
+        player_log = s.execute_move(move, active_stand, target_stand)
 
         # Build narrative
         turn_text = ""
@@ -238,7 +269,43 @@ class BattleView(discord.ui.View):
             await self._end_battle(interaction)
             return
 
-        # ── Show player's hit first, pause, then enemy attacks
+        # ── FOR PvP: Switch turn and wait for opponent ──
+        if s.is_pvp:
+            s.last_action = turn_text
+            
+            # Apply End of Turn DOT (Burn) before switching turns
+            burn_text = await self._apply_burn_damage()
+            if burn_text:
+                s.last_action += burn_text
+            
+            if s.finished:
+                self._rebuild_buttons()
+                await interaction.message.edit(embed=self._build_embed(), view=self)
+                await asyncio.sleep(1)
+                await self._end_battle(interaction)
+                return
+            
+            # Switch turn to opponent
+            s.current_turn_user_id = s.defender_id if s.current_turn_user_id == s.attacker_id else s.attacker_id
+            s.round_number += 1
+            
+            # Sync to DB
+            await self._sync_to_db()
+            self._rebuild_buttons()
+            
+            # Update embed and ping next player
+            await interaction.message.edit(embed=self._build_embed(), view=self)
+            
+            # Send a follow-up message pinging the next player
+            next_player = await self.ctx.bot.fetch_user(int(s.current_turn_user_id))
+            await interaction.followup.send(
+                f"{next_player.mention} It's your turn!",
+                ephemeral=False
+            )
+            return
+
+        # ── FOR PvE: Continue with AI turn ──
+        # Show player's hit first, pause, then enemy attacks
         s.last_action = turn_text + "\n\n*⏳ Enemy is thinking...*"
         self._rebuild_buttons()
         await interaction.message.edit(embed=self._build_embed(), view=self)
@@ -262,23 +329,9 @@ class BattleView(discord.ui.View):
         full_text += f"\n\n{enemy_log}"
 
         # ── Apply End of Turn DOT (Burn)
-        for st_obj, opponent in [(s.attacker_stand, s.defender_stand), (s.defender_stand, s.attacker_stand)]:
-            if st_obj.current_hp > 0 and st_obj.status == "burn":
-                burn_dmg = max(1, int(st_obj.max_hp / 16))
-                
-                # Magician's Red + Sun synergy: +50% burn damage
-                opponent_stands = {opponent.name, opponent.secondary_stand_name}
-                if {"Magician's Red", "The Sun"}.issubset(opponent_stands):
-                    burn_dmg = int(burn_dmg * 1.5)
-
-                st_obj.current_hp = max(0, st_obj.current_hp - burn_dmg)
-                full_text += f"\n🔥 **{st_obj.name}** took **{burn_dmg}** burn damage!"
-
-                if st_obj.current_hp <= 0:
-                    s.finished = True
-                    s.winner_is_attacker = (st_obj is s.defender_stand)
-                    full_text += f"\n💀 **{st_obj.name}** fainted from Burn!"
-                    break
+        burn_text = await self._apply_burn_damage()
+        if burn_text:
+            full_text += burn_text
 
         s.last_action = full_text
         s.round_number += 1
@@ -290,38 +343,66 @@ class BattleView(discord.ui.View):
             await self._end_battle(interaction)
             return
 
-        # Sync DB snapshot only for PvP battles (PvE battles are fast and don't need persistence)
-        if s.is_pvp:
-            await self._sync_to_db()
         self._rebuild_buttons()
         await interaction.message.edit(embed=self._build_embed(), view=self)
 
     # ── Item callback ─────────────────────────────────────────────────────────
 
     async def _item_callback(self, interaction: discord.Interaction):
-        if str(interaction.user.id) != self.session.attacker_id:
-            await interaction.response.send_message("This isn't your battle!", ephemeral=True)
-            return
+        s = self.session
+        # For PvP: check if it's this player's turn
+        if s.is_pvp:
+            if str(interaction.user.id) != s.current_turn_user_id:
+                await interaction.response.send_message("❌ It's not your turn!", ephemeral=True)
+                return
+            # Determine which stand is active
+            if s.current_turn_user_id == s.attacker_id:
+                stand = s.attacker_stand
+                user_id = s.attacker_id
+            else:
+                stand = s.defender_stand
+                user_id = s.defender_id
+        else:
+            # For PvE: only attacker can act
+            if str(interaction.user.id) != s.attacker_id:
+                await interaction.response.send_message("This isn't your battle!", ephemeral=True)
+                return
+            stand = s.attacker_stand
+            user_id = s.attacker_id
 
         from src.db import client as db
-        stand = self.session.attacker_stand
-        existing = await db.get_item(self.session.attacker_id, "healingItem")
+        existing = await db.get_item(user_id, "healingItem")
         if not existing or existing["quantity"] <= 0:
             await interaction.response.send_message("You have no Healing Bandages!", ephemeral=True)
             return
 
         base_heal = int(stand.max_hp * 0.30)
-        primary   = await db.get_primary_stand(self.session.attacker_id)
+        primary   = await db.get_primary_stand(user_id)
         if primary and primary["stand_name"] == "Crazy Diamond":
             base_heal = int(base_heal * 1.25)
 
         stand.current_hp = min(stand.max_hp, stand.current_hp + base_heal)
-        await db.consume_item(self.session.attacker_id, "healingItem")
+        await db.consume_item(user_id, "healingItem")
 
-        self.session.last_action = f"🩹 Used **Healing Bandage** → restored **{base_heal} HP**!"
+        s.last_action = f"🩹 Used **Healing Bandage** → restored **{base_heal} HP**!"
         await interaction.response.defer()
-        self._rebuild_buttons()
-        await interaction.message.edit(embed=self._build_embed(), view=self)
+        
+        # For PvP, switch turns after using item
+        if s.is_pvp:
+            s.current_turn_user_id = s.defender_id if s.current_turn_user_id == s.attacker_id else s.attacker_id
+            await self._sync_to_db()
+            self._rebuild_buttons()
+            await interaction.message.edit(embed=self._build_embed(), view=self)
+            
+            # Ping next player
+            next_player = await self.ctx.bot.fetch_user(int(s.current_turn_user_id))
+            await interaction.followup.send(
+                f"{next_player.mention} It's your turn!",
+                ephemeral=False
+            )
+        else:
+            self._rebuild_buttons()
+            await interaction.message.edit(embed=self._build_embed(), view=self)
 
     # ── Flee callback ─────────────────────────────────────────────────────────
 
@@ -355,10 +436,23 @@ class BattleView(discord.ui.View):
         s   = self.session
         att = s.attacker_stand
         dfd = s.defender_stand
+        
+        # Determine color and title based on turn (for PvP)
+        if s.is_pvp and s.current_turn_user_id:
+            if s.current_turn_user_id == s.attacker_id:
+                color = 0x00FF00  # Green for attacker's turn
+                turn_indicator = f"<@{s.attacker_id}>'s Turn"
+            else:
+                color = 0x4169E1  # Blue for defender's turn
+                turn_indicator = f"<@{s.defender_id}>'s Turn"
+            title = f"⚔️ {att.name} vs {dfd.name} — {turn_indicator}"
+        else:
+            color = 0xFF4444  # Red for PvE
+            title = f"⚔️ {att.name} vs {dfd.name}"
 
         embed = discord.Embed(
-            title=f"⚔️ {att.name}  vs  {dfd.name}",
-            color=0xFF4444,
+            title=title,
+            color=color,
         )
 
         # Enemy HP bar (top — Pokémon shows enemy first)
@@ -384,7 +478,14 @@ class BattleView(discord.ui.View):
                 inline=False,
             )
 
-        embed.set_footer(text=f"Round {s.round_number}  |  What will {att.name} do?")
+        # Footer with round and turn info
+        if s.is_pvp:
+            current_player = "<@" + s.current_turn_user_id + ">" if s.current_turn_user_id else "Player"
+            footer_text = f"Round {s.round_number}  |  {current_player}'s turn to act!"
+        else:
+            footer_text = f"Round {s.round_number}  |  What will {att.name} do?"
+        
+        embed.set_footer(text=footer_text)
         return embed
 
     # ── End battle ────────────────────────────────────────────────────────────
@@ -477,6 +578,41 @@ class BattleView(discord.ui.View):
         await interaction.message.edit(embed=embed, view=None)
         self.stop()
 
+    # ── Helper methods ────────────────────────────────────────────────────────
+    
+    async def _get_player_name(self, user_id: str) -> str:
+        """Get player display name from user ID."""
+        try:
+            user = await self.ctx.bot.fetch_user(int(user_id))
+            return user.name
+        except:
+            return "Player"
+    
+    async def _apply_burn_damage(self) -> str:
+        """Apply burn damage to both stands. Returns narrative text."""
+        s = self.session
+        burn_text = ""
+        
+        for st_obj, opponent in [(s.attacker_stand, s.defender_stand), (s.defender_stand, s.attacker_stand)]:
+            if st_obj.current_hp > 0 and st_obj.status == "burn":
+                burn_dmg = max(1, int(st_obj.max_hp / 16))
+                
+                # Magician's Red + Sun synergy: +50% burn damage
+                opponent_stands = {opponent.name, opponent.secondary_stand_name}
+                if {"Magician's Red", "The Sun"}.issubset(opponent_stands):
+                    burn_dmg = int(burn_dmg * 1.5)
+
+                st_obj.current_hp = max(0, st_obj.current_hp - burn_dmg)
+                burn_text += f"\n🔥 **{st_obj.name}** took **{burn_dmg}** burn damage!"
+
+                if st_obj.current_hp <= 0:
+                    s.finished = True
+                    s.winner_is_attacker = (st_obj is s.defender_stand)
+                    burn_text += f"\n💀 **{st_obj.name}** fainted from Burn!"
+                    break
+        
+        return burn_text
+
     async def _sync_to_db(self):
         from src.db import client as db
         s = self.session
@@ -487,6 +623,7 @@ class BattleView(discord.ui.View):
                 defender_hp  = s.defender_stand.current_hp,
                 turn         = "attacker",
                 state        = {},
+                current_turn_user_id = s.current_turn_user_id,
             )
 
     async def on_timeout(self):

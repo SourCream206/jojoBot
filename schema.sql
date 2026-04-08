@@ -103,16 +103,17 @@ CREATE TABLE battle_log (
 -- ACTIVE BATTLES  (snapshot for timeout/restart resolution)
 -- ────────────────────────────────────────────────────────────
 CREATE TABLE active_battles (
-    id              SERIAL PRIMARY KEY,
-    attacker_id     TEXT REFERENCES users(id),
-    defender_id     TEXT,                               -- NULL for PvE
-    attacker_hp     INTEGER NOT NULL,
-    defender_hp     INTEGER NOT NULL,
-    turn            TEXT NOT NULL,                      -- 'attacker' | 'defender'
-    state           JSONB,                              -- full BattleSession snapshot
-    is_pvp          BOOLEAN DEFAULT FALSE,
-    started_at      TIMESTAMPTZ DEFAULT NOW(),
-    expires_at      TIMESTAMPTZ NOT NULL
+    id                  SERIAL PRIMARY KEY,
+    attacker_id         TEXT REFERENCES users(id),
+    defender_id         TEXT,                               -- NULL for PvE
+    attacker_hp         INTEGER NOT NULL,
+    defender_hp         INTEGER NOT NULL,
+    turn                TEXT NOT NULL,                      -- 'attacker' | 'defender'
+    current_turn_user_id TEXT,                              -- Discord user ID of player whose turn it is (for PvP)
+    state               JSONB,                              -- full BattleSession snapshot
+    is_pvp              BOOLEAN DEFAULT FALSE,
+    started_at          TIMESTAMPTZ DEFAULT NOW(),
+    expires_at          TIMESTAMPTZ NOT NULL
 );
 
 
